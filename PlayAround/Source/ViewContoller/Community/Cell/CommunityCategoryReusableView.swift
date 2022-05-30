@@ -30,7 +30,7 @@ class CommunityCategoryReusableView: UICollectionReusableView {
   }
   
   var delegate: CommunityCategoryReusableViewDelegate?
-  let categoryList: [CommunityCategory] = [.전체, .아파트, .스터디그룹, .동호회, .맘카페, .기타]
+  let categoryList: [CommunityCategory] = [.전체, .아파트별모임, .스터디그룹, .동호회, .맘카페, .기타]
   var selectedCategory: CommunityCategory = .전체
 }
 

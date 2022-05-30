@@ -28,6 +28,7 @@
 		DF63D87628340C7D00711E53 /* FoodApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF63D87528340C7D00711E53 /* FoodApi.swift */; };
 		DF63D87828341FA100711E53 /* UsedApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF63D87728341FA100711E53 /* UsedApi.swift */; };
 		DF63D87B2834235A00711E53 /* UsedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF63D87A2834235A00711E53 /* UsedCell.swift */; };
+		DF756C452844D51D005EC418 /* CommunityDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF756C442844D51D005EC418 /* CommunityDetailVC.swift */; };
 		DF770ABD282CB61A0038380E /* JoinVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF770ABC282CB61A0038380E /* JoinVC.swift */; };
 		DF770AC0282CB6580038380E /* FindIdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF770ABF282CB6580038380E /* FindIdVC.swift */; };
 		DF770AC3282CB66C0038380E /* FindPwdVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF770AC2282CB66C0038380E /* FindPwdVC.swift */; };
@@ -141,6 +142,7 @@
 		DF63D87528340C7D00711E53 /* FoodApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodApi.swift; sourceTree = "<group>"; };
 		DF63D87728341FA100711E53 /* UsedApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedApi.swift; sourceTree = "<group>"; };
 		DF63D87A2834235A00711E53 /* UsedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedCell.swift; sourceTree = "<group>"; };
+		DF756C442844D51D005EC418 /* CommunityDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDetailVC.swift; sourceTree = "<group>"; };
 		DF770ABC282CB61A0038380E /* JoinVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinVC.swift; sourceTree = "<group>"; };
 		DF770ABF282CB6580038380E /* FindIdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdVC.swift; sourceTree = "<group>"; };
 		DF770AC2282CB66C0038380E /* FindPwdVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPwdVC.swift; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 			children = (
 				DF7B5F0C2840F29E000C2F59 /* Cell */,
 				DFBDF460283DD9FC00404D44 /* CommunityVC.swift */,
+				DF756C442844D51D005EC418 /* CommunityDetailVC.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -869,6 +872,7 @@
 				CBEE7DD3283B74E2000BEC15 /* FoodDetailVC.swift in Sources */,
 				DFA40479282B9661004E8859 /* AuthRequest.swift in Sources */,
 				DF7EE3F5283222AA00788CFE /* TableViewCell.swift in Sources */,
+				DF756C452844D51D005EC418 /* CommunityDetailVC.swift in Sources */,
 				DFA4521B282B7A1A0059EEFC /* ViewcontrollerExtention.swift in Sources */,
 				DFA45215282B7A1A0059EEFC /* PresentationController.swift in Sources */,
 				DF308A8B282E500D008E9728 /* AuthResponse.swift in Sources */,

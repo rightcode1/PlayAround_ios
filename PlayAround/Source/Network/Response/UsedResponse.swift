@@ -21,7 +21,7 @@ struct usedList: Codable {
   let isWish, statusSale: Bool
   let isLike: Bool?
   let likeCount, dislikeCount: Int
-  //    let user: [User]
+      let user: User
   let address: String
   let thumbnail: String?
   let villageId, viewCount, commentCount: Int

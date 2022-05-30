@@ -12,26 +12,32 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Community" id="xX9-Y1-yZJ" customClass="CommunityCollectionViewCell" customModule="PlayAround" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="421" height="163"/>
+            <rect key="frame" x="0.0" y="0.0" width="343" height="121"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="9ka-vI-8ak">
-                <rect key="frame" x="0.0" y="0.0" width="421" height="163"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="9ka-vI-8ak">
+                <rect key="frame" x="0.0" y="0.0" width="343" height="121"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="urE-Rp-TcH">
-                        <rect key="frame" x="0.0" y="0.0" width="421" height="163"/>
+                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="urE-Rp-TcH">
+                        <rect key="frame" x="0.0" y="0.0" width="328" height="121"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u4o-GO-M47">
-                                <rect key="frame" x="20" y="10" width="381" height="143"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4o-GO-M47">
+                                <rect key="frame" x="15" y="10" width="313" height="100"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="538-3P-d3X">
-                                        <rect key="frame" x="0.0" y="0.0" width="143" height="143"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="538-3P-d3X">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="538-3P-d3X" secondAttribute="height" multiplier="1:1" id="62V-5R-WOt"/>
+                                            <constraint firstAttribute="height" constant="100" id="FqL-Rb-GnM"/>
+                                            <constraint firstAttribute="width" constant="100" id="tMH-nK-4K6"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="아파트(동)별 모임" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGC-uc-ULz">
-                                        <rect key="frame" x="153" y="0.0" width="228" height="16"/>
+                                        <rect key="frame" x="110" y="0.0" width="92.5" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.95008450749999995" green="0.66389137509999996" blue="0.26261237259999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
@@ -48,19 +54,19 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="방이2동 민원 정보 공유방입니다." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DGj-2O-3g5">
-                                        <rect key="frame" x="153" y="20" width="228" height="21"/>
+                                        <rect key="frame" x="110" y="20" width="203" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="방이2동 민간 위원회에서 운영합니다." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PYn-2B-74H">
-                                        <rect key="frame" x="153" y="41" width="228" height="18"/>
+                                        <rect key="frame" x="110" y="41" width="203" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.39999994639999997" green="0.39999994639999997" blue="0.39999994639999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wnb-bK-WPG">
-                                        <rect key="frame" x="153" y="61" width="228" height="12"/>
+                                        <rect key="frame" x="110" y="61" width="203" height="12"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="listitemLocation" translatesAutoresizingMaskIntoConstraints="NO" id="gGh-ha-Zce">
                                                 <rect key="frame" x="0.0" y="0.0" width="12" height="12"/>
@@ -105,7 +111,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A6z-I3-o9q" userLabel="like">
-                                        <rect key="frame" x="153" y="124" width="40" height="19"/>
+                                        <rect key="frame" x="110" y="81" width="40" height="19"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="좋아요 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RKt-LG-HqG">
                                                 <rect key="frame" x="4" y="4" width="32" height="11"/>
@@ -134,7 +140,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yq3-KU-ckN" userLabel="hate">
-                                        <rect key="frame" x="198" y="124" width="40" height="19"/>
+                                        <rect key="frame" x="155" y="81" width="40" height="19"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="싫어요 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FVK-er-ysc">
                                                 <rect key="frame" x="4" y="4" width="32" height="11"/>
@@ -182,28 +188,37 @@
                                     <constraint firstItem="CGC-uc-ULz" firstAttribute="top" secondItem="u4o-GO-M47" secondAttribute="top" id="jDq-lY-c20"/>
                                     <constraint firstItem="PYn-2B-74H" firstAttribute="leading" secondItem="538-3P-d3X" secondAttribute="trailing" constant="10" id="msy-fN-EaR"/>
                                     <constraint firstItem="A6z-I3-o9q" firstAttribute="leading" secondItem="538-3P-d3X" secondAttribute="trailing" constant="10" id="muD-FN-jWJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="CGC-uc-ULz" secondAttribute="trailing" id="rJl-qB-l96"/>
                                     <constraint firstItem="wnb-bK-WPG" firstAttribute="leading" secondItem="538-3P-d3X" secondAttribute="trailing" constant="10" id="z8X-jV-hk9"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="u4o-GO-M47" secondAttribute="bottom" constant="10" id="H6x-cd-lia"/>
-                            <constraint firstAttribute="trailing" secondItem="u4o-GO-M47" secondAttribute="trailing" constant="20" id="Hrc-ZR-Rsw"/>
+                            <constraint firstAttribute="trailing" secondItem="u4o-GO-M47" secondAttribute="trailing" id="Hrc-ZR-Rsw"/>
                             <constraint firstItem="u4o-GO-M47" firstAttribute="top" secondItem="urE-Rp-TcH" secondAttribute="top" constant="10" id="JcM-QQ-UMh"/>
-                            <constraint firstItem="u4o-GO-M47" firstAttribute="leading" secondItem="urE-Rp-TcH" secondAttribute="leading" constant="20" id="rAT-c4-wAF"/>
+                            <constraint firstAttribute="bottom" secondItem="u4o-GO-M47" secondAttribute="bottom" id="qSI-3Y-SCG"/>
+                            <constraint firstItem="u4o-GO-M47" firstAttribute="leading" secondItem="urE-Rp-TcH" secondAttribute="leading" constant="15" id="rAT-c4-wAF"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="urE-Rp-TcH" firstAttribute="top" secondItem="9ka-vI-8ak" secondAttribute="top" id="NKb-Sj-Zp9"/>
-                    <constraint firstAttribute="bottom" secondItem="urE-Rp-TcH" secondAttribute="bottom" id="fMZ-A4-7uA"/>
+                    <constraint firstAttribute="bottom" secondItem="urE-Rp-TcH" secondAttribute="bottom" constant="10" id="fMZ-A4-7uA"/>
                     <constraint firstItem="urE-Rp-TcH" firstAttribute="leading" secondItem="9ka-vI-8ak" secondAttribute="leading" id="ubY-6q-qcU"/>
-                    <constraint firstAttribute="trailing" secondItem="urE-Rp-TcH" secondAttribute="trailing" id="vwu-gk-IIC"/>
+                    <constraint firstAttribute="trailing" secondItem="urE-Rp-TcH" secondAttribute="trailing" constant="15" id="vwu-gk-IIC"/>
                 </constraints>
             </collectionViewCellContentView>
-            <size key="customSize" width="421" height="163"/>
-            <point key="canvasLocation" x="178" y="31"/>
+            <size key="customSize" width="343" height="121"/>
+            <connections>
+                <outlet property="categoryLabel" destination="CGC-uc-ULz" id="ayJ-Em-UeL"/>
+                <outlet property="contentLabel" destination="PYn-2B-74H" id="qOX-dD-QOY"/>
+                <outlet property="disLikeLabel" destination="FVK-er-ysc" id="HgU-Dp-nDi"/>
+                <outlet property="distancLabel" destination="ZXv-gv-5in" id="jgs-bN-oHM"/>
+                <outlet property="likeLabel" destination="RKt-LG-HqG" id="DhO-oZ-xlL"/>
+                <outlet property="peopleLabel" destination="q0g-qe-dic" id="sIr-Xn-7kG"/>
+                <outlet property="thumbnailImageVIew" destination="538-3P-d3X" id="3NA-Ew-fmZ"/>
+                <outlet property="tiltleLabel" destination="DGj-2O-3g5" id="Mzw-Hc-hfb"/>
+            </connections>
+            <point key="canvasLocation" x="121.0144927536232" y="16.40625"/>
         </collectionViewCell>
     </objects>
     <resources>
