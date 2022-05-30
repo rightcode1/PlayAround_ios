@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "sideDishCategoryFullColorOn4.png"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "sideDishCategoryFullColorOn4@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "sideDishCategoryFullColorOn4@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
