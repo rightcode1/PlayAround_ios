@@ -15,5 +15,9 @@ class CollectionViewImageCell: UICollectionViewCell {
     super.awakeFromNib()
     // Initialization code
   }
-  
+  func setImage(_ data:Image){
+    if(data != nil){
+        self.imageView?.kf.setImage(with: URL(string: data.name))
+    }
+  }
 }

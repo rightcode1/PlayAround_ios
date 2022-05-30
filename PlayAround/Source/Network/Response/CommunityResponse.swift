@@ -26,3 +26,29 @@ struct commuintyList: Codable {
   let userName, address: String
   let images: [Image]
 }
+
+struct CommuintyDetailResponse: Codable {
+    let statusCode: Int
+    let message: String
+    let data: CommunityDetail
+}
+
+// MARK: - DataClass
+struct CommunityDetail: Codable {
+    let id: Int
+    let isSecret: Bool
+    let name, content: String
+    let villageId, likeCount, dislikeCount: Int
+  let distance: Double
+    let people: Int
+    let isJoin: Bool
+    let joinStatus: String
+    let isLike: Bool?
+    let images: [Image]
+    let user: User
+    let category: String
+    let authorityNotice, authorityBoard, authorityChat, authorityDelete: Bool
+    let userName, address: String
+    let noticeCount, boardCount, chatRoomCount: Int
+
+}

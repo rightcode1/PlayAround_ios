@@ -14,14 +14,7 @@ import UIKit
 enum CommunityApi {
   
   case CommuntyList(param: categoryListRequest)
-  //  case login(param: LoginRequest)
-  //  case join(param: JoinRequest)
-  //  case isExistLoginId(email: String)
-  //  case isExistNickname(nickname: String)
-  //  case sendCode(param: SendCodeRequest)
-  //  case confirm(tel: String, confirm: String)
-  //  case findId(param: FindMyIdRequest)
-  //  case changePassword(param: ChangePasswordRequest)
+  case CommuntyDetail(id: Int)
 }
 extension CommunityApi: TargetType {
   public var baseURL: URL {
@@ -33,24 +26,15 @@ extension CommunityApi: TargetType {
   var path: String {
     switch self {
     case .CommuntyList : return "/v1/community/list"
-      //    case .login : return "/v1/auth/login"
-      //    case .join: return "/v1/auth/join"
-      //
-      //    case .isExistLoginId: return "/v1/auth/existLoginId"
-      //    case .isExistNickname: return "/v1/auth/existNickname"
-      //
-      //    case .sendCode : return "/v1/auth/CertificationNumberSMS"
-      //    case .confirm : return "/v1/auth/confirm"
-      //
-      //    case .findId : return "/v1/auth/findLoginId"
-      //    case .changePassword : return "/v1/auth/passwordChange"
+    case .CommuntyDetail : return "/v1/community/detail"
     }
     
   }
   
   var method: Moya.Method {
     switch self {
-    case .CommuntyList:
+    case .CommuntyDetail,
+        .CommuntyList:
       return .get
       //    case .login,
       //        .join,
@@ -64,6 +48,10 @@ extension CommunityApi: TargetType {
   }
   var task: Task {
     switch self {
+      
+    case .CommuntyDetail(let id) :
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+      
     case .CommuntyList(let param) :
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
@@ -149,7 +137,7 @@ struct categoryListRequest: Codable {
 }
 enum CommunityCategory: String, Codable {
   case 전체
-  case 아파트
+  case 아파트별모임
   case 스터디그룹
   case 동호회
   case 맘카페
@@ -158,7 +146,7 @@ enum CommunityCategory: String, Codable {
     switch self {
     case .전체:
       return UIImage(named: "sideCategoryFullColorOn1") ?? UIImage()
-    case .아파트:
+    case .아파트별모임:
       return UIImage(named: "sideCommunityCategoryFullColorOn2") ?? UIImage()
     case .스터디그룹:
       return UIImage(named: "sideCommunityCategoryFullColorOn3") ?? UIImage()
@@ -175,7 +163,7 @@ enum CommunityCategory: String, Codable {
     switch self {
     case .전체:
       return UIImage(named: "sideCategoryFullColorOff1") ?? UIImage()
-    case .아파트:
+    case .아파트별모임:
       return UIImage(named: "sideCommunityCategoryFullColorOff2") ?? UIImage()
     case .스터디그룹:
       return UIImage(named: "sideCommunityCategoryFullColorOff3") ?? UIImage()

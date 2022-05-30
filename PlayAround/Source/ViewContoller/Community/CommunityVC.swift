@@ -18,7 +18,7 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     setCollectionView()
-    setFoodListCollectionViewLayout()
+    setCommunityListCollectionViewLayout()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -36,12 +36,9 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
     communityListCollectionView.register(UINib(nibName: "CommunityCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "Community")
   }
   
-  func setFoodListCollectionViewLayout() {
+  func setCommunityListCollectionViewLayout() {
     let layout = UICollectionViewFlowLayout()
-    layout.sectionInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
-    layout.itemSize = CGSize(width: (APP_WIDTH() - 40) / 2, height: 195)
-    layout.minimumInteritemSpacing = 10
-    layout.minimumLineSpacing = 10
+    layout.itemSize = CGSize(width: APP_WIDTH(), height: 120)
     layout.headerReferenceSize = CGSize(width: APP_WIDTH(), height: 87)
     layout.invalidateLayout()
     communityListCollectionView.collectionViewLayout = layout
@@ -101,6 +98,8 @@ extension CommunityVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let dict = communityList[indexPath.row]
-    
+    let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityDetailVC") as! CommunityDetailVC
+    vc.communityId = dict.id
+    self.navigationController?.pushViewController(vc, animated: true)
   }
 }
