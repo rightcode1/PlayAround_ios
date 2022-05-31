@@ -15,7 +15,7 @@ class SplashVC :BaseViewController{
     return build
   }
     override func viewDidLoad() {
-      
+      print("======token:\(DataHelperTool.token)")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             self.checkVersion()
         }

@@ -17,7 +17,7 @@ class CommunityCollectionViewCell: UICollectionViewCell {
   @IBOutlet weak var likeLabel: UILabel!
   @IBOutlet weak var disLikeLabel: UILabel!
   
-  func update(_ data: commuintyList) {
+  func update(_ data: CommuintyList) {
     if(data.images.count != 0){
       self.thumbnailImageVIew.kf.setImage(with: URL(string: data.images[0].name))
     }

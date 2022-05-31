@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 class FindIdVC:BaseViewController{
-  @IBOutlet weak var PhoneTextField: UITextField!
-  @IBOutlet weak var SmsTextField: UITextField!
+  @IBOutlet weak var phoneTextField: UITextField!
+  @IBOutlet weak var smsTextField: UITextField!
   
   func smsSend(){
-    let param = SendCodeRequest(tel: PhoneTextField.text!, diff: .find)
+    let param = SendCodeRequest(tel: phoneTextField.text!, diff: .find)
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
@@ -27,7 +27,7 @@ class FindIdVC:BaseViewController{
       .disposed(by: disposeBag)
   }
   func smsCheck(){
-    APIProvider.shared.authAPI.rx.request(.confirm(tel: PhoneTextField.text!, confirm: SmsTextField.text!))
+    APIProvider.shared.authAPI.rx.request(.confirm(tel: phoneTextField.text!, confirm: smsTextField.text!))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
@@ -41,7 +41,7 @@ class FindIdVC:BaseViewController{
   }
   
   func findId(){
-    let param = FindMyIdRequest(tel: PhoneTextField.text!)
+    let param = FindMyIdRequest(tel: phoneTextField.text!)
     APIProvider.shared.authAPI.rx.request(.findId(param: param))
       .filterSuccessfulStatusCodes()
       .map(FindIdResponse.self)
@@ -49,7 +49,7 @@ class FindIdVC:BaseViewController{
         self.dismissHUD()
         if(value.statusCode <= 202){
             let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "FindId2VC") as! FindId2VC
-          vc.MyIdTextField.text = value.data?.loginId
+          vc.myIdTextField.text = value.data?.loginId
             self.navigationController?.pushViewController(vc, animated: true)
         }
       }, onError: { error in

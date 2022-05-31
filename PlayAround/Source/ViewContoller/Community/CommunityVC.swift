@@ -13,7 +13,7 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
   @IBOutlet weak var communityListCollectionView: UICollectionView!
   
   var category: CommunityCategory = .전체
-  var communityList: [commuintyList] = []
+  var communityList: [CommuintyList] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()

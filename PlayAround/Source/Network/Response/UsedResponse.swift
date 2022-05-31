@@ -7,21 +7,21 @@
 
 import Foundation
 
-struct usedResponse: Codable {
+struct UsedResponse: Codable {
   let statusCode: Int
   let message: String
-  let list: [usedList]
+  let list: [UsedList]
 }
 
 // MARK: - List
-struct usedList: Codable {
+struct UsedList: Codable {
   let id: Int
   let category, name: String
   let price, wishCount: Int
   let isWish, statusSale: Bool
   let isLike: Bool?
   let likeCount, dislikeCount: Int
-      let user: User
+  let user: User
   let address: String
   let thumbnail: String?
   let villageId, viewCount, commentCount: Int
@@ -38,7 +38,7 @@ struct User: Codable {
   let active: Bool
   let followings, followers: [Follow]?
   let isFollowing: Bool
-  let foodLevel, usedLevel, communityLevel: Int
+  let foodLevel, usedLevel, communityLevel: Int?
 }
 
 // MARK: - Follow

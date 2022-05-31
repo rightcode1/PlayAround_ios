@@ -10,9 +10,9 @@ import Foundation
 struct FindIdResponse: Codable {
   let statusCode: Int
   let message: String
-  let data: findID?
+  let data: FindID?
 }
 
-struct findID: Codable {
+struct FindID: Codable {
   let loginId: String
 }

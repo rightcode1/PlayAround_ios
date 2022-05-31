@@ -14,6 +14,7 @@ enum Category: String, Codable {
   case 채팅방
 }
 class CommunityDetailVC: BaseViewController{
+  @IBOutlet weak var mainTableView: UITableView!
   @IBOutlet weak var imageCollectionView: UICollectionView!
   @IBOutlet weak var categoryCollectionView: UICollectionView!
   
@@ -32,23 +33,35 @@ class CommunityDetailVC: BaseViewController{
   var communityId: Int = 0
   var imageList: [Image] = []
   
+  var communityBoard: [CommunityBoard] = []
+  var communityNotice: [CommunityNotice] = []
+  
   var selectedCategory = "공지사항"
   var category: [Category] = [.공지사항, .자유게시판, .채팅방]
   
   override func viewDidLoad() {
     tabBarController?.tabBar.isHidden = true
+    initDelegate()
+    
+    initDetail()
+    
+    initDetailNotice(communityId)
+  }
+  
+  override func viewDidDisappear(_ animated: Bool) {
+    tabBarController?.tabBar.isHidden = false
+  }
+  
+  func initDelegate(){
+    mainTableView.dataSource = self
+    mainTableView.delegate = self
     imageCollectionView.dataSource = self
     imageCollectionView.delegate = self
     categoryCollectionView.dataSource = self
     categoryCollectionView.delegate = self
     
+
     imageCollectionView.register(UINib(nibName: "CollectionViewImageCell", bundle: nil), forCellWithReuseIdentifier: "CollectionViewImageCell")
-    
-    initDetail()
-    
-  }
-  override func viewDidDisappear(_ animated: Bool) {
-    tabBarController?.tabBar.isHidden = false
   }
   
   func initDetail() {
@@ -66,6 +79,41 @@ class CommunityDetailVC: BaseViewController{
       })
       .disposed(by: disposeBag)
   }
+  func initDetailNotice(_ communityId: Int){
+    self.showHUD()
+    let param = ComunityNoticeRequest(communityId: communityId)
+    APIProvider.shared.communityAPI.rx.request(.CommuntyNotice(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(CommunityNoticeResponse.self)
+      .subscribe(onSuccess: { value in
+        if(value.statusCode <= 200){
+          self.communityNotice = value.list ?? []
+          self.mainTableView.reloadData()
+        }
+        self.dismissHUD()
+      }, onError: { error in
+        self.dismissHUD()
+      })
+      .disposed(by: disposeBag)
+  }
+  func initDetailBoard(_ communityId: Int){
+    self.showHUD()
+    let param = ComunityNoticeRequest(communityId: communityId)
+    APIProvider.shared.communityAPI.rx.request(.CommuntyBoard(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(CommunityBoardResponse.self)
+      .subscribe(onSuccess: { value in
+        if(value.statusCode <= 200){
+          self.communityBoard = value.list ?? []
+          self.mainTableView.reloadData()
+        }
+        self.dismissHUD()
+      }, onError: { error in
+        self.dismissHUD()
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func setData(_ data: CommunityDetail){
     self.categoryLabel.text = data.category
     self.titleLabel.text = data.name
@@ -79,6 +127,7 @@ class CommunityDetailVC: BaseViewController{
     imageList = data.images
     imageCollectionView.reloadData()
   }
+  
 }
 
 extension CommunityDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -105,6 +154,13 @@ extension CommunityDetailVC: UICollectionViewDelegate, UICollectionViewDataSourc
             }
       diffLabel.text = dict.rawValue
       selectedView.isHidden = selectedCategory != dict.rawValue
+      if(selectedCategory == "공지사항"){
+        initDetailNotice(communityId)
+      }else if selectedCategory == "자유게시판"{
+        initDetailBoard(communityId)
+      }else{
+        initDetailBoard(communityId)
+      }
       return cell
     }
   }
@@ -125,6 +181,98 @@ extension CommunityDetailVC: UICollectionViewDelegate, UICollectionViewDataSourc
       selectedCategory = dict.rawValue
       categoryCollectionView.reloadData()
     }
-    
   }
 }
+extension CommunityDetailVC: UITableViewDataSource, UITableViewDelegate {
+  
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    if selectedCategory == "공지사항"{
+      return communityNotice.count
+    }else if selectedCategory == "자유게시판"{
+      return communityBoard.count
+    }else{
+      return communityBoard.count
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if selectedCategory == "공지사항"{
+      let cell = self.mainTableView.dequeueReusableCell(withIdentifier: "noticeCell", for: indexPath)
+      
+      let dict = communityNotice[indexPath.row]
+      guard let titleLabel = cell.viewWithTag(1) as? UILabel,
+            let contentLabel = cell.viewWithTag(2) as? UILabel,
+            let likeLabel = cell.viewWithTag(3) as? UILabel,
+            let dislikeLabel = cell.viewWithTag(4) as? UILabel,
+            let dateLabel = cell.viewWithTag(5) as? UILabel else {
+              return cell
+            }
+      titleLabel.text = dict.title
+      contentLabel.text = dict.content
+      likeLabel.text = "좋아요 \(dict.likeCount)"
+      likeLabel.text = "싫어요 \(dict.dislikeCount)"
+      dateLabel.text = dict.createdAt
+      
+      return cell
+    }else if selectedCategory == "자유게시판"{
+      let cell = self.mainTableView.dequeueReusableCell(withIdentifier: "noticeCell", for: indexPath)
+      
+      let dict = communityBoard[indexPath.row]
+      guard let titleLabel = cell.viewWithTag(1) as? UILabel,
+            let contentLabel = cell.viewWithTag(2) as? UILabel,
+            let likeLabel = cell.viewWithTag(3) as? UILabel,
+            let dislikeLabel = cell.viewWithTag(4) as? UILabel,
+            let dateLabel = cell.viewWithTag(5) as? UILabel else {
+              return cell
+            }
+      titleLabel.text = dict.title
+      contentLabel.text = dict.content
+      likeLabel.text = "좋아요 \(dict.likeCount)"
+      likeLabel.text = "싫어요 \(dict.dislikeCount)"
+      dateLabel.text = dict.createdAt
+      
+      return cell
+    }else{
+      let cell = self.mainTableView.dequeueReusableCell(withIdentifier: "chattingCell", for: indexPath)
+      guard let thumbnail = cell.viewWithTag(1) as? UIImageView,
+            let titleLabel = cell.viewWithTag(2) as? UILabel,
+            let peopleLabel = cell.viewWithTag(3) as? UILabel,
+            let dateLabel = cell.viewWithTag(4) as? UILabel,
+            let contentLabel = cell.viewWithTag(5) as? UILabel else {
+              return cell
+            }
+      
+      return cell
+    }
+  }
+  
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      if selectedCategory == "공지사항"{
+        let dict = communityNotice[indexPath.row]
+        let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityInfoDetailVC") as! CommunityInfoDetailVC
+        vc.naviTitle = selectedCategory
+        vc.detailId = dict.id
+        self.navigationController?.pushViewController(vc, animated: true)
+      }else if selectedCategory == "자유게시판"{
+        let dict = communityBoard[indexPath.row]
+        let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityInfoDetailVC") as! CommunityInfoDetailVC
+        vc.naviTitle = selectedCategory
+        vc.detailId = dict.id
+        self.navigationController?.pushViewController(vc, animated: true)
+      }else{
+        let dict = communityBoard[indexPath.row]
+      }
+    }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    if selectedCategory == "공지사항"{
+      return 90
+    }else if selectedCategory == "자유게시판"{
+      return 90
+    }else{
+      return 100
+    }
+  }
+  
+}
+

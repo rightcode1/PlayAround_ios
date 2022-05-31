@@ -15,6 +15,12 @@ enum CommunityApi {
   
   case CommuntyList(param: categoryListRequest)
   case CommuntyDetail(id: Int)
+  case CommuntyNotice(param: ComunityNoticeRequest)
+  case CommuntyBoard(param: ComunityNoticeRequest)
+  case CommuntyBoardDetail(id: Int)
+  case CommuntyNoticeDetail(id: Int)
+  case CommuntyBoardComment(id: Int)
+  case CommuntyNoticeComment(id: Int)
 }
 extension CommunityApi: TargetType {
   public var baseURL: URL {
@@ -27,6 +33,12 @@ extension CommunityApi: TargetType {
     switch self {
     case .CommuntyList : return "/v1/community/list"
     case .CommuntyDetail : return "/v1/community/detail"
+    case .CommuntyNotice : return "/v1/communityNotice/list"
+    case .CommuntyBoard : return "/v1/communityBoard/list"
+    case .CommuntyBoardDetail : return "/v1/communityBoard/detail"
+    case .CommuntyNoticeDetail : return "/v1/communityNotice/detail"
+    case .CommuntyBoardComment : return "/v1/communityBoardComment/list"
+    case .CommuntyNoticeComment : return "/v1/communityNoticeComment/list"
     }
     
   }
@@ -34,7 +46,13 @@ extension CommunityApi: TargetType {
   var method: Moya.Method {
     switch self {
     case .CommuntyDetail,
-        .CommuntyList:
+        .CommuntyList,
+        .CommuntyNotice,
+        .CommuntyBoardDetail,
+        .CommuntyNoticeDetail,
+        .CommuntyBoardComment,
+        .CommuntyNoticeComment,
+        .CommuntyBoard:
       return .get
       //    case .login,
       //        .join,
@@ -55,30 +73,23 @@ extension CommunityApi: TargetType {
     case .CommuntyList(let param) :
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
-      //    case .login(let param) :
-      //      return .requestJSONEncodable(param)
-      //
-      //    case .join(let param):
-      //      return .requestJSONEncodable(param)
-      //
-      //    case .isExistLoginId(let email):
-      //      return .requestParameters(parameters: ["loginId": email], encoding: URLEncoding.queryString)
-      //
-      //    case .isExistNickname(let nickname):
-      //      return .requestParameters(parameters: ["nickname": nickname], encoding: URLEncoding.queryString)
-      //
-      //    case .sendCode(let param) :
-      //      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
-      //
-      //    case .confirm(let tel, let confirm) :
-      //      return .requestParameters(parameters: ["tel": tel , "confirm": confirm], encoding: URLEncoding.queryString)
-      //
-      //    case .changePassword(let param) :
-      //      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
-      //
-      //    case .findId(let param) :
-      //      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
+    case .CommuntyNotice(let param) :
+      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
+    case .CommuntyBoard(let param) :
+      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
+      
+    case .CommuntyBoardDetail(let id) :
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+      
+    case .CommuntyNoticeDetail(let id) :
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+      
+    case .CommuntyBoardComment(let id) :
+      return .requestParameters(parameters: ["communityBoardId": id], encoding: URLEncoding.queryString)
+      
+    case .CommuntyNoticeComment(let id) :
+      return .requestParameters(parameters: ["communityNoticeId": id], encoding: URLEncoding.queryString)
     }
   }
   
@@ -94,7 +105,19 @@ extension CommunityApi: TargetType {
   }
 }
 
-
+struct ComunityNoticeRequest: Codable {
+  let isReport: Bool?
+  let communityId: Int?
+  
+  init(
+    isReport: Bool? = nil,
+    communityId: Int? = nil
+  ) {
+    self.isReport = isReport
+    self.communityId = communityId
+  }
+  
+}
 struct categoryListRequest: Codable {
   let category: CommunityCategory?
   let myList: Bool?
