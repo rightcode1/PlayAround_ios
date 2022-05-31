@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 class LoginVC: BaseViewController{
-  @IBOutlet weak var IdTextField: UITextField!
+  @IBOutlet weak var idTextField: UITextField!
   
-  @IBOutlet weak var PwdTextField: UITextField!
+  @IBOutlet weak var pwdTextField: UITextField!
   
   override func viewDidLoad() {
     navigationController?.isNavigationBarHidden = true
@@ -22,15 +22,15 @@ class LoginVC: BaseViewController{
   
   func login() {
     self.showHUD()
-    let param = LoginRequest(loginId: IdTextField.text!, password: PwdTextField.text!)
+    let param = LoginRequest(loginId: idTextField.text!, password: pwdTextField.text!)
     APIProvider.shared.authAPI.rx.request(.login(param: param))
       .filterSuccessfulStatusCodes()
       .map(LoginResponse.self)
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 202){
           DataHelper.set("bearer \(value.token)", forKey: .token)
-          DataHelper.set(self.IdTextField.text!, forKey: .userId)
-          DataHelper.set(self.PwdTextField.text!, forKey: .userPw)
+          DataHelper.set(self.idTextField.text!, forKey: .userId)
+          DataHelper.set(self.pwdTextField.text!, forKey: .userPw)
 
           self.goMain()
         }

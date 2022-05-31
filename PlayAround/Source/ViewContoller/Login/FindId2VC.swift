@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class FindId2VC: BaseViewController{
-  @IBOutlet weak var MyIdTextField: UILabel!
+  @IBOutlet weak var myIdTextField: UILabel!
   override func viewDidLoad() {
   }
   @IBAction func tapGoLogin(_ sender: Any) {

@@ -779,8 +779,8 @@
                     <navigationItem key="navigationItem" id="3fS-Yn-vCt"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="AdvertisementCollectionView" destination="1TU-9K-RAB" id="wqI-VC-4Iz"/>
-                        <outlet property="HeaderCollectionView" destination="X7a-bN-SW7" id="E5X-Xi-C4k"/>
+                        <outlet property="advertisementCollectionView" destination="1TU-9K-RAB" id="Xfx-ec-Coi"/>
+                        <outlet property="headerCollectionView" destination="X7a-bN-SW7" id="hHG-Sl-jen"/>
                         <outlet property="mainTableVIew" destination="mp4-Uy-xYT" id="XdY-Zf-xgO"/>
                         <outlet property="productCollectionview" destination="VJh-Jl-NeK" id="YpD-Ai-BWT"/>
                     </connections>

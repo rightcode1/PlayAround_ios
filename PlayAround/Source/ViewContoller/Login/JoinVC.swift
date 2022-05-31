@@ -10,18 +10,18 @@ import UIKit
 
 class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTransitioningDelegate{
  
-  @IBOutlet weak var IdTextField: UITextField!
-  @IBOutlet weak var PwdTextField: UITextField!
-  @IBOutlet weak var PwdTextFieldConfirm: UITextField!
-  @IBOutlet weak var PhoneTextField: UITextField!
-  @IBOutlet weak var SmsTextField: UITextField!
-  @IBOutlet weak var NicknameTextField: UITextField!
+  @IBOutlet weak var idTextField: UITextField!
+  @IBOutlet weak var pwdTextField: UITextField!
+  @IBOutlet weak var pwdTextFieldConfirm: UITextField!
+  @IBOutlet weak var phoneTextField: UITextField!
+  @IBOutlet weak var smsTextField: UITextField!
+  @IBOutlet weak var nicknameTextField: UITextField!
   
   var checkId : Bool = false
 
   
   func idcheck(){
-    APIProvider.shared.authAPI.rx.request(.isExistLoginId(email: IdTextField.text!))
+    APIProvider.shared.authAPI.rx.request(.isExistLoginId(email: idTextField.text!))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
@@ -40,7 +40,7 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
       .disposed(by: disposeBag)
   }
   func smsSend(){
-    let param = SendCodeRequest(tel: PhoneTextField.text!, diff: .join)
+    let param = SendCodeRequest(tel: phoneTextField.text!, diff: .join)
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
@@ -55,7 +55,7 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
   }
   func smsCheck(){
 //    let param = CheckphoneCodeRequest()
-    APIProvider.shared.authAPI.rx.request(.confirm(tel: PhoneTextField.text!, confirm: SmsTextField.text!))
+    APIProvider.shared.authAPI.rx.request(.confirm(tel: phoneTextField.text!, confirm: smsTextField.text!))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
@@ -69,24 +69,24 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
   }
   
   func Register(){
-    if NicknameTextField.text!.isEmpty{
+    if nicknameTextField.text!.isEmpty{
       callMSGDialog(message: "아이디를 입력해주세요.")
     }else if !checkId {
       callMSGDialog(message: "아이디 중복확인을 해주세요..")
-    }else if PwdTextField.text!.isEmpty{
+    }else if pwdTextField.text!.isEmpty{
       callMSGDialog(message: "비밀번호를 입력해주세요.")
-    }else if PwdTextFieldConfirm.text!.isEmpty{
+    }else if pwdTextFieldConfirm.text!.isEmpty{
       callMSGDialog(message: "비밀번호 확인을 입력해주세요.")
-    }else if PwdTextField.text != PwdTextFieldConfirm.text{
+    }else if pwdTextField.text != pwdTextFieldConfirm.text{
       callMSGDialog(message: "비밀번호가 일치하지않습니다.")
-    }else if !PwdTextField.text!.isPasswordValidate(){
+    }else if !pwdTextField.text!.isPasswordValidate(){
       callMSGDialog(message: "비밀번호 설정 규칙에 맞춰 입력하세요.")
-    }else if PhoneTextField.text!.isEmpty{
+    }else if phoneTextField.text!.isEmpty{
       callMSGDialog(message: "전화번호를 입력해주세요.")
-    }else if SmsTextField.text!.isEmpty{
+    }else if smsTextField.text!.isEmpty{
       callMSGDialog(message: "인증번호를 입력해주세요.")
     }else{
-      let param = JoinRequest(loginId: IdTextField.text!, password: PwdTextField.text!, tel: PhoneTextField.text!, name: NicknameTextField.text!)
+      let param = JoinRequest(loginId: idTextField.text!, password: pwdTextField.text!, tel: phoneTextField.text!, name: nicknameTextField.text!)
       APIProvider.shared.authAPI.rx.request(.join(param: param))
         .filterSuccessfulStatusCodes()
         .map(DefaultResponse.self)

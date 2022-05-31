@@ -17,7 +17,7 @@ class UsedCell: UICollectionViewCell{
   @IBOutlet weak var backView: UIView!
   
   
-  func initdelegate(_ data: usedList){
+  func initdelegate(_ data: UsedList){
     if(data.thumbnail != nil){
       self.Thumbnail?.kf.setImage(with: URL(string: data.thumbnail!))
     }else{

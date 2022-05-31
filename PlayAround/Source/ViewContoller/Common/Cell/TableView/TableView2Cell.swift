@@ -25,7 +25,7 @@ class TableView2Cell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-  func initdelegate(_ data: usedList){
+  func initdelegate(_ data: UsedList){
     if(thumbnail != nil){
       self.thumbnail?.kf.setImage(with: URL(string: data.thumbnail! ))
     }else{

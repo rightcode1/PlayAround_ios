@@ -9,15 +9,15 @@ import Foundation
 import UIKit
 
 class HomeVC: BaseViewController{
-  @IBOutlet weak var HeaderCollectionView: UICollectionView!
-  @IBOutlet weak var AdvertisementCollectionView: UICollectionView!
+  @IBOutlet weak var headerCollectionView: UICollectionView!
+  @IBOutlet weak var advertisementCollectionView: UICollectionView!
   @IBOutlet weak var productCollectionview: UICollectionView!
   @IBOutlet weak var mainTableVIew: UITableView!
   
-  var HeaderList: [commuintyList] = []
-  var AdList: [AdvertiseList] = []
-  var usedList : [usedList] = []
-  var FoodList : [FoodList] = []
+  var headerList: [CommuintyList] = []
+  var adList: [AdvertiseList] = []
+  var usedList : [UsedList] = []
+  var foodList : [FoodList] = []
   
   override func viewDidLoad() {
     initDelegate()
@@ -27,7 +27,7 @@ class HomeVC: BaseViewController{
     flowLayout.scrollDirection = .horizontal
     flowLayout.itemSize = CGSize(width: 358, height: 128.0)
     flowLayout.minimumLineSpacing = 0
-    HeaderCollectionView.collectionViewLayout = flowLayout
+    headerCollectionView.collectionViewLayout = flowLayout
     
   }
   
@@ -36,19 +36,19 @@ class HomeVC: BaseViewController{
   }
   
   func initDelegate(){
-    HeaderCollectionView.delegate = self
-    AdvertisementCollectionView.delegate = self
+    headerCollectionView.delegate = self
+    advertisementCollectionView.delegate = self
     productCollectionview.delegate = self
     mainTableVIew.delegate = self
     
-    HeaderCollectionView.dataSource = self
-    AdvertisementCollectionView.dataSource = self
+    headerCollectionView.dataSource = self
+    advertisementCollectionView.dataSource = self
     productCollectionview.dataSource = self
     mainTableVIew.dataSource = self
     
-    HeaderCollectionView.backgroundColor = .clear
-    HeaderCollectionView.decelerationRate = .fast
-    HeaderCollectionView.isPagingEnabled = false
+    headerCollectionView.backgroundColor = .clear
+    headerCollectionView.decelerationRate = .fast
+    headerCollectionView.isPagingEnabled = false
     
     initHeaderList()
     initAdvList()
@@ -65,9 +65,9 @@ class HomeVC: BaseViewController{
       .subscribe(onSuccess: { value in
         
         if(value.statusCode <= 202){
-          self.HeaderList = value.list
-          print("\(self.HeaderList.count)!!!")
-          self.HeaderCollectionView.reloadData()
+          self.headerList = value.list
+          print("\(self.headerList.count)!!!")
+          self.headerCollectionView.reloadData()
         }
         self.dismissHUD()
       }, onError: { error in
@@ -83,9 +83,9 @@ class HomeVC: BaseViewController{
       .map(AdvertiseResponse.self)
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 202){
-          self.AdList = value.list
-          print("\(self.AdList.count)!!!")
-          self.AdvertisementCollectionView.reloadData()
+          self.adList = value.list
+          print("\(self.adList.count)!!!")
+          self.advertisementCollectionView.reloadData()
         }
         self.dismissHUD()
       }, onError: { error in
@@ -99,7 +99,7 @@ class HomeVC: BaseViewController{
     let param = UsedListRequest()
     APIProvider.shared.usedAPI.rx.request(.UsedList(param: param))
       .filterSuccessfulStatusCodes()
-      .map(usedResponse.self)
+      .map(UsedResponse.self)
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 202){
           self.usedList = value.list
@@ -121,9 +121,9 @@ class HomeVC: BaseViewController{
       .map(FoodResponse.self)
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 202){
-          self.FoodList = value.list
-          print("\(self.FoodList.count)!!!")
-          self.AdvertisementCollectionView.reloadData()
+          self.foodList = value.list
+          print("\(self.foodList.count)!!!")
+          self.advertisementCollectionView.reloadData()
         }
         self.dismissHUD()
       }, onError: { error in
@@ -135,19 +135,19 @@ class HomeVC: BaseViewController{
 
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    if(collectionView == self.HeaderCollectionView){
-      return HeaderList.count
-    }else if(collectionView == self.AdvertisementCollectionView){
-      return AdList.count
+    if(collectionView == self.headerCollectionView){
+      return headerList.count
+    }else if(collectionView == self.advertisementCollectionView){
+      return adList.count
     }else {
       return usedList.count
     }
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    if(collectionView == self.HeaderCollectionView){
+    if(collectionView == self.headerCollectionView){
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
-      let dict = HeaderList[indexPath.row]
+      let dict = headerList[indexPath.row]
       
       if(!dict.images.isEmpty){
         cell.thumbnail.kf.setImage(with: URL(string: dict.images[0].name))
@@ -167,9 +167,9 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
       cell.backView?.layer.applySketchShadow(color: UIColor(red: 117, green: 117, blue: 117, alpha: 1.0), alpha: 1, x: 0, y: 3, blur: 10, spread: 0)
       
       return cell
-    }else if(collectionView == self.AdvertisementCollectionView){
+    }else if(collectionView == self.advertisementCollectionView){
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdvertisementCell", for: indexPath) as! AdvertisementCell
-      let dict = AdList[indexPath.row]
+      let dict = adList[indexPath.row]
       if(dict.thumbnail != nil){
         cell.banner?.kf.setImage(with: URL(string: dict.thumbnail!))
       }
@@ -191,18 +191,18 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    if(collectionView == HeaderCollectionView){
+    if(collectionView == headerCollectionView){
       return CGSize(width: 358, height : 128)
-    }else if(collectionView == AdvertisementCollectionView){
-      return CGSize(width: self.AdvertisementCollectionView.frame.size.width , height: self.HeaderCollectionView.frame.height)
+    }else if(collectionView == advertisementCollectionView){
+      return CGSize(width: self.advertisementCollectionView.frame.size.width , height: self.headerCollectionView.frame.height)
     }else {
       return CGSize(width: 160, height: self.productCollectionview.frame.height)
     }
   }
   
   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-    if(scrollView.isEqual(self.HeaderCollectionView)){
-      guard let layout = self.HeaderCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+    if(scrollView.isEqual(self.headerCollectionView)){
+      guard let layout = self.headerCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
       
       // CollectionView Item Size
       let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
