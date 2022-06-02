@@ -6,9 +6,7 @@
 //
 
 import Foundation
-import Alamofire
 import Moya
-import UIKit
 
 // 서버랑 통신하는 api 만드는 곳
 enum UsedApi {

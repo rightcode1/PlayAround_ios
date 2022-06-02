@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB87B44E2848B3DE000297BB /* FoodCommentListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44D2848B3DE000297BB /* FoodCommentListCell.swift */; };
+		CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44F2848B532000297BB /* FoodCommentAPI.swift */; };
 		CBEE7DC2283B348C000BEC15 /* Food.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEE7DC1283B348C000BEC15 /* Food.storyboard */; };
 		CBEE7DC4283B59E9000BEC15 /* FoodVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */; };
 		CBEE7DC9283B5D6D000BEC15 /* FoodListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE7DC8283B5D6D000BEC15 /* FoodListCell.swift */; };
@@ -122,6 +124,8 @@
 		37A05326AC94E35D2EF82135 /* Pods-PlayAround.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround.debug.xcconfig"; path = "Target Support Files/Pods-PlayAround/Pods-PlayAround.debug.xcconfig"; sourceTree = "<group>"; };
 		49B8F3D397A015C1DFBA4C82 /* Pods_PlayAround.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayAround.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9700BC72A55D67CD210741D7 /* Pods-PlayAround.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround.release.xcconfig"; path = "Target Support Files/Pods-PlayAround/Pods-PlayAround.release.xcconfig"; sourceTree = "<group>"; };
+		CB87B44D2848B3DE000297BB /* FoodCommentListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentListCell.swift; sourceTree = "<group>"; };
+		CB87B44F2848B532000297BB /* FoodCommentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentAPI.swift; sourceTree = "<group>"; };
 		CBEE7DC1283B348C000BEC15 /* Food.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Food.storyboard; sourceTree = "<group>"; };
 		CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodVC.swift; sourceTree = "<group>"; };
 		CBEE7DC8283B5D6D000BEC15 /* FoodListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodListCell.swift; sourceTree = "<group>"; };
@@ -262,6 +266,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB87B44C2848B3C8000297BB /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				CB87B44D2848B3DE000297BB /* FoodCommentListCell.swift */,
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
 		CBEE7DC0283B3476000BEC15 /* Food */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,7 +287,7 @@
 		CBEE7DC5283B5D52000BEC15 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				CBEE7DC7283B5D5C000BEC15 /* TableView */,
+				CB87B44C2848B3C8000297BB /* TableView */,
 				CBEE7DC6283B5D57000BEC15 /* CollectionVIew */,
 			);
 			path = Cell;
@@ -288,13 +300,6 @@
 				CBEE7DCA283B5D8C000BEC15 /* FoodCategoryReusableView.swift */,
 			);
 			path = CollectionVIew;
-			sourceTree = "<group>";
-		};
-		CBEE7DC7283B5D5C000BEC15 /* TableView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TableView;
 			sourceTree = "<group>";
 		};
 		CBEE7DCC283B62B7000BEC15 /* Cell */ = {
@@ -395,6 +400,7 @@
 				DF3D6484283264B500D72D36 /* CommunityApi.swift */,
 				DF63D87528340C7D00711E53 /* FoodApi.swift */,
 				DF63D87728341FA100711E53 /* UsedApi.swift */,
+				CB87B44F2848B532000297BB /* FoodCommentAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -815,6 +821,7 @@
 				DF63D87B2834235A00711E53 /* UsedCell.swift in Sources */,
 				DFA40477282B963B004E8859 /* UserRequest.swift in Sources */,
 				DF308A89282E4ADA008E9728 /* FindId2VC.swift in Sources */,
+				CB87B44E2848B3DE000297BB /* FoodCommentListCell.swift in Sources */,
 				DF770AC0282CB6580038380E /* FindIdVC.swift in Sources */,
 				CBEE7DC4283B59E9000BEC15 /* FoodVC.swift in Sources */,
 				DF770ACB282CDEAD0038380E /* DialogPopupView.swift in Sources */,
@@ -877,6 +884,7 @@
 				DFA40479282B9661004E8859 /* AuthRequest.swift in Sources */,
 				DF7EE3F5283222AA00788CFE /* TableViewCell.swift in Sources */,
 				DF756C452844D51D005EC418 /* CommunityDetailVC.swift in Sources */,
+				CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */,
 				DFA4521B282B7A1A0059EEFC /* ViewcontrollerExtention.swift in Sources */,
 				DFA45215282B7A1A0059EEFC /* PresentationController.swift in Sources */,
 				DF308A8B282E500D008E9728 /* AuthResponse.swift in Sources */,

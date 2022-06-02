@@ -44,6 +44,7 @@ struct User: Codable {
 // MARK: - Follow
 struct Follow: Codable {
   let id: Int
-  let name, thumbnail: String
+  let name: String?
+  let thumbnail: String?
   let isFollowing: Bool
 }

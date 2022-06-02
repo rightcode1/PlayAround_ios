@@ -132,9 +132,9 @@ class CommunityDetailVC: BaseViewController{
 
 extension CommunityDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    if(collectionView == imageCollectionView){
+    if (collectionView == imageCollectionView) {
       return imageList.count
-    }else{
+    } else{
       return category.count
     }
   }
@@ -154,9 +154,9 @@ extension CommunityDetailVC: UICollectionViewDelegate, UICollectionViewDataSourc
             }
       diffLabel.text = dict.rawValue
       selectedView.isHidden = selectedCategory != dict.rawValue
-      if(selectedCategory == "공지사항"){
+      if (selectedCategory == "공지사항") {
         initDetailNotice(communityId)
-      }else if selectedCategory == "자유게시판"{
+      }else if selectedCategory == "자유게시판" {
         initDetailBoard(communityId)
       }else{
         initDetailBoard(communityId)

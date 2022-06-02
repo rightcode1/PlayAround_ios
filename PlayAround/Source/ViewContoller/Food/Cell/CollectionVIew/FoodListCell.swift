@@ -19,13 +19,18 @@ class FoodListCell: UICollectionViewCell {
   
   @IBOutlet weak var soldOutView: UIView!
   
-  func update(_ data: FoodListData) {
+  func update(_ data: FoodListData, isDetail: String? = nil) {
     if let thumbnailURL = data.thumbnail {
       thumbnailImageView.kf.setImage(with: URL(string: thumbnailURL))
     }
     
-    foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리예정
-    foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리완료
+    if isDetail != nil {
+      foodStatusStackView.arrangedSubviews[0].isHidden = true
+      foodStatusStackView.arrangedSubviews[1].isHidden = true
+    } else {
+      foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리예정
+      foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리완료
+    }
     
     titleLabel.text = data.name
     priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
