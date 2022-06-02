@@ -9,9 +9,9 @@ import Foundation
 import Moya 
 import UIKit
 
-enum UserApi {
+enum UserAPI {
   
-  case userinfo(id: Int)
+  case userInfo(param: UserInfoRequest)
   case userList(search: String?)
   case userUpdate(param: UserUpdateRequest)
   case userLogout
@@ -20,7 +20,7 @@ enum UserApi {
   case userFileDelete
 }
 
-extension UserApi: TargetType {
+extension UserAPI: TargetType {
   public var baseURL: URL {
     switch self {
     default:
@@ -30,7 +30,7 @@ extension UserApi: TargetType {
   
   var path: String {
     switch self {
-    case .userinfo:
+    case .userInfo:
       return "/v1/user/info"
     case .userList:
       return "/v1/user/list"
@@ -50,7 +50,7 @@ extension UserApi: TargetType {
   var method: Moya.Method {
     switch self {
       
-    case .userinfo,
+    case .userInfo,
         .userList,
         .userLogout:
       return .get
@@ -73,7 +73,7 @@ extension UserApi: TargetType {
   
   var task: Task {
     switch self {
-    case .userinfo(let id):
+    case .userInfo(let id):
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
       
     case .userList(let search):
@@ -105,3 +105,38 @@ extension UserApi: TargetType {
   }
 }
 
+struct UserInfoRequest: Codable {
+  let id: Int?
+  
+  init(
+    id: Int? = nil
+  ) {
+    self.id = id
+  }
+}
+
+struct UserInfoResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let data: User
+}
+
+// MARK: - User
+struct User: Codable {
+  let id: Int
+  let loginId, tel: String
+  let thumbnail: String?
+  let name, role: String
+  let active: Bool
+  let followings, followers: [Follow]?
+  let isFollowing: Bool
+  let foodLevel, usedLevel, communityLevel: Int?
+}
+
+// MARK: - Follow
+struct Follow: Codable {
+  let id: Int
+  let name: String?
+  let thumbnail: String?
+  let isFollowing: Bool
+}

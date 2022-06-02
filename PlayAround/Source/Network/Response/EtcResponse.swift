@@ -28,7 +28,7 @@ struct DefaultResponse: Codable {
 }
 struct LoginResponse: Codable {
   let statusCode: Int
-    let token: String
+  let token: String
   let message: String
 }
 
@@ -50,7 +50,7 @@ struct MyInfoResponse: Codable {
 }
 
 struct myinfo: Codable {
-    let id : Int
+  let id : Int
   let loginId, tel, name, role: String
 }
 
@@ -70,7 +70,7 @@ struct AdvertiseResponse: Codable {
 }
 
 struct AdvertiseList: Codable {
-    let id : Int
+  let id : Int
   let title, diff : String
   let url, thumbnail, image: String?
 }

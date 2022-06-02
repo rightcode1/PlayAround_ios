@@ -887,7 +887,7 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4lH-ot-cjf">
-                                                            <rect key="frame" x="0.0" y="517" width="414" height="30"/>
+                                                            <rect key="frame" x="0.0" y="517" width="414" height="34"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="content" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W62-jh-r4E">
                                                                     <rect key="frame" x="15" y="15" width="384" height="20"/>
@@ -905,7 +905,7 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ra2-ct-qit">
-                                                            <rect key="frame" x="0.0" y="547" width="414" height="23"/>
+                                                            <rect key="frame" x="0.0" y="551" width="414" height="23"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="해시태그" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ru8-9N-0fc">
                                                                     <rect key="frame" x="15" y="0.0" width="384" height="19"/>
@@ -926,7 +926,7 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tTz-Sd-ZtX">
-                                                            <rect key="frame" x="0.0" y="570" width="414" height="34"/>
+                                                            <rect key="frame" x="0.0" y="574" width="414" height="30"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="hashtag" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNV-FW-jAQ">
                                                                     <rect key="frame" x="15" y="15" width="384" height="86"/>
@@ -1606,7 +1606,10 @@
                     </navigationItem>
                     <size key="freeformSize" width="414" height="1500"/>
                     <connections>
+                        <outlet property="allergyCollectionView" destination="LFe-P0-f7u" id="Ltd-ef-R8o"/>
+                        <outlet property="anotherFoodListCollectionView" destination="UNs-sC-ddJ" id="mUc-14-i3k"/>
                         <outlet property="checkCheatButton" destination="gtR-Oh-xBf" id="osT-pd-6ij"/>
+                        <outlet property="commentCountlabel" destination="KCO-l5-XUA" id="gAO-y3-aXN"/>
                         <outlet property="dateLabel" destination="ljU-nJ-rhV" id="V7g-KS-ojI"/>
                         <outlet property="disLikeCountLabel" destination="4mD-wm-x45" id="B06-Na-uQB"/>
                         <outlet property="dislikeButton" destination="xbg-9U-2nb" id="YfV-MJ-P4y"/>
@@ -1621,6 +1624,7 @@
                         <outlet property="likeCountLabel" destination="unR-YM-hL6" id="aCm-Hx-uCb"/>
                         <outlet property="possibleRequestCountLabel" destination="bUA-Q2-D2u" id="Wxw-F2-KP9"/>
                         <outlet property="priceLabel" destination="hhE-oX-VvQ" id="Wf4-fS-TWj"/>
+                        <outlet property="registCommentButton" destination="A2w-wa-T2v" id="sdf-DP-dvT"/>
                         <outlet property="requestButton" destination="aQS-ym-dXW" id="hGF-3a-dRX"/>
                         <outlet property="requestPeopleCountLabel" destination="FJV-gN-cUs" id="89Y-dP-inE"/>
                         <outlet property="tableView" destination="kgD-YF-ETw" id="D4f-W0-YCa"/>
@@ -1629,6 +1633,7 @@
                         <outlet property="titleLabel" destination="VfT-2G-g11" id="nau-yD-WK0"/>
                         <outlet property="userFoodLevelImageView" destination="byf-aJ-Bf9" id="vHP-uc-YD9"/>
                         <outlet property="userNameLabel" destination="uMx-Yr-j3A" id="69C-Hq-Kwg"/>
+                        <outlet property="userNameLabel2" destination="Mio-6X-Sw6" id="chk-Yo-t6n"/>
                         <outlet property="userThumbnailImageView" destination="JdU-09-k0R" id="g77-HG-dCh"/>
                         <outlet property="viewCountLabel" destination="2aI-Zn-RQL" id="Xkl-kP-j7V"/>
                         <outlet property="wishBarButtonItem" destination="9U7-AM-yRz" id="AtR-vu-aet"/>

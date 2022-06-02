@@ -80,6 +80,18 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     // Dispose of any resources that can be recreated.
   }
   
+  func userInfo(result: @escaping (UserInfoResponse) -> Void) {
+    APIProvider.shared.userAPI.rx.request(.userInfo(param: UserInfoRequest()))
+      .filterSuccessfulStatusCodes()
+      .map(UserInfoResponse.self)
+      .subscribe(onSuccess: { response in
+        DataHelper.set(response.data.id, forKey: .userAppId)
+        result(response)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func foodLevelImage(level: Int) -> UIImage {
     return UIImage(named: "foodLevel\(level)") ?? UIImage()
   }

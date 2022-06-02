@@ -266,7 +266,7 @@ enum FoodAllergy: String, Codable {
 struct FoodDetailResponse: Codable {
   let statusCode: Int
   let message: String
-  let data: FoodDetailData
+  let data: FoodDetailData?
 }
 
 // MARK: - FoodDetailData

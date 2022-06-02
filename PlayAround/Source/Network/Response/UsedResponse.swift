@@ -29,22 +29,4 @@ struct UsedList: Codable {
   let isReport: Bool
 }
 
-// MARK: - User
-struct User: Codable {
-  let id: Int
-  let loginId, tel: String
-  let thumbnail: String?
-  let name, role: String
-  let active: Bool
-  let followings, followers: [Follow]?
-  let isFollowing: Bool
-  let foodLevel, usedLevel, communityLevel: Int?
-}
 
-// MARK: - Follow
-struct Follow: Codable {
-  let id: Int
-  let name: String?
-  let thumbnail: String?
-  let isFollowing: Bool
-}

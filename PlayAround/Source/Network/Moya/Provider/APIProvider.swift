@@ -10,7 +10,7 @@ import Moya
 final class APIProvider {
   static let shared = APIProvider()
   
-  var userAPI = MoyaProvider<UserApi>()
+  var userAPI = MoyaProvider<UserAPI>()
   var authAPI = MoyaProvider<AuthApi>()
   var communityAPI = MoyaProvider<CommunityApi>()
   var foodAPI = MoyaProvider<FoodApi>()
@@ -40,7 +40,7 @@ final class APIProvider {
 //      }
 //    }
     
-    userAPI = MoyaProvider<UserApi>(plugins: [MoyaLoggingPlugin()])
+    userAPI = MoyaProvider<UserAPI>(plugins: [MoyaLoggingPlugin()])
     authAPI = MoyaProvider<AuthApi>(plugins: [MoyaLoggingPlugin()])
     communityAPI = MoyaProvider<CommunityApi>(plugins: [MoyaLoggingPlugin()])
     foodAPI = MoyaProvider<FoodApi>(plugins: [MoyaLoggingPlugin()])
