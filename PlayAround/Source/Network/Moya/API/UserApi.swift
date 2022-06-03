@@ -6,13 +6,11 @@
 //
 
 import Foundation
-import Moya 
-import UIKit
+import Moya
 
 enum UserAPI {
   
   case userInfo(param: UserInfoRequest)
-  case userList(search: String?)
   case userUpdate(param: UserUpdateRequest)
   case userLogout
   case userWithDrawal
@@ -32,8 +30,6 @@ extension UserAPI: TargetType {
     switch self {
     case .userInfo:
       return "/v1/user/info"
-    case .userList:
-      return "/v1/user/list"
     case .userUpdate:
       return "/v1/user/update"
     case .userLogout:
@@ -51,7 +47,6 @@ extension UserAPI: TargetType {
     switch self {
       
     case .userInfo,
-        .userList,
         .userLogout:
       return .get
       
@@ -73,11 +68,8 @@ extension UserAPI: TargetType {
   
   var task: Task {
     switch self {
-    case .userInfo(let id):
-      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
-      
-    case .userList(let search):
-      return .requestParameters(parameters: ["search": search], encoding: URLEncoding.queryString)
+    case .userInfo(let param):
+      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
     case .userUpdate(let param):
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
