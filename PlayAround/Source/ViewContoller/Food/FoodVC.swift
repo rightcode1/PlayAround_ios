@@ -93,6 +93,8 @@ extension FoodVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let dict = foodList[indexPath.row]
-    
+    let vc = FoodDetailVC.viewController()
+    vc.foodId = dict.id
+    self.navigationController?.pushViewController(vc, animated: true)
   }
 }

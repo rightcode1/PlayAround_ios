@@ -81,7 +81,8 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
   }
   
   func userInfo(result: @escaping (UserInfoResponse) -> Void) {
-    APIProvider.shared.userAPI.rx.request(.userInfo(param: UserInfoRequest()))
+    let param = UserInfoRequest()
+    APIProvider.shared.userAPI.rx.request(.userInfo(param: param))
       .filterSuccessfulStatusCodes()
       .map(UserInfoResponse.self)
       .subscribe(onSuccess: { response in

@@ -71,7 +71,7 @@ struct FoodListRequest: Codable {
   let villageId: Int?
   let hashtag: String?
   let isWish: String?
-  let userId: String?
+  let userId: Int?
   let isReport: String?
   
   
@@ -85,7 +85,7 @@ struct FoodListRequest: Codable {
     villageId: Int? = nil,
     hashtag: String? = nil,
     isWish: String? = nil,
-    userId: String? = nil,
+    userId: Int? = nil,
     isReport: String? = nil
   ) {
     self.category = category

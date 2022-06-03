@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-class FoodDetailVC: BaseViewController {
+class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var wishBarButtonItem: UIBarButtonItem!
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var thumbnailCollectionView: UICollectionView!
@@ -43,8 +43,10 @@ class FoodDetailVC: BaseViewController {
   @IBOutlet weak var hashtagLabel: UILabel!
   
   @IBOutlet weak var allergyCollectionView: UICollectionView!
+  @IBOutlet weak var allergyCollectionVIewHeightConstraint: NSLayoutConstraint!
   
   @IBOutlet weak var userNameLabel2: UILabel!
+  @IBOutlet weak var anotherFoodView: UIStackView!
   @IBOutlet weak var anotherFoodListCollectionView: UICollectionView!
   
   @IBOutlet weak var commentCountlabel: UILabel!
@@ -62,7 +64,11 @@ class FoodDetailVC: BaseViewController {
   var isFullRequest = false
   var isRequest = false
   
+  let isWish = BehaviorSubject<Bool>(value: false)
+  
   let isLike = BehaviorSubject<Bool?>(value: nil)
+  let likeCount = BehaviorSubject<Int>(value: 0)
+  let dislikeCount = BehaviorSubject<Int>(value: 0)
   
   let allergyList: [FoodAllergy] = [.없음, .갑각류, .생선, .메밀복숭아, .견과류, .달걀, .우유]
   var selectedAllergyList: [FoodAllergy] = []
@@ -73,6 +79,7 @@ class FoodDetailVC: BaseViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    setTableView()
     setCollectionView()
     bindInput()
     bindOutput()
@@ -80,6 +87,20 @@ class FoodDetailVC: BaseViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     initUserInfo()
+  }
+  
+  override func viewDidLayoutSubviews() {
+    tableView.layoutTableHeaderView()
+  }
+  
+  static func viewController() -> FoodDetailVC {
+    let viewController = FoodDetailVC.viewController(storyBoardName: "Food")
+    return viewController
+  }
+  
+  func setTableView() {
+    tableView.delegate = self
+    tableView.dataSource = self
   }
   
   func setCollectionView() {
@@ -110,12 +131,13 @@ class FoodDetailVC: BaseViewController {
   func setAllergyCollectionViewLayout() {
     let layout = UICollectionViewFlowLayout()
     layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-    let width = (APP_WIDTH() - 72) / 7
+    let width = (APP_WIDTH() - 30) / 7
     layout.itemSize = CGSize(width: width, height: width + 5.5)
-    layout.minimumInteritemSpacing = 6
-    layout.minimumLineSpacing = 6
+    layout.minimumInteritemSpacing = 0
+    layout.minimumLineSpacing = 0
     layout.invalidateLayout()
     allergyCollectionView.collectionViewLayout = layout
+    allergyCollectionVIewHeightConstraint.constant = width + 5.5
   }
   
   func setAnotherFoodListCollectionViewLayout() {
@@ -151,6 +173,7 @@ class FoodDetailVC: BaseViewController {
   func initUserInfo() {
     userInfo() { result in
       self.initFoodDetail()
+      self.initAnotherFoodList(userId: result.data.id)
     }
   }
   
@@ -161,11 +184,17 @@ class FoodDetailVC: BaseViewController {
       .map(FoodDetailResponse.self)
       .subscribe(onSuccess: { value in
         guard let data = value.data else { return }
+        
         self.thumbnailList = data.images
+        self.thumbnailCountLabel.text = "1/\(self.thumbnailList.count)"
+        self.thumbnailCollectionView.reloadData()
+        
         self.selectedAllergyList = data.allergy
+        
         self.foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리예정
         self.foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리완료
       
+        self.isWish.onNext(data.isWish)
         self.titleLabel.text = data.name
         self.priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
         
@@ -175,7 +204,7 @@ class FoodDetailVC: BaseViewController {
         self.userNameLabel.text = userData.name
         self.dateLabel.text = data.createdAt
         self.wishCountLabel.text = "\(data.wishCount)"
-        self.viewCountLabel.text = "\(data.viewCount)"
+        self.viewCountLabel.text = "조회 \(data.viewCount)"
         self.isFollow.onNext(userData.isFollowing)
         
         self.isMine = data.userId == DataHelperTool.userAppId ?? 0
@@ -200,9 +229,15 @@ class FoodDetailVC: BaseViewController {
         }
         self.initRequstButton()
         
-        self.likeCountLabel.text = "좋아요 \(data.likeCount)"
-        self.disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"
+        self.foodContentLabel.text = data.content
+        let hashTagList = data.hashtag.map({ "#\($0)" })
+        self.hashtagLabel.text = hashTagList.joined(separator: " ")
         
+        self.isLike.onNext(data.isLike)
+        self.likeCount.onNext(data.likeCount)
+        self.dislikeCount.onNext(data.dislikeCount)
+        
+        self.initCommentList()
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
@@ -210,15 +245,98 @@ class FoodDetailVC: BaseViewController {
       .disposed(by: disposeBag)
   }
   
-  func bindInput() {
+  func initAnotherFoodList(userId: Int) {
+    let param = FoodListRequest(userId: userId)
+    APIProvider.shared.foodAPI.rx.request(.foodList(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(FoodListResponse.self)
+      .subscribe(onSuccess: { value in
+        self.anotherFoodList = value.list
+        self.anotherFoodView.isHidden = value.list.count <= 0
+        self.anotherFoodListCollectionView.reloadData()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func initCommentList() {
+    APIProvider.shared.foodCommnetAPI.rx.request(.foodCommentList(foodId: foodId))
+      .filterSuccessfulStatusCodes()
+      .map(FoodCommentListResponse.self)
+      .subscribe(onSuccess: { value in
+        self.commentList = value.list
+        self.tableView.reloadData()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func registWish() {
+    let param = RegistFoodWishRequest(foodId: foodId)
+    APIProvider.shared.foodWishAPI.rx.request(.wishRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.initFoodDetail()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func removeWish() {
+    APIProvider.shared.foodWishAPI.rx.request(.wishRemove(foodId: foodId))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.initFoodDetail()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func registLike(isLike: Bool) {
+    let param = RegistFoodLikeRequest(isLike: isLike, foodId: foodId)
+    APIProvider.shared.foodLikeAPI.rx.request(.likeRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.initFoodDetail()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func removeLike() {
+    APIProvider.shared.foodLikeAPI.rx.request(.likeRemove(id: foodId))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.initFoodDetail()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func registFollow() {
     
   }
   
-  func bindOutput() {
-    isLike
-      .bind(onNext: { [weak self] isLike in
+  func bindInput() {
+    wishBarButtonItem.rx.tap
+      .bind(onNext: { [weak self] in
         guard let self = self else { return }
-        if let bool = isLike {
+        if try! self.isWish.value() {
+          self.removeWish()
+        } else {
+          self.registWish()
+        }
+      })
+      .disposed(by: disposeBag)
+    
+    followButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        if try! self.isFollow.value() {
           
         } else {
           
@@ -226,12 +344,72 @@ class FoodDetailVC: BaseViewController {
       })
       .disposed(by: disposeBag)
     
+    likeButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        if try! self.isLike.value() != nil {
+          self.removeLike()
+        } else {
+          self.registLike(isLike: true)
+        }
+      })
+      .disposed(by: disposeBag)
+    
+    dislikeButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        if try! self.isLike.value() != nil {
+          self.removeLike()
+        } else {
+          self.registLike(isLike: false)
+        }
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func bindOutput() {
+    isLike
+      .bind(onNext: { [weak self] isLike in
+        guard let self = self else { return }
+        if let bool = isLike {
+          self.likeButton.image = bool ? UIImage(named: "like") : UIImage(named: "likeoff")
+          self.dislikeButton.image = !bool ? UIImage(named: "dislike") : UIImage(named: "dislikeoff")
+        } else {
+          self.likeButton.image = UIImage(named: "likeoff")
+          self.dislikeButton.image = UIImage(named: "dislikeoff")
+        }
+      })
+      .disposed(by: disposeBag)
+    
+    isWish
+      .bind(onNext: { [weak self] isWish in
+        guard let self = self else { return }
+        if isWish {
+          self.wishBarButtonItem.image = UIImage(named: "heartFull")
+        } else {
+          self.wishBarButtonItem.image = UIImage(named: "heardEmpty")
+        }
+      })
+      .disposed(by: disposeBag)
+    
     isFollow
       .bind(onNext: { [weak self] isFollow in
         guard let self = self else { return }
-        
+        self.initFollowButton(isFollow)
       })
       .disposed(by: disposeBag)
+    
+    likeCount
+      .bind(onNext: { [weak self] count in
+        guard let self = self else { return }
+        self.likeCountLabel.text = "좋아요 \(count)"
+      }).disposed(by: disposeBag)
+    
+    dislikeCount
+      .bind(onNext: { [weak self] count in
+        guard let self = self else { return }
+        self.disLikeCountLabel.text = "싫어요 \(count)"
+      }).disposed(by: disposeBag)
   }
   
 }
@@ -257,7 +435,7 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     if collectionView == thumbnailCollectionView {
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+      let cell = thumbnailCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
       let dict = thumbnailList[indexPath.row]
       guard let imageView = cell.viewWithTag(1) as? UIImageView else {
         return cell
@@ -266,7 +444,7 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
       imageView.kf.setImage(with: URL(string: dict.name))
       return cell
     } else if collectionView == allergyCollectionView {
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+      let cell = allergyCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
       let dict = allergyList[indexPath.row]
       guard let imageView = cell.viewWithTag(1) as? UIImageView else {
         return cell
@@ -275,7 +453,7 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
       imageView.image = selectedAllergyList.contains(dict) ? dict.onImage() : dict.offImage()
       return cell
     } else {
-      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FoodListCell
+      let cell = anotherFoodListCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FoodListCell
       let dict = anotherFoodList[indexPath.row]
       cell.update(dict, isDetail: "detail")
       return cell
@@ -292,4 +470,25 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
   }
   
+}
+
+// MARK: - TableView
+extension FoodDetailVC: UITableViewDelegate, UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return commentList.count
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = self.tableView.dequeueReusableCell(withIdentifier: "FoodCommentListCell") as! FoodCommentListCell
+    
+    let dict = commentList[indexPath.row]
+    cell.update(dict)
+    
+    cell.selectionStyle = .none
+    return cell
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return UITableView.automaticDimension
+  }
 }

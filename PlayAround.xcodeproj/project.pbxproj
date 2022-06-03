@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		CB87B44E2848B3DE000297BB /* FoodCommentListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44D2848B3DE000297BB /* FoodCommentListCell.swift */; };
 		CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44F2848B532000297BB /* FoodCommentAPI.swift */; };
+		CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B4512849FDA4000297BB /* FoodWishAPI.swift */; };
+		CB87B4542849FEBB000297BB /* FoodLikeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B4532849FEBB000297BB /* FoodLikeAPI.swift */; };
 		CBEE7DC2283B348C000BEC15 /* Food.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEE7DC1283B348C000BEC15 /* Food.storyboard */; };
 		CBEE7DC4283B59E9000BEC15 /* FoodVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */; };
 		CBEE7DC9283B5D6D000BEC15 /* FoodListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE7DC8283B5D6D000BEC15 /* FoodListCell.swift */; };
@@ -126,6 +128,8 @@
 		9700BC72A55D67CD210741D7 /* Pods-PlayAround.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround.release.xcconfig"; path = "Target Support Files/Pods-PlayAround/Pods-PlayAround.release.xcconfig"; sourceTree = "<group>"; };
 		CB87B44D2848B3DE000297BB /* FoodCommentListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentListCell.swift; sourceTree = "<group>"; };
 		CB87B44F2848B532000297BB /* FoodCommentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentAPI.swift; sourceTree = "<group>"; };
+		CB87B4512849FDA4000297BB /* FoodWishAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodWishAPI.swift; sourceTree = "<group>"; };
+		CB87B4532849FEBB000297BB /* FoodLikeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLikeAPI.swift; sourceTree = "<group>"; };
 		CBEE7DC1283B348C000BEC15 /* Food.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Food.storyboard; sourceTree = "<group>"; };
 		CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodVC.swift; sourceTree = "<group>"; };
 		CBEE7DC8283B5D6D000BEC15 /* FoodListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodListCell.swift; sourceTree = "<group>"; };
@@ -399,8 +403,10 @@
 				DFA40472282B90BE004E8859 /* AuthApi.swift */,
 				DF3D6484283264B500D72D36 /* CommunityApi.swift */,
 				DF63D87528340C7D00711E53 /* FoodApi.swift */,
-				DF63D87728341FA100711E53 /* UsedApi.swift */,
 				CB87B44F2848B532000297BB /* FoodCommentAPI.swift */,
+				CB87B4512849FDA4000297BB /* FoodWishAPI.swift */,
+				CB87B4532849FEBB000297BB /* FoodLikeAPI.swift */,
+				DF63D87728341FA100711E53 /* UsedApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -839,6 +845,7 @@
 				DFA45224282B7A1A0059EEFC /* Class+ZoomAndSnapFolwLayout.swift in Sources */,
 				DF3C36D328364F2900BD05D8 /* MainHeaderCell.swift in Sources */,
 				DFA4521E282B7A1A0059EEFC /* Functions.swift in Sources */,
+				CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */,
 				DFA40462282B86F3004E8859 /* UserAPI.swift in Sources */,
 				DFA451C6282B762D0059EEFC /* AppDelegate.swift in Sources */,
 				DF7EE3FD283233C500788CFE /* HomeVC.swift in Sources */,
@@ -861,6 +868,7 @@
 				DFA45221282B7A1A0059EEFC /* String+Extension.swift in Sources */,
 				DF63D87628340C7D00711E53 /* FoodApi.swift in Sources */,
 				DFBDF461283DD9FC00404D44 /* CommunityVC.swift in Sources */,
+				CB87B4542849FEBB000297BB /* FoodLikeAPI.swift in Sources */,
 				DFA4521A282B7A1A0059EEFC /* CustomPageController.swift in Sources */,
 				DFA4047B282BA02C004E8859 /* VersionResponse.swift in Sources */,
 				DFA4522A282B7A1A0059EEFC /* Date+Extension.swift in Sources */,

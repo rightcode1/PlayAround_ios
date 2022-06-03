@@ -12,8 +12,14 @@ final class APIProvider {
   
   var userAPI = MoyaProvider<UserAPI>()
   var authAPI = MoyaProvider<AuthApi>()
+  
   var communityAPI = MoyaProvider<CommunityApi>()
+  
   var foodAPI = MoyaProvider<FoodApi>()
+  var foodCommnetAPI = MoyaProvider<FoodCommentAPI>()
+  var foodWishAPI = MoyaProvider<FoodWishAPI>()
+  var foodLikeAPI = MoyaProvider<FoodLikeAPI>()
+  
   var usedAPI = MoyaProvider<UsedApi>()
   
   private init() {
@@ -42,8 +48,14 @@ final class APIProvider {
     
     userAPI = MoyaProvider<UserAPI>(plugins: [MoyaLoggingPlugin()])
     authAPI = MoyaProvider<AuthApi>(plugins: [MoyaLoggingPlugin()])
+    
     communityAPI = MoyaProvider<CommunityApi>(plugins: [MoyaLoggingPlugin()])
+    
     foodAPI = MoyaProvider<FoodApi>(plugins: [MoyaLoggingPlugin()])
+    foodCommnetAPI = MoyaProvider<FoodCommentAPI>(plugins: [MoyaLoggingPlugin()])
+    foodWishAPI = MoyaProvider<FoodWishAPI>(plugins: [MoyaLoggingPlugin()])
+    foodLikeAPI = MoyaProvider<FoodLikeAPI>(plugins: [MoyaLoggingPlugin()])
+    
     usedAPI = MoyaProvider<UsedApi>(plugins: [MoyaLoggingPlugin()])
   }
 }
