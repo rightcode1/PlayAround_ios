@@ -20,7 +20,10 @@ final class APIProvider {
   var foodWishAPI = MoyaProvider<FoodWishAPI>()
   var foodLikeAPI = MoyaProvider<FoodLikeAPI>()
   
+  var followAPI = MoyaProvider<FollowAPI>()
+  
   var usedAPI = MoyaProvider<UsedApi>()
+  var reportAPI = MoyaProvider<ReportAPI>()
   
   private init() {
 //
@@ -56,7 +59,10 @@ final class APIProvider {
     foodWishAPI = MoyaProvider<FoodWishAPI>(plugins: [MoyaLoggingPlugin()])
     foodLikeAPI = MoyaProvider<FoodLikeAPI>(plugins: [MoyaLoggingPlugin()])
     
+    followAPI = MoyaProvider<FollowAPI>(plugins: [MoyaLoggingPlugin()])
+    
     usedAPI = MoyaProvider<UsedApi>(plugins: [MoyaLoggingPlugin()])
+    reportAPI = MoyaProvider<ReportAPI>(plugins: [MoyaLoggingPlugin()])
   }
 }
 

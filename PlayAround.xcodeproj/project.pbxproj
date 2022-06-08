@@ -11,6 +11,12 @@
 		CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44F2848B532000297BB /* FoodCommentAPI.swift */; };
 		CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B4512849FDA4000297BB /* FoodWishAPI.swift */; };
 		CB87B4542849FEBB000297BB /* FoodLikeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B4532849FEBB000297BB /* FoodLikeAPI.swift */; };
+		CBE3DAD8284F55C100A2A1B6 /* FollowAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE3DAD7284F55C100A2A1B6 /* FollowAPI.swift */; };
+		CBE3DADB2850704900A2A1B6 /* FoodSortPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE3DADA2850704900A2A1B6 /* FoodSortPopupVC.swift */; };
+		CBE3DADD2850708200A2A1B6 /* CheckCrimeHistoryPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE3DADC2850708200A2A1B6 /* CheckCrimeHistoryPopupVC.swift */; };
+		CBE3DADF285070AC00A2A1B6 /* FoodDetailMenuPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE3DADE285070AC00A2A1B6 /* FoodDetailMenuPopupVC.swift */; };
+		CBE3DAE1285070BC00A2A1B6 /* FoodReportPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE3DAE0285070BC00A2A1B6 /* FoodReportPopupVC.swift */; };
+		CBE3DAE328507AD000A2A1B6 /* ReportAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE3DAE228507AD000A2A1B6 /* ReportAPI.swift */; };
 		CBEE7DC2283B348C000BEC15 /* Food.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEE7DC1283B348C000BEC15 /* Food.storyboard */; };
 		CBEE7DC4283B59E9000BEC15 /* FoodVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */; };
 		CBEE7DC9283B5D6D000BEC15 /* FoodListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEE7DC8283B5D6D000BEC15 /* FoodListCell.swift */; };
@@ -130,6 +136,12 @@
 		CB87B44F2848B532000297BB /* FoodCommentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentAPI.swift; sourceTree = "<group>"; };
 		CB87B4512849FDA4000297BB /* FoodWishAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodWishAPI.swift; sourceTree = "<group>"; };
 		CB87B4532849FEBB000297BB /* FoodLikeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLikeAPI.swift; sourceTree = "<group>"; };
+		CBE3DAD7284F55C100A2A1B6 /* FollowAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowAPI.swift; sourceTree = "<group>"; };
+		CBE3DADA2850704900A2A1B6 /* FoodSortPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSortPopupVC.swift; sourceTree = "<group>"; };
+		CBE3DADC2850708200A2A1B6 /* CheckCrimeHistoryPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCrimeHistoryPopupVC.swift; sourceTree = "<group>"; };
+		CBE3DADE285070AC00A2A1B6 /* FoodDetailMenuPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDetailMenuPopupVC.swift; sourceTree = "<group>"; };
+		CBE3DAE0285070BC00A2A1B6 /* FoodReportPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodReportPopupVC.swift; sourceTree = "<group>"; };
+		CBE3DAE228507AD000A2A1B6 /* ReportAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportAPI.swift; sourceTree = "<group>"; };
 		CBEE7DC1283B348C000BEC15 /* Food.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Food.storyboard; sourceTree = "<group>"; };
 		CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodVC.swift; sourceTree = "<group>"; };
 		CBEE7DC8283B5D6D000BEC15 /* FoodListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodListCell.swift; sourceTree = "<group>"; };
@@ -278,10 +290,22 @@
 			path = TableView;
 			sourceTree = "<group>";
 		};
+		CBE3DAD92850703200A2A1B6 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				CBE3DADA2850704900A2A1B6 /* FoodSortPopupVC.swift */,
+				CBE3DADC2850708200A2A1B6 /* CheckCrimeHistoryPopupVC.swift */,
+				CBE3DADE285070AC00A2A1B6 /* FoodDetailMenuPopupVC.swift */,
+				CBE3DAE0285070BC00A2A1B6 /* FoodReportPopupVC.swift */,
+			);
+			path = Popup;
+			sourceTree = "<group>";
+		};
 		CBEE7DC0283B3476000BEC15 /* Food */ = {
 			isa = PBXGroup;
 			children = (
 				CBEE7DC5283B5D52000BEC15 /* Cell */,
+				CBE3DAD92850703200A2A1B6 /* Popup */,
 				CBEE7DC3283B59E9000BEC15 /* FoodVC.swift */,
 				CBEE7DD2283B74E2000BEC15 /* FoodDetailVC.swift */,
 			);
@@ -406,7 +430,9 @@
 				CB87B44F2848B532000297BB /* FoodCommentAPI.swift */,
 				CB87B4512849FDA4000297BB /* FoodWishAPI.swift */,
 				CB87B4532849FEBB000297BB /* FoodLikeAPI.swift */,
+				CBE3DAD7284F55C100A2A1B6 /* FollowAPI.swift */,
 				DF63D87728341FA100711E53 /* UsedApi.swift */,
+				CBE3DAE228507AD000A2A1B6 /* ReportAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -822,6 +848,7 @@
 			files = (
 				DF63D87428340C0700711E53 /* FoodResponse.swift in Sources */,
 				DFA45225282B7A1A0059EEFC /* UIColor+Extension.swift in Sources */,
+				CBE3DAE1285070BC00A2A1B6 /* FoodReportPopupVC.swift in Sources */,
 				DFA4521D282B7A1A0059EEFC /* Data+Extension.swift in Sources */,
 				DFA40486282BC263004E8859 /* LoginVC.swift in Sources */,
 				DF63D87B2834235A00711E53 /* UsedCell.swift in Sources */,
@@ -836,13 +863,17 @@
 				CBEE7DD0283B62DA000BEC15 /* CollectionViewImageCell.swift in Sources */,
 				DFA451CA282B762D0059EEFC /* ViewController.swift in Sources */,
 				DFA4522C282B7A1A0059EEFC /* Utils.swift in Sources */,
+				CBE3DAE328507AD000A2A1B6 /* ReportAPI.swift in Sources */,
 				DF7B5F082840F1A1000C2F59 /* CommunityCollectionViewCell.swift in Sources */,
 				DFA40483282BB89B004E8859 /* Plugin.swift in Sources */,
 				CBEE7DC9283B5D6D000BEC15 /* FoodListCell.swift in Sources */,
+				CBE3DADF285070AC00A2A1B6 /* FoodDetailMenuPopupVC.swift in Sources */,
 				DFA45217282B7A1A0059EEFC /* Class+CustomSlider.swift in Sources */,
 				DF770ABD282CB61A0038380E /* JoinVC.swift in Sources */,
 				CBEE7DCB283B5D8C000BEC15 /* FoodCategoryReusableView.swift in Sources */,
+				CBE3DADB2850704900A2A1B6 /* FoodSortPopupVC.swift in Sources */,
 				DFA45224282B7A1A0059EEFC /* Class+ZoomAndSnapFolwLayout.swift in Sources */,
+				CBE3DAD8284F55C100A2A1B6 /* FollowAPI.swift in Sources */,
 				DF3C36D328364F2900BD05D8 /* MainHeaderCell.swift in Sources */,
 				DFA4521E282B7A1A0059EEFC /* Functions.swift in Sources */,
 				CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */,
@@ -856,6 +887,7 @@
 				DFA45227282B7A1A0059EEFC /* Class+UICollectionViewLeftAlignedLayout.swift in Sources */,
 				DFA45222282B7A1A0059EEFC /* BaseViewController.swift in Sources */,
 				DF7EE3F92832232600788CFE /* TableView2Cell.swift in Sources */,
+				CBE3DADD2850708200A2A1B6 /* CheckCrimeHistoryPopupVC.swift in Sources */,
 				DFA4521C282B7A1A0059EEFC /* UIImage+Extension.swift in Sources */,
 				DFA4047D282BA051004E8859 /* EtcResponse.swift in Sources */,
 				DFA45216282B7A1A0059EEFC /* JSONFileReader.swift in Sources */,

@@ -7,9 +7,12 @@
 
 import UIKit
 import RxSwift
+import IQKeyboardManagerSwift
 
 class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var wishBarButtonItem: UIBarButtonItem!
+  @IBOutlet weak var menuBarButtonItem: UIBarButtonItem!
+  
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var thumbnailCollectionView: UICollectionView!
   @IBOutlet weak var thumbnailCountLabel: UILabel!
@@ -52,12 +55,30 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var commentCountlabel: UILabel!
   @IBOutlet weak var registCommentButton: UIButton!
   
+  @IBOutlet weak var replyView: UIView!
+  @IBOutlet weak var replyLabel: UILabel!
+  @IBOutlet weak var cancelReplyButton: UIButton!
+  
+  @IBOutlet weak var inputCommentView: UIView!
+  @IBOutlet weak var inputTextView: UITextView! {
+    didSet {
+      inputTextView.delegate = self
+    }
+  }
+  @IBOutlet weak var inputTextViewPlaceHolder: UILabel!
+  @IBOutlet weak var inputTextBottomConst: NSLayoutConstraint!
+  
+  @IBOutlet weak var registCommentButton2: UIButton!
+  
+  @IBOutlet weak var chatButton: UIButton!
+  
   var foodId: Int = -1
   
   var isMine: Bool = false
   
   var thumbnailList: [Image] = []
   
+  var foodUserId: Int = -1
   let isFollow = BehaviorSubject<Bool>(value: false)
   
   var isEndRequest = false
@@ -75,27 +96,89 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   
   var anotherFoodList: [FoodListData] = []
   
+  var replyCommentId: Int?
   var commentList: [FoodCommentListData] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    IQKeyboardManager.shared.enableAutoToolbar = false
     setTableView()
     setCollectionView()
     bindInput()
     bindOutput()
+    registNotificationCenter()
   }
   
   override func viewWillAppear(_ animated: Bool) {
     initUserInfo()
+    setTextViewHeight()
   }
   
   override func viewDidLayoutSubviews() {
     tableView.layoutTableHeaderView()
   }
   
+  override func viewDidDisappear(_ animated: Bool) {
+    IQKeyboardManager.shared.enableAutoToolbar = true
+  }
+  
   static func viewController() -> FoodDetailVC {
     let viewController = FoodDetailVC.viewController(storyBoardName: "Food")
     return viewController
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+    self.view.endEditing(true)
+    self.tableView.endEditing(true)
+  }
+  
+  func registNotificationCenter() {
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+  }
+  
+  func resetReplyInfo() {
+    self.replyCommentId = nil
+    self.replyView.alpha = 0
+  }
+  
+  // 텍스트의 맞게 텍스트뷰 높이 설정
+  func setTextViewHeight() {
+    let size = CGSize(width: inputTextView.frame.width, height: .infinity)
+    let estimatedSize = inputTextView.sizeThatFits(size)
+    inputTextView.constraints.forEach { (constraint) in
+      
+      if constraint.firstAttribute == .height {
+        constraint.constant = estimatedSize.height
+      }
+    }
+  }
+  
+  @objc func keyboardWillShow(_ notification: NSNotification) {
+    if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+      UIView.animate(withDuration: 1.5, delay: 0.0, options: .curveEaseOut, animations: {
+        print("\(APP_WIDTH())/\(APP_HEIGHT())")
+        
+        if APP_WIDTH() >= 375 && APP_HEIGHT() > 750 {
+          self.inputTextBottomConst.constant = keyboardRect.height - 34
+        } else {
+          self.inputTextBottomConst.constant = keyboardRect.height
+        }
+        
+        self.inputCommentView.isHidden = false
+        self.chatButton.isHidden = true
+        self.view.layoutIfNeeded()
+      })
+    }
+  }
+  
+  @objc func keyboardWillHide(_ notification: NSNotification) {
+    UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+      self.inputTextBottomConst.constant = 0
+      self.inputCommentView.isHidden = true
+      self.chatButton.isHidden = false
+      self.view.layoutIfNeeded()
+    })
   }
   
   func setTableView() {
@@ -154,6 +237,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     followButton.backgroundColor = isFollow ? .white : UIColor(red: 243/255, green: 112/255, blue: 34/255, alpha: 1.0)
     followButton.layer.borderWidth = isFollow ? 1 : 0
     followButton.layer.borderColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1.0).cgColor
+    followButton.setTitleColor(isFollow ? UIColor(red: 188/255, green: 188/255, blue: 188/255, alpha: 1.0) : .white, for: .normal)
     followButton.setTitle(isFollow ? "팔로잉" : "+팔로우", for: .normal)
   }
   
@@ -199,6 +283,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
         
         let userData = data.user
+        self.foodUserId = userData.id
         self.userThumbnailImageView.kf.setImage(with: URL(string: userData.thumbnail ?? ""))
         self.userFoodLevelImageView.image = self.foodLevelImage(level: userData.foodLevel ?? 1)
         self.userNameLabel.text = userData.name
@@ -265,6 +350,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .map(FoodCommentListResponse.self)
       .subscribe(onSuccess: { value in
         self.commentList = value.list
+        self.commentCountlabel.text = "\(value.list.count)"
         self.tableView.reloadData()
       }, onError: { error in
       })
@@ -318,7 +404,41 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   }
   
   func registFollow() {
-    
+    let param = RegistFollowRequest(userId: foodUserId)
+    APIProvider.shared.followAPI.rx.request(.register(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.isFollow.onNext(true)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func removeFollow() {
+    APIProvider.shared.followAPI.rx.request(.remove(userId: foodUserId))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.isFollow.onNext(false)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func registComment() {
+    let param = RegistFoodCommentRequest(foodId: foodId, content: inputTextView.text!, foodCommentId: replyCommentId)
+    APIProvider.shared.foodCommnetAPI.rx.request(.foodCommentRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.resetReplyInfo()
+        self.inputTextView.text = nil
+        self.view.endEditing(true)
+        self.initCommentList()
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
   }
   
   func bindInput() {
@@ -333,13 +453,23 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
       })
       .disposed(by: disposeBag)
     
+    menuBarButtonItem.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = FoodDetailMenuPopupVC.viewController()
+        vc.isMine.onNext(self.isMine)
+        vc.delegate = self
+        self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
     followButton.rx.tap
       .bind(onNext: { [weak self] in
         guard let self = self else { return }
         if try! self.isFollow.value() {
-          
+          self.removeFollow()
         } else {
-          
+          self.registFollow()
         }
       })
       .disposed(by: disposeBag)
@@ -363,6 +493,35 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         } else {
           self.registLike(isLike: false)
         }
+      })
+      .disposed(by: disposeBag)
+    
+    cancelReplyButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.resetReplyInfo()
+      })
+      .disposed(by: disposeBag)
+    
+    registCommentButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.inputTextView.becomeFirstResponder()
+      })
+      .disposed(by: disposeBag)
+    
+    registCommentButton2.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        if !self.inputTextView.text.isEmpty {
+          self.registComment()
+        }
+      })
+      .disposed(by: disposeBag)
+    
+    inputTextView.rx.text.orEmpty
+      .bind(onNext: { [weak self] text in
+        self?.inputTextViewPlaceHolder.isHidden = !text.isEmpty
       })
       .disposed(by: disposeBag)
   }
@@ -413,6 +572,62 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   }
   
 }
+
+extension FoodDetailVC: UITextViewDelegate {
+  func textViewDidChange(_ textView: UITextView) {
+    let spacing = CharacterSet.whitespacesAndNewlines
+    if !textView.text.trimmingCharacters(in: spacing).isEmpty || !textView.text.isEmpty {
+      textView.textColor = .black
+    } else if textView.text.isEmpty {
+      textView.textColor = .lightGray
+    }
+    setTextViewHeight()
+  }
+}
+
+extension FoodDetailVC: FoodCommentListCellDelegate {
+  func setReplyInfo(commentId: Int, userName: String) {
+    self.inputTextView.becomeFirstResponder()
+    replyCommentId = commentId
+    replyLabel.text = "\(userName)님에게 답글 다는 중..."
+    UIView.animate(withDuration: 0.5) {
+      self.replyView.alpha = 1.0
+      self.replyView.layoutIfNeeded()
+    }
+  }
+}
+
+extension FoodDetailVC: FoodDetailMenuDelegate {
+  func shareFood() {
+    
+  }
+  
+  func updateFood() {
+    
+  }
+  
+  func updateFoodStatus() {
+    
+  }
+  
+  func removeFood() {
+    
+  }
+  
+  func reportFood() {
+    let vc = FoodReportPopupVC.viewController()
+    vc.delegate = self
+    vc.foodId = foodId
+    self.present(vc, animated: true)
+  }
+}
+
+extension FoodDetailVC: FoodReportDelegate {
+  func finishFoodReport() {
+    showToast(message: "신고가 완료되었습니다.", yPosition: APP_HEIGHT() / 2)
+  }
+}
+
 
 extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -482,6 +697,7 @@ extension FoodDetailVC: UITableViewDelegate, UITableViewDataSource {
     let cell = self.tableView.dequeueReusableCell(withIdentifier: "FoodCommentListCell") as! FoodCommentListCell
     
     let dict = commentList[indexPath.row]
+    cell.delegate = self
     cell.update(dict)
     
     cell.selectionStyle = .none

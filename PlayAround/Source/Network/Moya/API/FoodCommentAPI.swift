@@ -20,6 +20,7 @@ extension FoodCommentAPI: TargetType {
       return URL(string: ApiEnvironment.baseUrl)!
     }
   }
+  
   var path: String {
     switch self {
     case .foodCommentList : return "/v1/foodComment/list"
