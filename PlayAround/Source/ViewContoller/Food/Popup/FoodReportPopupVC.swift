@@ -22,6 +22,7 @@ class FoodReportPopupVC: BaseViewController, ViewControllerFromStoryboard, UITex
   
   var delegate: FoodReportDelegate?
   var foodId: Int?
+  var usedId: Int?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -43,7 +44,7 @@ class FoodReportPopupVC: BaseViewController, ViewControllerFromStoryboard, UITex
   }
   
   func registReport() {
-    let param = RegistReportRequest(content: contentTextView.text!, foodId: foodId)
+    let param = RegistReportRequest(content: contentTextView.text!, foodId: foodId, usedId: usedId)
     APIProvider.shared.reportAPI.rx.request(.register(param: param))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)

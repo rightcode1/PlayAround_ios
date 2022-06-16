@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "foodLevel3.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "scale" : "2x",
+      "filename" : "foodLevel3@2x.png",
+      "idiom" : "universal"
+    },
+    {
+      "scale" : "3x",
+      "idiom" : "universal",
+      "filename" : "foodLevel3@3x.png"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

@@ -12,6 +12,12 @@ enum FoodApi {
   
   case foodList(param: FoodListRequest)
   case foodDetail(id: Int)
+  
+  case register(param: FoodRegistRequest)
+  case update(id: Int, param: FoodRegistRequest)
+  case remove(id: Int)
+  
+  case imageRegister(foodId: Int, imageList: [UIImage])
 }
 extension FoodApi: TargetType {
   public var baseURL: URL {
@@ -20,10 +26,16 @@ extension FoodApi: TargetType {
       return URL(string: ApiEnvironment.baseUrl)!
     }
   }
+  
+  
   var path: String {
     switch self {
     case .foodList : return "/v1/food/list"
     case .foodDetail : return "/v1/food/detail"
+    case .register : return "/v1/food/register"
+    case .update : return "/v1/food/update"
+    case .remove : return "/v1/food/remove"
+    case .imageRegister : return "/v1/foodImage/register"
     }
   }
   
@@ -32,6 +44,13 @@ extension FoodApi: TargetType {
     case .foodList,
         .foodDetail:
       return .get
+    case .register,
+        .imageRegister:
+      return .post
+    case .update:
+      return .put
+    case .remove:
+      return .delete
     }
   }
   
@@ -45,6 +64,20 @@ extension FoodApi: TargetType {
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
     case .foodDetail(let id):
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+    case .register(let param):
+      return .requestJSONEncodable(param)
+    case .update(let id, let param):
+      return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
+    case .remove(let id):
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
+    case .imageRegister(let foodId, let imageList):
+        let multipartList = imageList.map { image in
+          return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.9)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+        }
+        return .uploadCompositeMultipart(
+          multipartList,
+          urlParameters: ["foodId": foodId]
+        )
     }
   }
   
@@ -73,7 +106,7 @@ struct FoodListRequest: Codable {
   let isWish: String?
   let userId: Int?
   let isReport: String?
-  
+  let sort: FoodSort?
   
   init(
     category: FoodCategory? = nil,
@@ -86,7 +119,8 @@ struct FoodListRequest: Codable {
     hashtag: String? = nil,
     isWish: String? = nil,
     userId: Int? = nil,
-    isReport: String? = nil
+    isReport: String? = nil,
+    sort: FoodSort? = nil
   ) {
     self.category = category
     self.search = search
@@ -99,56 +133,9 @@ struct FoodListRequest: Codable {
     self.isWish = isWish
     self.userId = userId
     self.isReport = isReport
+    self.sort = sort
   }
   
-}
-
-enum FoodCategory: String, Codable {
-  case 전체
-  case 국물
-  case 찜
-  case 볶음
-  case 나물
-  case 베이커리
-  case 저장
-  
-  func onImage() -> UIImage {
-    switch self {
-    case .전체:
-      return UIImage(named: "sideCategoryFullColorOn1") ?? UIImage()
-    case .국물:
-      return UIImage(named: "sideDishCategoryFullColorOn2") ?? UIImage()
-    case .찜:
-      return UIImage(named: "sideDishCategoryFullColorOn3") ?? UIImage()
-    case .볶음:
-      return UIImage(named: "sideDishCategoryFullColorOn4") ?? UIImage()
-    case .나물:
-      return UIImage(named: "sideDishCategoryFullColorOn5") ?? UIImage()
-    case .베이커리:
-      return UIImage(named: "sideDishCategoryFullColorOn6") ?? UIImage()
-    case .저장:
-      return UIImage(named: "sideDishCategoryFullColorOn7") ?? UIImage()
-    }
-  }
-  
-  func offImage() -> UIImage {
-    switch self {
-    case .전체:
-      return UIImage(named: "sideCategoryFullColorOff1") ?? UIImage()
-    case .국물:
-      return UIImage(named: "sideDishCategoryFullColorOff2") ?? UIImage()
-    case .찜:
-      return UIImage(named: "sideDishCategoryFullColorOff3") ?? UIImage()
-    case .볶음:
-      return UIImage(named: "sideDishCategoryFullColorOff4") ?? UIImage()
-    case .나물:
-      return UIImage(named: "sideDishCategoryFullColorOff5") ?? UIImage()
-    case .베이커리:
-      return UIImage(named: "sideDishCategoryFullColorOff6") ?? UIImage()
-    case .저장:
-      return UIImage(named: "sideDishCategoryFullColorOff7") ?? UIImage()
-    }
-  }
 }
 
 // MARK: - FoodListResponse
@@ -214,53 +201,6 @@ enum Thumbnail: Codable {
   }
 }
 
-enum FoodAllergy: String, Codable {
-  case 없음
-  case 갑각류
-  case 생선
-  case 메밀복숭아 = "메밀/복숭아"
-  case 견과류
-  case 달걀
-  case 우유
-  
-  func onImage() -> UIImage {
-    switch self {
-    case .없음:
-      return UIImage(named: "foodAllergyDetailImageOn1") ?? UIImage()
-    case .갑각류:
-      return UIImage(named: "foodAllergyDetailImageOn2") ?? UIImage()
-    case .생선:
-      return UIImage(named: "foodAllergyDetailImageOn3") ?? UIImage()
-    case .메밀복숭아:
-      return UIImage(named: "foodAllergyDetailImageOn4") ?? UIImage()
-    case .견과류:
-      return UIImage(named: "foodAllergyDetailImageOn5") ?? UIImage()
-    case .달걀:
-      return UIImage(named: "foodAllergyDetailImageOn6") ?? UIImage()
-    case .우유:
-      return UIImage(named: "foodAllergyDetailImageOn7") ?? UIImage()
-    }
-  }
-  
-  func offImage() -> UIImage {
-    switch self {
-    case .없음:
-      return UIImage(named: "foodAllergyDetailImageOff1") ?? UIImage()
-    case .갑각류:
-      return UIImage(named: "foodAllergyDetailImageOff2") ?? UIImage()
-    case .생선:
-      return UIImage(named: "foodAllergyDetailImageOff3") ?? UIImage()
-    case .메밀복숭아:
-      return UIImage(named: "foodAllergyDetailImageOff4") ?? UIImage()
-    case .견과류:
-      return UIImage(named: "foodAllergyDetailImageOff5") ?? UIImage()
-    case .달걀:
-      return UIImage(named: "foodAllergyDetailImageOff6") ?? UIImage()
-    case .우유:
-      return UIImage(named: "foodAllergyDetailImageOff7") ?? UIImage()
-    }
-  }
-}
 
 // MARK: - FoodDetailResponse
 struct FoodDetailResponse: Codable {
@@ -295,4 +235,18 @@ struct FoodDetailData: Codable {
   let foodUsers: [User]
   let hashtag: [String]
   let isReport: Bool
+}
+
+
+// MARK: - FoodRegistRequest
+struct FoodRegistRequest: Codable {
+  let category: FoodCategory
+  let name, content: String
+  let price: Int
+  let hashtag: [String]
+  let allergy: [FoodAllergy]
+  let villageId: Int
+  let userCount: Int?
+  let dueDate: String?
+  let status: FoodStatus
 }

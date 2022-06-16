@@ -97,7 +97,7 @@ class HomeVC: BaseViewController{
   func initUsedList() {
     self.showHUD()
     let param = UsedListRequest()
-    APIProvider.shared.usedAPI.rx.request(.UsedList(param: param))
+    APIProvider.shared.usedAPI.rx.request(.list(param: param))
       .filterSuccessfulStatusCodes()
       .map(UsedResponse.self)
       .subscribe(onSuccess: { value in

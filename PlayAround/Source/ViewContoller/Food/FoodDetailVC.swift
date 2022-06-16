@@ -174,6 +174,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   
   @objc func keyboardWillHide(_ notification: NSNotification) {
     UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+      self.resetReplyInfo()
       self.inputTextBottomConst.constant = 0
       self.inputCommentView.isHidden = true
       self.chatButton.isHidden = false
@@ -208,6 +209,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     layout.minimumInteritemSpacing = 0
     layout.minimumLineSpacing = 0
     layout.invalidateLayout()
+    layout.scrollDirection = .horizontal
     thumbnailCollectionView.collectionViewLayout = layout
   }
   
@@ -474,6 +476,15 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
       })
       .disposed(by: disposeBag)
     
+    checkCheatButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = CheckCrimeHistoryPopupVC.viewController()
+        vc.delegate = self 
+        self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
     likeButton.rx.tapGesture().when(.recognized)
       .bind(onNext: { [weak self] _ in
         guard let self = self else { return }
@@ -597,6 +608,12 @@ extension FoodDetailVC: FoodCommentListCellDelegate {
   }
 }
 
+extension FoodDetailVC: CheckCrimeHistoryDelegate {
+  func moveToCheckCheatWithWeb(urlString: String) {
+    openUrl(urlString)
+  }
+}
+
 extension FoodDetailVC: FoodDetailMenuDelegate {
   func shareFood() {
     
@@ -634,7 +651,7 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     if scrollView.isEqual(thumbnailCollectionView) {
       let page = Int(targetContentOffset.pointee.x / thumbnailCollectionView.bounds.width)
       print(page)
-      thumbnailCountLabel.text = "\(page)/\(thumbnailList.count)"
+      thumbnailCountLabel.text = "\(page + 1)/\(thumbnailList.count)"
     }
   }
   
@@ -694,7 +711,7 @@ extension FoodDetailVC: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = self.tableView.dequeueReusableCell(withIdentifier: "FoodCommentListCell") as! FoodCommentListCell
+    let cell = self.tableView.dequeueReusableCell(withIdentifier: "FoodCommentListCell") as! CommentListCell
     
     let dict = commentList[indexPath.row]
     cell.delegate = self

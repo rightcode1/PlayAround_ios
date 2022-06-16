@@ -22,8 +22,10 @@ final class APIProvider {
   
   var followAPI = MoyaProvider<FollowAPI>()
   
-  var usedAPI = MoyaProvider<UsedApi>()
+  var usedAPI = MoyaProvider<UsedAPI>()
   var reportAPI = MoyaProvider<ReportAPI>()
+  
+  var hashtagAPI = MoyaProvider<HashtagAPI>()
   
   private init() {
 //
@@ -61,8 +63,10 @@ final class APIProvider {
     
     followAPI = MoyaProvider<FollowAPI>(plugins: [MoyaLoggingPlugin()])
     
-    usedAPI = MoyaProvider<UsedApi>(plugins: [MoyaLoggingPlugin()])
+    usedAPI = MoyaProvider<UsedAPI>(plugins: [MoyaLoggingPlugin()])
     reportAPI = MoyaProvider<ReportAPI>(plugins: [MoyaLoggingPlugin()])
+    
+    hashtagAPI = MoyaProvider<HashtagAPI>(plugins: [MoyaLoggingPlugin()])
   }
 }
 

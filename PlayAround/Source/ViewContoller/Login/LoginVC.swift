@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import TAKUUID
 
 class LoginVC: BaseViewController{
   @IBOutlet weak var idTextField: UITextField!
@@ -21,8 +22,10 @@ class LoginVC: BaseViewController{
   }
   
   func login() {
+    TAKUUIDStorage.sharedInstance().migrate()
+    let uuid = TAKUUIDStorage.sharedInstance().findOrCreate() ?? ""
     self.showHUD()
-    let param = LoginRequest(loginId: idTextField.text!, password: pwdTextField.text!)
+    let param = LoginRequest(loginId: idTextField.text!, password: pwdTextField.text!, deviceId: uuid)
     APIProvider.shared.authAPI.rx.request(.login(param: param))
       .filterSuccessfulStatusCodes()
       .map(LoginResponse.self)

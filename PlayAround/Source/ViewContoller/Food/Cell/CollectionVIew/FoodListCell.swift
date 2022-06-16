@@ -39,4 +39,22 @@ class FoodListCell: UICollectionViewCell {
     disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"
   }
   
+  func update(_ data: UsedListData) {
+    foodStatusStackView.arrangedSubviews[0].isHidden = true
+    foodStatusStackView.arrangedSubviews[1].isHidden = true
+    
+    likeCountLabel.isHidden = true
+    disLikeCountLabel.isHidden = true
+    
+    if let thumbnailURL = data.thumbnail {
+      thumbnailImageView.kf.setImage(with: URL(string: thumbnailURL))
+    }
+    
+    titleLabel.text = data.name
+    priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
+    wishCountLabel.text = "\(data.wishCount)"
+    likeCountLabel.text = "좋아요 \(data.likeCount)"
+    disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"
+  }
+  
 }

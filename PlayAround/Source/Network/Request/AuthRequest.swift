@@ -73,5 +73,5 @@ struct ChangePasswordRequest: Codable {
 struct LoginRequest: Codable {
   var loginId: String
   var password: String
-
+  let deviceId: String 
 }

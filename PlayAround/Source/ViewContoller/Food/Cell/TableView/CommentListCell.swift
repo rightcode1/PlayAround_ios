@@ -1,5 +1,5 @@
 //
-//  FoodCommentListCell.swift
+//  CommentListCell.swift
 //  PlayAround
 //
 //  Created by haon on 2022/06/02.
@@ -11,7 +11,7 @@ protocol FoodCommentListCellDelegate {
   func setReplyInfo(commentId: Int, userName: String)
 }
 
-class FoodCommentListCell: UITableViewCell {
+class CommentListCell: UITableViewCell {
   
   @IBOutlet weak var thumbnailImageView: UIImageView!
   @IBOutlet weak var thumbnailImageViewLeadingConstraint: NSLayoutConstraint!
@@ -45,6 +45,21 @@ class FoodCommentListCell: UITableViewCell {
   }
   
   func update(_ data: FoodCommentListData) {
+    commentId = data.id
+    userName = data.user.name
+    
+    let isReply = data.depth == 1
+    thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
+    thumbnailImageViewLeadingConstraint.constant = isReply ? 50 : 15
+    foodLevelImageView.image = foodLevelImage(level: data.user.foodLevel ?? 1)
+    
+    userNameLabel.text = data.user.name
+    commentLabel.text = data.content
+    dateLabel.text = data.createdAt
+    replyButton.isHidden = isReply
+  }
+  
+  func update(_ data: UsedCommentListData) {
     commentId = data.id
     userName = data.user.name
     
