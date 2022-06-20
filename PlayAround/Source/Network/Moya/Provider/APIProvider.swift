@@ -27,6 +27,10 @@ final class APIProvider {
   
   var hashtagAPI = MoyaProvider<HashtagAPI>()
   
+  var noticeAPI = MoyaProvider<NoticeAPI>()
+  var faqAPI = MoyaProvider<FAQAPI>()
+  var inquiryAPI = MoyaProvider<InquiryAPI>()
+  
   private init() {
 //
 //    let networkLoggerPlugin = NetworkLoggerPlugin(configuration: .init(formatter: .init(entry: { (string1, string2, targetType) -> String in
@@ -67,6 +71,10 @@ final class APIProvider {
     reportAPI = MoyaProvider<ReportAPI>(plugins: [MoyaLoggingPlugin()])
     
     hashtagAPI = MoyaProvider<HashtagAPI>(plugins: [MoyaLoggingPlugin()])
+    
+    noticeAPI = MoyaProvider<NoticeAPI>(plugins: [MoyaLoggingPlugin()])
+    faqAPI = MoyaProvider<FAQAPI>(plugins: [MoyaLoggingPlugin()])
+    inquiryAPI = MoyaProvider<InquiryAPI>(plugins: [MoyaLoggingPlugin()])
   }
 }
 

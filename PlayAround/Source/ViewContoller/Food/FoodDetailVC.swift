@@ -620,7 +620,9 @@ extension FoodDetailVC: FoodDetailMenuDelegate {
   }
   
   func updateFood() {
-    
+    let vc = RegistFoodVC.viewController()
+    vc.foodId = foodId
+    self.navigationController?.pushViewController(vc, animated: true)
   }
   
   func updateFoodStatus() {

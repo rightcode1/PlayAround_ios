@@ -16,7 +16,7 @@ enum UsedAPI {
   case update(id: Int, param: RegistUsedRequest)
   case remove(id: Int)
   
-  case imageRegister(useId: Int, imageList: [UIImage])
+  case imageRegister(usedId: Int, imageList: [UIImage])
   
   case likeRegister(param: RegistUsedLikeRequest)
   case likeRemove(id: Int)
@@ -93,13 +93,13 @@ extension UsedAPI: TargetType {
       return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
     case .remove(let id):
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
-    case .imageRegister(let useId, let imageList):
+    case .imageRegister(let usedId, let imageList):
       let multipartList = imageList.map { image in
         return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.9)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
       }
       return .uploadCompositeMultipart(
         multipartList,
-        urlParameters: ["useId": useId]
+        urlParameters: ["usedId": usedId]
       )
     case .likeRegister(let param):
       return .requestJSONEncodable(param)
@@ -138,7 +138,7 @@ struct UsedListRequest: Codable {
   let dong: String?
   let villageId: Int?
   let hashtag: String?
-  let isWish: String?
+  let isWish: Bool?
   let userId: Int?
   let isReport: String?
   let sort: UsedSort?
@@ -152,7 +152,7 @@ struct UsedListRequest: Codable {
     dong: String? = nil,
     villageId: Int? = nil,
     hashtag: String? = nil,
-    isWish: String? = nil,
+    isWish: Bool? = nil,
     userId: Int? = nil,
     isReport: String? = nil,
     sort: UsedSort? = nil

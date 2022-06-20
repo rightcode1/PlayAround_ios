@@ -55,8 +55,18 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    
+    setCollectionViews()
+    bindInput()
+  }
+  
+  static func viewController() -> RegistUsedVC {
+    let viewController = RegistUsedVC.viewController(storyBoardName: "Used")
+    return viewController
+  }
+  
+  func setCollectionViews() {
+    setCategoryCollectionView()
+    setUploadImageCollectionViewLayout()
   }
   
   func setCategoryCollectionView() {
@@ -153,6 +163,120 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
     }
     
     print("self.assets : \(self.assets?.count ?? 0)")
+  }
+  
+  func registFood() {
+    guard let selectedCategory = selectedCategory else {
+      showToast(message: "카테고리를 선택해주세요.")
+      return
+    }
+    
+    guard !titleTextField.text!.isEmpty else {
+      showToast(message: "제목 입력해주세요.")
+      return
+    }
+    
+    guard !priceTextField.text!.isEmpty else {
+      showToast(message: "달란트를 입력해주세요.")
+      return
+    }
+    
+    guard !contentTextView.text!.isEmpty else {
+      showToast(message: "내용을 입력해주세요.")
+      return
+    }
+    
+    if hashtag.count <= 0 {
+      showToast(message: "해시태그를 입력해주세요.")
+      return
+    }
+    
+    let param = RegistUsedRequest(
+      category: selectedCategory,
+      name: titleTextField.text!,
+      content: contentTextView.text!,
+      price: Int(priceTextField.text!) ?? 0,
+      villageId: 0,
+      hashtag: hashtag
+    )
+    
+    showHUD()
+    
+    if let usedId = self.usedId { // 수정
+      APIProvider.shared.usedAPI.rx.request(.update(id: usedId, param: param))
+        .filterSuccessfulStatusCodes()
+        .subscribe(onSuccess: { response in
+          self.uploadIamgeList(usedId: usedId, success: {
+            self.dismissHUD()
+            self.callOkActionMSGDialog(message: "수정되었습니다") {
+              self.backPress()
+            }
+          })
+          
+        }, onError: { error in
+          self.dismissHUD()
+          self.callMSGDialog(message: "오류가 발생하였습니다")
+        })
+        .disposed(by: disposeBag)
+    } else { // 생성
+      APIProvider.shared.usedAPI.rx.request(.register(param: param))
+        .filterSuccessfulStatusCodes()
+        .map(DefaultIDResponse.self)
+        .subscribe(onSuccess: { response in
+          let id = response.data?.id ?? 0
+          self.uploadIamgeList(usedId: id, success: {
+            self.dismissHUD()
+            self.callOkActionMSGDialog(message: "요청되었습니다") {
+              self.backPress()
+            }
+          })
+          
+        }, onError: { error in
+          self.dismissHUD()
+          self.callMSGDialog(message: "오류가 발생하였습니다")
+        })
+        .disposed(by: disposeBag)
+    }
+  }
+  
+  func uploadIamgeList(usedId: Int, success: @escaping () -> Void) {
+    if uploadImages.isEmpty {
+      success()
+    } else {
+      APIProvider.shared.usedAPI.rx.request(.imageRegister(usedId: usedId, imageList: uploadImages.map({ $0 })))
+        .filterSuccessfulStatusCodes()
+        .subscribe(onSuccess: { response in
+          success()
+        }, onError: { error in
+          success()
+        })
+        .disposed(by: disposeBag)
+    }
+  }
+  
+  func bindInput() {
+    contentTextView.rx.text.orEmpty
+      .bind(onNext: { [weak self] text in
+        self?.contentTextViewPlaceHolder.isHidden = !text.isEmpty
+      })
+      .disposed(by: disposeBag)
+    
+    setHashTagButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        let vc = HashtagListVC.viewController()
+        vc.delegate = self
+        vc.selectHashtag = self.hashtag
+        self.navigationController?.pushViewController(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
+    registButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        self.registFood()
+      })
+      .disposed(by: disposeBag)
   }
   
 }

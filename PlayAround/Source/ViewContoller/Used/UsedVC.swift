@@ -33,7 +33,7 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
   func setUsedListCollectionViewLayout() {
     let layout = UICollectionViewFlowLayout()
     layout.sectionInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
-    layout.itemSize = CGSize(width: (APP_WIDTH() - 40) / 2, height: 195)
+    layout.itemSize = CGSize(width: (APP_WIDTH() - 40) / 2, height: 175)
     layout.minimumInteritemSpacing = 10
     layout.minimumLineSpacing = 10
     layout.headerReferenceSize = CGSize(width: APP_WIDTH(), height: 87)
@@ -56,7 +56,6 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
       .subscribe(onSuccess: { value in
         self.usedList = value.list
         self.usedListCollectionView.reloadData()
-        
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()

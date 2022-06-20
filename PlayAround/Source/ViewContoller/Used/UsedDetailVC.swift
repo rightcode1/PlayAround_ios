@@ -243,7 +243,7 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         let userData = data.user
         self.usedUserId = userData.id
         self.userThumbnailImageView.kf.setImage(with: URL(string: userData.thumbnail ?? ""))
-        self.userUsedLevelImageView.image = self.foodLevelImage(level: userData.foodLevel ?? 1)
+        self.userUsedLevelImageView.image = self.usedLevelImage(level: userData.usedLevel ?? 1)
         self.userNameLabel.text = userData.name
         self.dateLabel.text = data.createdAt
         self.wishCountLabel.text = "\(data.wishCount)"
@@ -558,7 +558,9 @@ extension UsedDetailVC: FoodDetailMenuDelegate {
   }
   
   func updateFood() {
-    
+    let vc = RegistUsedVC.viewController()
+    vc.usedId = usedId
+    self.navigationController?.pushViewController(vc, animated: true)
   }
   
   func updateFoodStatus() {

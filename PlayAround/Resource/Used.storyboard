@@ -1311,7 +1311,7 @@
                                         <connections>
                                             <outlet property="commentLabel" destination="oyu-3e-fGA" id="Sq7-s7-Q0H"/>
                                             <outlet property="dateLabel" destination="mew-K1-LVI" id="4sZ-sX-u4N"/>
-                                            <outlet property="foodLevelImageView" destination="Odg-Ni-wAN" id="w0P-Pv-7T5"/>
+                                            <outlet property="levelImageView" destination="Odg-Ni-wAN" id="w0P-Pv-7T5"/>
                                             <outlet property="replyButton" destination="1J7-Q4-WnE" id="E28-HU-JCg"/>
                                             <outlet property="thumbnailImageView" destination="mVd-aK-Ov1" id="4va-wW-SuG"/>
                                             <outlet property="thumbnailImageViewLeadingConstraint" destination="2aO-fm-EOo" id="Dvb-ma-c51"/>
@@ -1527,7 +1527,7 @@
         <!--중고거래-->
         <scene sceneID="YN4-sz-yam">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="bge-kW-MdV" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RegistUsedVC" hidesBottomBarWhenPushed="YES" id="bge-kW-MdV" customClass="RegistUsedVC" customModule="PlayAround" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fKy-Yi-39U">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2013,15 +2013,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="categoryCollectionView" destination="kCC-Z7-c8Z" id="oNh-JO-kF0"/>
-                        <outlet property="contentTextView" destination="1er-jT-e22" id="ZdT-bh-4pD"/>
-                        <outlet property="contentTextViewPlaceHolder" destination="IjP-7V-yDG" id="dd0-zA-Qi8"/>
+                        <outlet property="categoryCollectionView" destination="kCC-Z7-c8Z" id="6LJ-My-yrb"/>
+                        <outlet property="contentTextView" destination="1er-jT-e22" id="mnC-7N-keU"/>
+                        <outlet property="contentTextViewPlaceHolder" destination="IjP-7V-yDG" id="TiZ-Zs-47p"/>
                         <outlet property="hashtagTextView" destination="pp0-f4-HQd" id="XhC-5U-U7W"/>
                         <outlet property="hashtagTextViewPlaceHolder" destination="uO5-Ma-8S8" id="ryM-X9-ahU"/>
-                        <outlet property="priceTextField" destination="7nZ-PD-NSX" id="Ruk-BQ-osi"/>
+                        <outlet property="priceTextField" destination="7nZ-PD-NSX" id="cBh-Jc-XX0"/>
                         <outlet property="registButton" destination="VOj-61-8Bv" id="IZW-WE-LAQ"/>
                         <outlet property="setHashTagButton" destination="FKQ-vC-H1f" id="7wd-QR-mQi"/>
-                        <outlet property="titleTextField" destination="ofc-Ke-FgK" id="7rd-OZ-E2Q"/>
+                        <outlet property="titleTextField" destination="ofc-Ke-FgK" id="NIp-lT-TaI"/>
                         <outlet property="uploadImageCollectionView" destination="JOa-ld-7iQ" id="2p5-vs-zEY"/>
                     </connections>
                 </viewController>

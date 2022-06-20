@@ -253,7 +253,7 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
     }
     
     guard !titleTextField.text!.isEmpty else {
-      showToast(message: "전화번호를 입력해주세요.")
+      showToast(message: "제목을 입력해주세요.")
       return
     }
     
@@ -304,8 +304,8 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
         .filterSuccessfulStatusCodes()
         .subscribe(onSuccess: { response in
           self.uploadIamgeList(foodId: foodId, success: {
+            self.dismissHUD()
             self.callOkActionMSGDialog(message: "수정되었습니다") {
-              self.dismissHUD()
               self.backPress()
             }
           })
@@ -322,8 +322,8 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
         .subscribe(onSuccess: { response in
           let foodId = response.data?.id ?? 0
           self.uploadIamgeList(foodId: foodId, success: {
+            self.dismissHUD()
             self.callOkActionMSGDialog(message: "요청되었습니다") {
-              self.dismissHUD()
               self.backPress()
             }
           })

@@ -15,7 +15,7 @@ class CommentListCell: UITableViewCell {
   
   @IBOutlet weak var thumbnailImageView: UIImageView!
   @IBOutlet weak var thumbnailImageViewLeadingConstraint: NSLayoutConstraint!
-  @IBOutlet weak var foodLevelImageView: UIImageView!
+  @IBOutlet weak var levelImageView: UIImageView!
   
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var commentLabel: UILabel!
@@ -44,6 +44,10 @@ class CommentListCell: UITableViewCell {
     return UIImage(named: "foodLevel\(level)") ?? UIImage()
   }
   
+  func usedLevelImage(level: Int) -> UIImage {
+    return UIImage(named: "usedLevel\(level)") ?? UIImage()
+  }
+  
   func update(_ data: FoodCommentListData) {
     commentId = data.id
     userName = data.user.name
@@ -51,7 +55,7 @@ class CommentListCell: UITableViewCell {
     let isReply = data.depth == 1
     thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
     thumbnailImageViewLeadingConstraint.constant = isReply ? 50 : 15
-    foodLevelImageView.image = foodLevelImage(level: data.user.foodLevel ?? 1)
+    levelImageView.image = foodLevelImage(level: data.user.foodLevel ?? 1)
     
     userNameLabel.text = data.user.name
     commentLabel.text = data.content
@@ -66,7 +70,7 @@ class CommentListCell: UITableViewCell {
     let isReply = data.depth == 1
     thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
     thumbnailImageViewLeadingConstraint.constant = isReply ? 50 : 15
-    foodLevelImageView.image = foodLevelImage(level: data.user.foodLevel ?? 1)
+    levelImageView.image = usedLevelImage(level: data.user.usedLevel ?? 1)
     
     userNameLabel.text = data.user.name
     commentLabel.text = data.content

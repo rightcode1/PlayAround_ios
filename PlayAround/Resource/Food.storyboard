@@ -1573,7 +1573,7 @@
                                         <connections>
                                             <outlet property="commentLabel" destination="ovT-8q-52q" id="kcM-Wj-KnO"/>
                                             <outlet property="dateLabel" destination="ogK-ds-kPB" id="l5C-Yr-3zx"/>
-                                            <outlet property="foodLevelImageView" destination="RhI-hk-xLp" id="XBn-HA-591"/>
+                                            <outlet property="levelImageView" destination="RhI-hk-xLp" id="XBn-HA-591"/>
                                             <outlet property="replyButton" destination="9yC-Ew-ms4" id="dGX-DB-GUC"/>
                                             <outlet property="thumbnailImageView" destination="mfg-4f-4KY" id="Ig5-HC-VQy"/>
                                             <outlet property="thumbnailImageViewLeadingConstraint" destination="f22-Zc-EqK" id="c8R-9H-E97"/>

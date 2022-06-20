@@ -103,7 +103,7 @@ struct FoodListRequest: Codable {
   let dong: String?
   let villageId: Int?
   let hashtag: String?
-  let isWish: String?
+  let isWish: Bool?
   let userId: Int?
   let isReport: String?
   let sort: FoodSort?
@@ -117,7 +117,7 @@ struct FoodListRequest: Codable {
     dong: String? = nil,
     villageId: Int? = nil,
     hashtag: String? = nil,
-    isWish: String? = nil,
+    isWish: Bool? = nil,
     userId: Int? = nil,
     isReport: String? = nil,
     sort: FoodSort? = nil
