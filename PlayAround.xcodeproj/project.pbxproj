@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		059FCB831FFF6B83804C6517 /* Pods_PlayAround_PlayAroundUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3A1E30C2CDD9B628E65CF6C /* Pods_PlayAround_PlayAroundUITests.framework */; };
+		CB3860782861D41100C4B688 /* ImageListWithScrolViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */; };
+		CB38607A2861D9D100C4B688 /* SearchFoodAndUsedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */; };
 		CB87B44E2848B3DE000297BB /* CommentListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44D2848B3DE000297BB /* CommentListCell.swift */; };
 		CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44F2848B532000297BB /* FoodCommentAPI.swift */; };
 		CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B4512849FDA4000297BB /* FoodWishAPI.swift */; };
@@ -165,6 +167,8 @@
 		9700BC72A55D67CD210741D7 /* Pods-PlayAround.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround.release.xcconfig"; path = "Target Support Files/Pods-PlayAround/Pods-PlayAround.release.xcconfig"; sourceTree = "<group>"; };
 		A3A1E30C2CDD9B628E65CF6C /* Pods_PlayAround_PlayAroundUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayAround_PlayAroundUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4062B5B711D08DCF2E69834 /* Pods-PlayAround-PlayAroundUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround-PlayAroundUITests.debug.xcconfig"; path = "Target Support Files/Pods-PlayAround-PlayAroundUITests/Pods-PlayAround-PlayAroundUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListWithScrolViewViewController.swift; sourceTree = "<group>"; };
+		CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFoodAndUsedVC.swift; sourceTree = "<group>"; };
 		CB87B44D2848B3DE000297BB /* CommentListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListCell.swift; sourceTree = "<group>"; };
 		CB87B44F2848B532000297BB /* FoodCommentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentAPI.swift; sourceTree = "<group>"; };
 		CB87B4512849FDA4000297BB /* FoodWishAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodWishAPI.swift; sourceTree = "<group>"; };
@@ -451,6 +455,7 @@
 				CBAD1390285738FC00247EE6 /* RegistFoodVC.swift */,
 				CBAD139828586FC400247EE6 /* SelectFoodDateVC.swift */,
 				CBAD139C28587D8A00247EE6 /* HashtagListVC.swift */,
+				CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */,
 			);
 			path = Food;
 			sourceTree = "<group>";
@@ -505,6 +510,7 @@
 		DF770AC6282CD8480038380E /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */,
 				CBAD139528586BF300247EE6 /* SelectedDateView.swift */,
 				CBAD139628586BF300247EE6 /* SelectedDateView.xib */,
 				CBEE7DCC283B62B7000BEC15 /* Cell */,
@@ -1171,11 +1177,13 @@
 				CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */,
 				DFA4521B282B7A1A0059EEFC /* ViewcontrollerExtention.swift in Sources */,
 				CBAD13A52859DB5800247EE6 /* UsedDetailVC.swift in Sources */,
+				CB3860782861D41100C4B688 /* ImageListWithScrolViewViewController.swift in Sources */,
 				DFA45215282B7A1A0059EEFC /* PresentationController.swift in Sources */,
 				CBAD139B2858790E00247EE6 /* HashtagAPI.swift in Sources */,
 				CBDBEBA128603C3A00165352 /* InquiryAPI.swift in Sources */,
 				CBDBEBA828604E3E00165352 /* UIImagePickerController+Extension.swift in Sources */,
 				DF308A8B282E500D008E9728 /* AuthResponse.swift in Sources */,
+				CB38607A2861D9D100C4B688 /* SearchFoodAndUsedVC.swift in Sources */,
 				DF770AC3282CB66C0038380E /* FindPwdVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
