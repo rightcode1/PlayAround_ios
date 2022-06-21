@@ -128,6 +128,11 @@ class CommunityDetailVC: BaseViewController{
     imageCollectionView.reloadData()
   }
   
+  @IBAction func tapRegister(_ sender: Any) {
+    let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityDetailRegisterVC") as! CommunityDetailRegisterVC
+    self.navigationController?.pushViewController(vc, animated: true)
+  }
+  
 }
 
 extension CommunityDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

@@ -24,6 +24,7 @@
 		DF3D648128325E4000D72D36 /* CommunityResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D648028325E4000D72D36 /* CommunityResponse.swift */; };
 		DF3D64832832607D00D72D36 /* UsedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D64822832607D00D72D36 /* UsedResponse.swift */; };
 		DF3D6485283264B500D72D36 /* CommunityApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D6484283264B500D72D36 /* CommunityApi.swift */; };
+		DF5BBACC2857439600ACFE0A /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5BBACB2857439600ACFE0A /* CommentCell.swift */; };
 		DF63D872283405C500711E53 /* AdvertisementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF63D871283405C500711E53 /* AdvertisementCell.swift */; };
 		DF63D87428340C0700711E53 /* FoodResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF63D87328340C0700711E53 /* FoodResponse.swift */; };
 		DF63D87628340C7D00711E53 /* FoodApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF63D87528340C7D00711E53 /* FoodApi.swift */; };
@@ -46,6 +47,8 @@
 		DF7EE3F92832232600788CFE /* TableView2Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7EE3F72832232600788CFE /* TableView2Cell.swift */; };
 		DF7EE3FA2832232600788CFE /* TableView2Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DF7EE3F82832232600788CFE /* TableView2Cell.xib */; };
 		DF7EE3FD283233C500788CFE /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7EE3FC283233C500788CFE /* HomeVC.swift */; };
+		DF8072EF284C630800941277 /* CommunityDetailRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8072EE284C630700941277 /* CommunityDetailRegisterVC.swift */; };
+		DF8072F1284C71AC00941277 /* CommunityVote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8072F0284C71AC00941277 /* CommunityVote.swift */; };
 		DFA40457282B7FE6004E8859 /* Splash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFA40456282B7FE6004E8859 /* Splash.storyboard */; };
 		DFA4045A282B807E004E8859 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40459282B807E004E8859 /* SplashVC.swift */; };
 		DFA4045E282B86D3004E8859 /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA4045D282B86D3004E8859 /* APIProvider.swift */; };
@@ -139,6 +142,7 @@
 		DF3D648028325E4000D72D36 /* CommunityResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityResponse.swift; sourceTree = "<group>"; };
 		DF3D64822832607D00D72D36 /* UsedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedResponse.swift; sourceTree = "<group>"; };
 		DF3D6484283264B500D72D36 /* CommunityApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityApi.swift; sourceTree = "<group>"; };
+		DF5BBACB2857439600ACFE0A /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		DF63D871283405C500711E53 /* AdvertisementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementCell.swift; sourceTree = "<group>"; };
 		DF63D87328340C0700711E53 /* FoodResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodResponse.swift; sourceTree = "<group>"; };
 		DF63D87528340C7D00711E53 /* FoodApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodApi.swift; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 		DF7EE3F72832232600788CFE /* TableView2Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView2Cell.swift; sourceTree = "<group>"; };
 		DF7EE3F82832232600788CFE /* TableView2Cell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableView2Cell.xib; sourceTree = "<group>"; };
 		DF7EE3FC283233C500788CFE /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		DF8072EE284C630700941277 /* CommunityDetailRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDetailRegisterVC.swift; sourceTree = "<group>"; };
+		DF8072F0284C71AC00941277 /* CommunityVote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVote.swift; sourceTree = "<group>"; };
 		DFA40456282B7FE6004E8859 /* Splash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Splash.storyboard; sourceTree = "<group>"; };
 		DFA40459282B807E004E8859 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		DFA4045D282B86D3004E8859 /* APIProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
@@ -340,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				DF7B5F0D2840F2B8000C2F59 /* CommunityCategoryReusableView.swift */,
+				DF5BBACB2857439600ACFE0A /* CommentCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -606,6 +613,8 @@
 				DFBDF460283DD9FC00404D44 /* CommunityVC.swift */,
 				DF756C442844D51D005EC418 /* CommunityDetailVC.swift */,
 				DF383A1228460A1500F89E5F /* CommunityInfoDetailVC.swift */,
+				DF8072EE284C630700941277 /* CommunityDetailRegisterVC.swift */,
+				DF8072F0284C71AC00941277 /* CommunityVote.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -827,6 +836,7 @@
 				DFA40483282BB89B004E8859 /* Plugin.swift in Sources */,
 				CBEE7DC9283B5D6D000BEC15 /* FoodListCell.swift in Sources */,
 				DFA45217282B7A1A0059EEFC /* Class+CustomSlider.swift in Sources */,
+				DF5BBACC2857439600ACFE0A /* CommentCell.swift in Sources */,
 				DF770ABD282CB61A0038380E /* JoinVC.swift in Sources */,
 				CBEE7DCB283B5D8C000BEC15 /* FoodCategoryReusableView.swift in Sources */,
 				DFA45224282B7A1A0059EEFC /* Class+ZoomAndSnapFolwLayout.swift in Sources */,
@@ -834,6 +844,7 @@
 				DFA4521E282B7A1A0059EEFC /* Functions.swift in Sources */,
 				DFA40462282B86F3004E8859 /* UserApi.swift in Sources */,
 				DFA451C6282B762D0059EEFC /* AppDelegate.swift in Sources */,
+				DF8072F1284C71AC00941277 /* CommunityVote.swift in Sources */,
 				DF7EE3FD283233C500788CFE /* HomeVC.swift in Sources */,
 				DF383A1328460A1500F89E5F /* CommunityInfoDetailVC.swift in Sources */,
 				DFA4045E282B86D3004E8859 /* APIProvider.swift in Sources */,
@@ -870,6 +881,7 @@
 				DFA4522B282B7A1A0059EEFC /* IAPHelper.swift in Sources */,
 				DFA4522E282B7A1A0059EEFC /* ImageFileManager.swift in Sources */,
 				DF770ACE282CE7930038380E /* JoingOkVC.swift in Sources */,
+				DF8072EF284C630800941277 /* CommunityDetailRegisterVC.swift in Sources */,
 				DFA4522F282B7A1A0059EEFC /* UIView+Extension.swift in Sources */,
 				DFA45229282B7A1A0059EEFC /* Class+AppColor.swift in Sources */,
 				DFA45228282B7A1A0059EEFC /* UITextField+Extension.swift in Sources */,

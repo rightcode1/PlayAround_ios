@@ -25,6 +25,7 @@ class CommunityInfoDetailVC:BaseViewController{
   var naviTitle: String?
   var detailId: Int?
   var imageList: [Image?] = []
+  var comment: [Comment] = []
   
   override func viewDidLoad() {
     navigationController?.title  = naviTitle
@@ -39,14 +40,15 @@ class CommunityInfoDetailVC:BaseViewController{
   }
   
   func initDelegate(){
-//    mainTableView.delegate = self
-//    mainTableView.dataSource = self
+    mainTableView.delegate = self
+    mainTableView.dataSource = self
     voteHiddenView.isHidden = true
     infoImageView.isHidden = true
     imageCollectionView.delegate = self
     imageCollectionView.dataSource = self
     
     imageCollectionView.register(UINib(nibName: "CollectionViewImageCell", bundle: nil), forCellWithReuseIdentifier: "CollectionViewImageCell")
+
   }
   
   func initNoticeDetail() {
@@ -62,6 +64,22 @@ class CommunityInfoDetailVC:BaseViewController{
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func initNoticeComment(_ id: Int) {
+    APIProvider.shared.communityAPI.rx.request(.CommuntyNoticeComment(id: id))
+      .filterSuccessfulStatusCodes()
+      .map(CommunityCommentResponse.self)
+      .subscribe(onSuccess: { value in
+        if(value.statusCode <= 200){
+          print(value.list)
+          self.commentCountLabel.text = "\(value.list.count)"
+          self.comment = value.list
+          self.mainTableView.reloadData()
+        }
+      }, onError: { error in
       })
       .disposed(by: disposeBag)
   }
@@ -83,20 +101,6 @@ class CommunityInfoDetailVC:BaseViewController{
       .disposed(by: disposeBag)
   }
   
-  func initNoticeComment(_ id: Int) {
-    APIProvider.shared.communityAPI.rx.request(.CommuntyNoticeComment(id: id))
-      .filterSuccessfulStatusCodes()
-      .map(CommunityCommentResponse.self)
-      .subscribe(onSuccess: { value in
-        if(value.statusCode <= 200){
-          self.commentCountLabel.text = "\(value.list.count)"
-          print(value.list)
-        }
-      }, onError: { error in
-      })
-      .disposed(by: disposeBag)
-  }
-  
   func initBoardComment(_ id: Int) {
     APIProvider.shared.communityAPI.rx.request(.CommuntyBoardComment(id: id))
       .filterSuccessfulStatusCodes()
@@ -104,7 +108,8 @@ class CommunityInfoDetailVC:BaseViewController{
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 200){
           self.commentCountLabel.text = "\(value.list.count)"
-          print(value.list)
+          self.comment = value.list
+          self.mainTableView.reloadData()
         }
       }, onError: { error in
       })
@@ -147,24 +152,29 @@ extension CommunityInfoDetailVC: UICollectionViewDelegate, UICollectionViewDataS
   }
   
 }
-//extension CommunityInfoDetailVC: UITableViewDataSource, UITableViewDelegate {
-//
-//  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    return communityBoard.count
+extension CommunityInfoDetailVC: UITableViewDataSource, UITableViewDelegate {
+
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return comment.count
+  }
+
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = self.mainTableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentCell
+    let dict = comment[indexPath.row]
+    return cell
+  }
+
+//  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //  }
-//
-//  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//    let cell = self.mainTableView.dequeueReusableCell(withIdentifier: "noticeCell", for: indexPath)
-//    let dict = communityNotice[indexPath.row]
-//    return cell
-//  }
-//
-////  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-////  }
-//
-//  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//      return 100
-//  }
-//
-//}
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    let dict = comment[indexPath.row]
+    
+    let mainWidth = UIScreen.main.bounds.width
+    
+    let textHeight = dict.content.height(withConstrainedWidth: mainWidth - (dict.depth == 1 ? 72 : 112), font: .systemFont(ofSize: 13))
+    
+    return (textHeight + 57)
+  }
+
+}
 

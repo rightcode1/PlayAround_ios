@@ -99,9 +99,10 @@ struct CommunityCommentResponse: Codable {
 
 // MARK: - List
 struct Comment: Codable {
-    let id, userId, communityBoardId: Int
+  let id, userId: Int
+  let  communityBoardId,CommunityNoticeId: Int?
     let content: String
     let depth: Int
     let createdAt: String
-    let user: [User]
+//    let user: [User]
 }
