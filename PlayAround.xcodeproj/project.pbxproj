@@ -88,7 +88,7 @@
 		DFA40457282B7FE6004E8859 /* Splash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFA40456282B7FE6004E8859 /* Splash.storyboard */; };
 		DFA4045A282B807E004E8859 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40459282B807E004E8859 /* SplashVC.swift */; };
 		DFA4045E282B86D3004E8859 /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA4045D282B86D3004E8859 /* APIProvider.swift */; };
-		DFA40462282B86F3004E8859 /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40461282B86F3004E8859 /* UserAPI.swift */; };
+		DFA40462282B86F3004E8859 /* UserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40461282B86F3004E8859 /* UserApi.swift */; };
 		DFA40465282B8707004E8859 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40464282B8707004E8859 /* Environment.swift */; };
 		DFA40473282B90BE004E8859 /* AuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40472282B90BE004E8859 /* AuthApi.swift */; };
 		DFA40477282B963B004E8859 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA40476282B963B004E8859 /* UserRequest.swift */; };
@@ -246,7 +246,7 @@
 		DFA40456282B7FE6004E8859 /* Splash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Splash.storyboard; sourceTree = "<group>"; };
 		DFA40459282B807E004E8859 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		DFA4045D282B86D3004E8859 /* APIProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
-		DFA40461282B86F3004E8859 /* UserAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
+		DFA40461282B86F3004E8859 /* UserApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserApi.swift; sourceTree = "<group>"; };
 		DFA40464282B8707004E8859 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		DFA40472282B90BE004E8859 /* AuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthApi.swift; sourceTree = "<group>"; };
 		DFA40476282B963B004E8859 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
@@ -568,7 +568,7 @@
 		DFA4045F282B86D5004E8859 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				DFA40461282B86F3004E8859 /* UserAPI.swift */,
+				DFA40461282B86F3004E8859 /* UserApi.swift */,
 				DFA40472282B90BE004E8859 /* AuthApi.swift */,
 				DF3D6484283264B500D72D36 /* CommunityApi.swift */,
 				DF63D87528340C7D00711E53 /* FoodApi.swift */,
@@ -1107,7 +1107,7 @@
 				CBAD13AB2859E82600247EE6 /* Used+Enum.swift in Sources */,
 				DFA4521E282B7A1A0059EEFC /* Functions.swift in Sources */,
 				CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */,
-				DFA40462282B86F3004E8859 /* UserAPI.swift in Sources */,
+				DFA40462282B86F3004E8859 /* UserApi.swift in Sources */,
 				CBDBEB9028600AEE00165352 /* NoticeVC.swift in Sources */,
 				DFA451C6282B762D0059EEFC /* AppDelegate.swift in Sources */,
 				DF7EE3FD283233C500788CFE /* HomeVC.swift in Sources */,

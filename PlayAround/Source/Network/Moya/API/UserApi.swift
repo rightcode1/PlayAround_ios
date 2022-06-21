@@ -9,9 +9,8 @@ import Foundation
 import Moya
 
 enum UserAPI {
-  
   case userInfo(param: UserInfoRequest)
-  case userUpdate(param: UserUpdateRequest)
+  case userUpdate(param: UpdateUserInfoRequest)
   case userLogout
   case userWithDrawal
   case userFileRegister(image: UIImage)
@@ -45,17 +44,13 @@ extension UserAPI: TargetType {
   
   var method: Moya.Method {
     switch self {
-      
     case .userInfo,
         .userLogout:
       return .get
-      
     case .userFileRegister:
       return .post
-      
     case .userUpdate:
       return .put
-      
     case .userWithDrawal,
         .userFileDelete:
       return .delete
@@ -72,7 +67,7 @@ extension UserAPI: TargetType {
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
     case .userUpdate(let param):
-      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
+      return .requestJSONEncodable(param)
       
     case .userLogout,
         .userWithDrawal,
@@ -131,4 +126,8 @@ struct Follow: Codable {
   let name: String?
   let thumbnail: String?
   let isFollowing: Bool
+}
+
+struct UpdateUserInfoRequest: Codable {
+  let name: String
 }
