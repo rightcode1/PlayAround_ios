@@ -10,11 +10,26 @@ import Moya
 final class APIProvider {
   static let shared = APIProvider()
   
-  var userAPI = MoyaProvider<UserApi>()
+  var userAPI = MoyaProvider<UserAPI>()
   var authAPI = MoyaProvider<AuthApi>()
+  
   var communityAPI = MoyaProvider<CommunityApi>()
+  
   var foodAPI = MoyaProvider<FoodApi>()
-  var usedAPI = MoyaProvider<UsedApi>()
+  var foodCommnetAPI = MoyaProvider<FoodCommentAPI>()
+  var foodWishAPI = MoyaProvider<FoodWishAPI>()
+  var foodLikeAPI = MoyaProvider<FoodLikeAPI>()
+  
+  var followAPI = MoyaProvider<FollowAPI>()
+  
+  var usedAPI = MoyaProvider<UsedAPI>()
+  var reportAPI = MoyaProvider<ReportAPI>()
+  
+  var hashtagAPI = MoyaProvider<HashtagAPI>()
+  
+  var noticeAPI = MoyaProvider<NoticeAPI>()
+  var faqAPI = MoyaProvider<FAQAPI>()
+  var inquiryAPI = MoyaProvider<InquiryAPI>()
   
   private init() {
 //
@@ -40,11 +55,26 @@ final class APIProvider {
 //      }
 //    }
     
-    userAPI = MoyaProvider<UserApi>(plugins: [MoyaLoggingPlugin()])
+    userAPI = MoyaProvider<UserAPI>(plugins: [MoyaLoggingPlugin()])
     authAPI = MoyaProvider<AuthApi>(plugins: [MoyaLoggingPlugin()])
+    
     communityAPI = MoyaProvider<CommunityApi>(plugins: [MoyaLoggingPlugin()])
+    
     foodAPI = MoyaProvider<FoodApi>(plugins: [MoyaLoggingPlugin()])
-    usedAPI = MoyaProvider<UsedApi>(plugins: [MoyaLoggingPlugin()])
+    foodCommnetAPI = MoyaProvider<FoodCommentAPI>(plugins: [MoyaLoggingPlugin()])
+    foodWishAPI = MoyaProvider<FoodWishAPI>(plugins: [MoyaLoggingPlugin()])
+    foodLikeAPI = MoyaProvider<FoodLikeAPI>(plugins: [MoyaLoggingPlugin()])
+    
+    followAPI = MoyaProvider<FollowAPI>(plugins: [MoyaLoggingPlugin()])
+    
+    usedAPI = MoyaProvider<UsedAPI>(plugins: [MoyaLoggingPlugin()])
+    reportAPI = MoyaProvider<ReportAPI>(plugins: [MoyaLoggingPlugin()])
+    
+    hashtagAPI = MoyaProvider<HashtagAPI>(plugins: [MoyaLoggingPlugin()])
+    
+    noticeAPI = MoyaProvider<NoticeAPI>(plugins: [MoyaLoggingPlugin()])
+    faqAPI = MoyaProvider<FAQAPI>(plugins: [MoyaLoggingPlugin()])
+    inquiryAPI = MoyaProvider<InquiryAPI>(plugins: [MoyaLoggingPlugin()])
   }
 }
 

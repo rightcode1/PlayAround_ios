@@ -6,13 +6,11 @@
 //
 
 import Foundation
-import Moya 
-import UIKit
+import Moya
 
-enum UserApi {
+enum UserAPI {
   
-  case userinfo(id: Int)
-  case userList(search: String?)
+  case userInfo(param: UserInfoRequest)
   case userUpdate(param: UserUpdateRequest)
   case userLogout
   case userWithDrawal
@@ -20,7 +18,7 @@ enum UserApi {
   case userFileDelete
 }
 
-extension UserApi: TargetType {
+extension UserAPI: TargetType {
   public var baseURL: URL {
     switch self {
     default:
@@ -30,10 +28,8 @@ extension UserApi: TargetType {
   
   var path: String {
     switch self {
-    case .userinfo:
+    case .userInfo:
       return "/v1/user/info"
-    case .userList:
-      return "/v1/user/list"
     case .userUpdate:
       return "/v1/user/update"
     case .userLogout:
@@ -50,8 +46,7 @@ extension UserApi: TargetType {
   var method: Moya.Method {
     switch self {
       
-    case .userinfo,
-        .userList,
+    case .userInfo,
         .userLogout:
       return .get
       
@@ -73,11 +68,8 @@ extension UserApi: TargetType {
   
   var task: Task {
     switch self {
-    case .userinfo(let id):
-      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
-      
-    case .userList(let search):
-      return .requestParameters(parameters: ["search": search], encoding: URLEncoding.queryString)
+    case .userInfo(let param):
+      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
     case .userUpdate(let param):
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
@@ -105,3 +97,38 @@ extension UserApi: TargetType {
   }
 }
 
+struct UserInfoRequest: Codable {
+  let id: Int?
+  
+  init(
+    id: Int? = nil
+  ) {
+    self.id = id
+  }
+}
+
+struct UserInfoResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let data: User
+}
+
+// MARK: - User
+struct User: Codable {
+  let id: Int
+  let loginId, tel: String
+  let thumbnail: String?
+  let name, role: String
+  let active: Bool
+  let followings, followers: [Follow]?
+  let isFollowing: Bool
+  let foodLevel, usedLevel, communityLevel: Int?
+}
+
+// MARK: - Follow
+struct Follow: Codable {
+  let id: Int
+  let name: String?
+  let thumbnail: String?
+  let isFollowing: Bool
+}

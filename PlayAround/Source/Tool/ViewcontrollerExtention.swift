@@ -274,6 +274,15 @@ extension UIViewController {
     self.present(vc, animated: true, completion: nil)
   }
   
+  func openUrl(_ url: String?) {
+    if let url = URL(string: url!) {
+      print("url: \(url)")
+      if UIApplication.shared.canOpenURL(url) {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+      }
+    }
+  }
+  
   @IBAction func backPress(){
     if let navigationController = navigationController{
       if let rootViewController = navigationController.viewControllers.first, rootViewController.isEqual(self){

@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "usedCategoryRegistOff1.png"
+    },
+    {
+      "filename" : "usedCategoryRegistOff1@2x.png",
+      "scale" : "2x",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "usedCategoryRegistOff1@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

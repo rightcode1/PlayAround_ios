@@ -53,7 +53,7 @@ extension String {
     return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
   }
   
-  var stringToDate:Date {
+  var stringToDate: Date {
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
     dateFormatter.dateFormat = "yyyy-MM-dd"

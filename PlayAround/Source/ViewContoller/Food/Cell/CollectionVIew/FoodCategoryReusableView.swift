@@ -20,6 +20,7 @@ class FoodCategoryReusableView: UICollectionReusableView {
       
       let layout = UICollectionViewFlowLayout()
       layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+      
       layout.itemSize = CGSize(width: 40, height: 57)
       layout.minimumInteritemSpacing = 12
       layout.minimumLineSpacing = 12

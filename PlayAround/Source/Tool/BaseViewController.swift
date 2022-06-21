@@ -25,23 +25,23 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
   @IBInspectable var localizedText: String = "" {
     didSet {
       if localizedText.count > 0 {
-        #if TARGET_INTERFACE_BUILDER
+#if TARGET_INTERFACE_BUILDER
         var bundle = NSBundle(forClass: type(of: self))
         self.title = bundle.localizedStringForKey(self.localizedText, value:"", table: nil)
-        #else
+#else
         self.title = NSLocalizedString(self.localizedText, comment:"");
-        #endif
+#endif
       }
     }
   }
   @objc func MyTapMethod(sender: UITapGestureRecognizer) {
-      self.view.endEditing(true)
+    self.view.endEditing(true)
   }
   func backTwo() {
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
-        self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
-    }
-
+    let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+    self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -50,34 +50,55 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
     self.navigationController?.navigationBar.clipsToBounds = true
     
-//    let notificationCenter = NotificationCenter.default
-//    notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
-//    
-//    // EnterForeground -> applicationWillEnterForeground -> applcation(_: open url: options:) -> applicationDidBecomeActive 순서로 진행 됨
-//    notificationCenter.addObserver(self, selector: #selector(backgroundMovedToApp), name: UIApplication.didBecomeActiveNotification, object: nil)
+    //    let notificationCenter = NotificationCenter.default
+    //    notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+    //
+    //    // EnterForeground -> applicationWillEnterForeground -> applcation(_: open url: options:) -> applicationDidBecomeActive 순서로 진행 됨
+    //    notificationCenter.addObserver(self, selector: #selector(backgroundMovedToApp), name: UIApplication.didBecomeActiveNotification, object: nil)
   }
   
-//  @objc func appMovedToBackground() {
-//    print("App moved to background!")
-//  }
-//
-//  @objc func backgroundMovedToApp() {
-//    print("Background moved to app!")
-////    shareEvents()
-//  }
+  //  @objc func appMovedToBackground() {
+  //    print("App moved to background!")
+  //  }
+  //
+  //  @objc func backgroundMovedToApp() {
+  //    print("Background moved to app!")
+  ////    shareEvents()
+  //  }
   
   func shareEvents() {
-//    if shareFeedId != 0 {
-//      let vc = UIStoryboard.init(name: "Sns", bundle: nil).instantiateViewController(withIdentifier: "feedList") as! FeedListViewController
-//      vc.shareId = shareFeedId
-//      navigationController?.pushViewController(vc, animated: true)
-//      shareFeedId = 0
-//    }
+    //    if shareFeedId != 0 {
+    //      let vc = UIStoryboard.init(name: "Sns", bundle: nil).instantiateViewController(withIdentifier: "feedList") as! FeedListViewController
+    //      vc.shareId = shareFeedId
+    //      navigationController?.pushViewController(vc, animated: true)
+    //      shareFeedId = 0
+    //    }
   }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
+  }
+  
+  func userInfo(result: @escaping (UserInfoResponse) -> Void) {
+    let param = UserInfoRequest()
+    APIProvider.shared.userAPI.rx.request(.userInfo(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(UserInfoResponse.self)
+      .subscribe(onSuccess: { response in
+        DataHelper.set(response.data.id, forKey: .userAppId)
+        result(response)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func foodLevelImage(level: Int) -> UIImage {
+    return UIImage(named: "foodLevel\(level)") ?? UIImage()
+  }
+  
+  func usedLevelImage(level: Int) -> UIImage {
+    return UIImage(named: "usedLevel\(level)") ?? UIImage()
   }
   
   func clearImageCache() {

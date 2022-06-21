@@ -8,7 +8,7 @@
 import UIKit
 
 class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
-  
+  @IBOutlet weak var filterButton: UIButton!
   @IBOutlet weak var foodListCollectionView: UICollectionView!
   
   var category: FoodCategory = .전체
@@ -17,6 +17,7 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     setFoodListCollectionViewLayout()
+    bindInput()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -39,9 +40,9 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
     foodListCollectionView.collectionViewLayout = layout
   }
   
-  func initFoodList() {
+  func initFoodList(sort: FoodSort? = nil) {
     self.showHUD()
-    let param = FoodListRequest(category: category == .전체 ? nil : category)
+    let param = FoodListRequest(category: category == .전체 ? nil : category, sort: sort == nil ? .최신순 : sort)
     APIProvider.shared.foodAPI.rx.request(.foodList(param: param))
       .filterSuccessfulStatusCodes()
       .map(FoodListResponse.self)
@@ -57,13 +58,29 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
       .disposed(by: disposeBag)
   }
   
-  
   // FoodCategoryReusableViewDelegate
   func setCategory(category: FoodCategory) {
     self.category = category
     initFoodList()
   }
   
+  func bindInput() {
+    filterButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = FoodSortPopupVC.viewController()
+        vc.delegate = self
+        self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+  }
+  
+}
+
+extension FoodVC: FoodSortDelegate {
+  func setFoodSort(sort: FoodSort) {
+    initFoodList(sort: sort)
+  }
 }
 
 extension FoodVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -93,6 +110,8 @@ extension FoodVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let dict = foodList[indexPath.row]
-    
+    let vc = FoodDetailVC.viewController()
+    vc.foodId = dict.id
+    self.navigationController?.pushViewController(vc, animated: true)
   }
 }

@@ -6,22 +6,18 @@
 //
 
 import Foundation
-import Alamofire
 import Moya
-import UIKit
 
-// 서버랑 통신하는 api 만드는 곳
 enum FoodApi {
   
   case foodList(param: FoodListRequest)
-  //  case login(param: LoginRequest)
-  //  case join(param: JoinRequest)
-  //  case isExistLoginId(email: String)
-  //  case isExistNickname(nickname: String)
-  //  case sendCode(param: SendCodeRequest)
-  //  case confirm(tel: String, confirm: String)
-  //  case findId(param: FindMyIdRequest)
-  //  case changePassword(param: ChangePasswordRequest)
+  case foodDetail(id: Int)
+  
+  case register(param: FoodRegistRequest)
+  case update(id: Int, param: FoodRegistRequest)
+  case remove(id: Int)
+  
+  case imageRegister(foodId: Int, imageList: [UIImage])
 }
 extension FoodApi: TargetType {
   public var baseURL: URL {
@@ -30,67 +26,58 @@ extension FoodApi: TargetType {
       return URL(string: ApiEnvironment.baseUrl)!
     }
   }
+  
+  
   var path: String {
     switch self {
     case .foodList : return "/v1/food/list"
-      //    case .login : return "/v1/auth/login"
-      //    case .join: return "/v1/auth/join"
-      //
-      //    case .isExistLoginId: return "/v1/auth/existLoginId"
-      //    case .isExistNickname: return "/v1/auth/existNickname"
-      //
-      //    case .sendCode : return "/v1/auth/CertificationNumberSMS"
-      //    case .confirm : return "/v1/auth/confirm"
-      //
-      //    case .findId : return "/v1/auth/findLoginId"
-      //    case .changePassword : return "/v1/auth/passwordChange"
+    case .foodDetail : return "/v1/food/detail"
+    case .register : return "/v1/food/register"
+    case .update : return "/v1/food/update"
+    case .remove : return "/v1/food/remove"
+    case .imageRegister : return "/v1/foodImage/register"
     }
-    
   }
   
   var method: Moya.Method {
     switch self {
-    case .foodList:
+    case .foodList,
+        .foodDetail:
       return .get
-      //    case .login,
-      //        .join,
-      //        .changePassword:
-      //      return .post
+    case .register,
+        .imageRegister:
+      return .post
+    case .update:
+      return .put
+    case .remove:
+      return .delete
     }
   }
   
   var sampleData: Data {
     return "!!".data(using: .utf8)!
   }
+  
   var task: Task {
     switch self {
-    case .foodList(let param) :
+    case .foodList(let param):
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
-      
-      //    case .login(let param) :
-      //      return .requestJSONEncodable(param)
-      //
-      //    case .join(let param):
-      //      return .requestJSONEncodable(param)
-      //
-      //    case .isExistLoginId(let email):
-      //      return .requestParameters(parameters: ["loginId": email], encoding: URLEncoding.queryString)
-      //
-      //    case .isExistNickname(let nickname):
-      //      return .requestParameters(parameters: ["nickname": nickname], encoding: URLEncoding.queryString)
-      //
-      //    case .sendCode(let param) :
-      //      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
-      //
-      //    case .confirm(let tel, let confirm) :
-      //      return .requestParameters(parameters: ["tel": tel , "confirm": confirm], encoding: URLEncoding.queryString)
-      //
-      //    case .changePassword(let param) :
-      //      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
-      //
-      //    case .findId(let param) :
-      //      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
-      
+    case .foodDetail(let id):
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+    case .register(let param):
+      return .requestJSONEncodable(param)
+    case .update(let id, let param):
+      return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
+    case .remove(let id):
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
+    case .imageRegister(let foodId, let imageList):
+        let multipartList = imageList.map { image in
+          return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.9)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+        }
+        return .uploadCompositeMultipart(
+          multipartList,
+          urlParameters: ["foodId": foodId]
+        )
     }
   }
   
@@ -116,10 +103,10 @@ struct FoodListRequest: Codable {
   let dong: String?
   let villageId: Int?
   let hashtag: String?
-  let isWish: String?
-  let userId: String?
+  let isWish: Bool?
+  let userId: Int?
   let isReport: String?
-  
+  let sort: FoodSort?
   
   init(
     category: FoodCategory? = nil,
@@ -130,9 +117,10 @@ struct FoodListRequest: Codable {
     dong: String? = nil,
     villageId: Int? = nil,
     hashtag: String? = nil,
-    isWish: String? = nil,
-    userId: String? = nil,
-    isReport: String? = nil
+    isWish: Bool? = nil,
+    userId: Int? = nil,
+    isReport: String? = nil,
+    sort: FoodSort? = nil
   ) {
     self.category = category
     self.search = search
@@ -145,58 +133,10 @@ struct FoodListRequest: Codable {
     self.isWish = isWish
     self.userId = userId
     self.isReport = isReport
+    self.sort = sort
   }
   
 }
-
-enum FoodCategory: String, Codable {
-  case 전체
-  case 국물
-  case 찜
-  case 볶음
-  case 나물
-  case 베이커리
-  case 저장
-  
-  func onImage() -> UIImage {
-    switch self {
-    case .전체:
-      return UIImage(named: "sideCategoryFullColorOn1") ?? UIImage()
-    case .국물:
-      return UIImage(named: "sideDishCategoryFullColorOn2") ?? UIImage()
-    case .찜:
-      return UIImage(named: "sideDishCategoryFullColorOn3") ?? UIImage()
-    case .볶음:
-      return UIImage(named: "sideDishCategoryFullColorOn4") ?? UIImage()
-    case .나물:
-      return UIImage(named: "sideDishCategoryFullColorOn5") ?? UIImage()
-    case .베이커리:
-      return UIImage(named: "sideDishCategoryFullColorOn6") ?? UIImage()
-    case .저장:
-      return UIImage(named: "sideDishCategoryFullColorOn7") ?? UIImage()
-    }
-  }
-  
-  func offImage() -> UIImage {
-    switch self {
-    case .전체:
-      return UIImage(named: "sideCategoryFullColorOff1") ?? UIImage()
-    case .국물:
-      return UIImage(named: "sideDishCategoryFullColorOff2") ?? UIImage()
-    case .찜:
-      return UIImage(named: "sideDishCategoryFullColorOff3") ?? UIImage()
-    case .볶음:
-      return UIImage(named: "sideDishCategoryFullColorOff4") ?? UIImage()
-    case .나물:
-      return UIImage(named: "sideDishCategoryFullColorOff5") ?? UIImage()
-    case .베이커리:
-      return UIImage(named: "sideDishCategoryFullColorOff6") ?? UIImage()
-    case .저장:
-      return UIImage(named: "sideDishCategoryFullColorOff7") ?? UIImage()
-    }
-  }
-}
-
 
 // MARK: - FoodListResponse
 struct FoodListResponse: Codable {
@@ -259,4 +199,54 @@ enum Thumbnail: Codable {
       try container.encode(x)
     }
   }
+}
+
+
+// MARK: - FoodDetailResponse
+struct FoodDetailResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let data: FoodDetailData?
+}
+
+// MARK: - FoodDetailData
+struct FoodDetailData: Codable {
+  let id, userId: Int
+  let category: FoodCategory
+  let name, content: String
+  let price: Int
+  let allergy: [FoodAllergy]
+  let statusSale: Bool?
+  let viewCount: Int
+  let createdAt: String
+  let wishCount: Int
+  let isWish: Bool
+  let isLike: Bool?
+  let likeCount, dislikeCount: Int
+  let images: [Image]
+  let user: User
+  let address: String
+  let villageId: Int
+  let status: FoodStatus
+  let userCount: Int?
+  let dueDate: String?
+  let requestCount: Int?
+  let isRequest: Bool
+  let foodUsers: [User]
+  let hashtag: [String]
+  let isReport: Bool
+}
+
+
+// MARK: - FoodRegistRequest
+struct FoodRegistRequest: Codable {
+  let category: FoodCategory
+  let name, content: String
+  let price: Int
+  let hashtag: [String]
+  let allergy: [FoodAllergy]
+  let villageId: Int
+  let userCount: Int?
+  let dueDate: String?
+  let status: FoodStatus
 }

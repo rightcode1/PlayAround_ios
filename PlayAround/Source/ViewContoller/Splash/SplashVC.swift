@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import TAKUUID
 
 class SplashVC :BaseViewController{
   var version: String? {
@@ -21,8 +21,10 @@ class SplashVC :BaseViewController{
         }
     }
     func login() {
+      TAKUUIDStorage.sharedInstance().migrate()
+      let uuid = TAKUUIDStorage.sharedInstance().findOrCreate() ?? ""
       self.showHUD()
-      let param = LoginRequest(loginId:  DataHelperTool.userId ?? "",password: DataHelperTool.userPw ?? "")
+      let param = LoginRequest(loginId:  DataHelperTool.userId ?? "",password: DataHelperTool.userPw ?? "",deviceId: uuid)
 
       APIProvider.shared.authAPI.rx.request(.login(param: param))
         .filterSuccessfulStatusCodes()

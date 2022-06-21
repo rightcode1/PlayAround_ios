@@ -15,6 +15,8 @@ class DataHelper<T> {
     case userId = "userId"
     case userPw = "userPw"
     case token = "token"
+    
+    case userAppId = "userAppId"
   }
   
   class func value(forKey key: DataKeys) -> T? {
@@ -56,6 +58,11 @@ class DataHelperTool {
   static var token: String? {
     guard let token = DataHelper<String>.value(forKey: .token) else { return nil }
     return token
+  }
+  
+  static var userAppId: Int? {
+    guard let userAppId = DataHelper<Int>.value(forKey: .userAppId) else { return nil }
+    return userAppId
   }
 }
   

@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "foodAllergyDetailImageOn3.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x",
+      "filename" : "foodAllergyDetailImageOn3@2x.png"
+    },
+    {
+      "scale" : "3x",
+      "filename" : "foodAllergyDetailImageOn3@3x.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
