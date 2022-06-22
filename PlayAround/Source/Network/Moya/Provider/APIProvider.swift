@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+
 final class APIProvider {
   static let shared = APIProvider()
   
@@ -32,28 +33,28 @@ final class APIProvider {
   var inquiryAPI = MoyaProvider<InquiryAPI>()
   
   private init() {
-//
-//    let networkLoggerPlugin = NetworkLoggerPlugin(configuration: .init(formatter: .init(entry: { (string1, string2, targetType) -> String in
-//      if string1 != "Response" {
-//        return "[\(string1)] \(string2)"
-//      }
-//      return "Response"
-//    }, requestData: { data -> (String) in
-//      return (data.prettyPrintedJSONString as String?) ?? ""
-//    }, responseData: { data -> (String) in
-//      return (data.prettyPrintedJSONString as String?) ?? ""
-//    }), output: { (targetType, stringList) in
-//      print("------------------------------------------------------------")
-//      stringList.forEach { if $0 != "Response" { print($0) } }
-//      print("------------------------------------------------------------")
-//    }, logOptions: [.verbose]))
-//
-//    let networkActivityPlugin = NetworkActivityPlugin { (networkActivityChangeType, targetType) in
-//      switch networkActivityChangeType {
-//      case .began: break
-//      case .ended: break
-//      }
-//    }
+    //
+    //    let networkLoggerPlugin = NetworkLoggerPlugin(configuration: .init(formatter: .init(entry: { (string1, string2, targetType) -> String in
+    //      if string1 != "Response" {
+    //        return "[\(string1)] \(string2)"
+    //      }
+    //      return "Response"
+    //    }, requestData: { data -> (String) in
+    //      return (data.prettyPrintedJSONString as String?) ?? ""
+    //    }, responseData: { data -> (String) in
+    //      return (data.prettyPrintedJSONString as String?) ?? ""
+    //    }), output: { (targetType, stringList) in
+    //      print("------------------------------------------------------------")
+    //      stringList.forEach { if $0 != "Response" { print($0) } }
+    //      print("------------------------------------------------------------")
+    //    }, logOptions: [.verbose]))
+    //
+    //    let networkActivityPlugin = NetworkActivityPlugin { (networkActivityChangeType, targetType) in
+    //      switch networkActivityChangeType {
+    //      case .began: break
+    //      case .ended: break
+    //      }
+    //    }
     
     userAPI = MoyaProvider<UserAPI>(plugins: [MoyaLoggingPlugin()])
     authAPI = MoyaProvider<AuthApi>(plugins: [MoyaLoggingPlugin()])
@@ -76,8 +77,22 @@ final class APIProvider {
     faqAPI = MoyaProvider<FAQAPI>(plugins: [MoyaLoggingPlugin()])
     inquiryAPI = MoyaProvider<InquiryAPI>(plugins: [MoyaLoggingPlugin()])
   }
+  
+  func getErrorStatusCode(_ error: Error) -> Int {
+    let moayError: MoyaError? = error as? MoyaError
+    let response: Response? = moayError?.response
+    let statusCode: Int? = response?.statusCode
+    return statusCode ?? 499
+  }
 }
 
+extension MoyaError {
+  var backendError: DefaultResponse? {
+    return response.flatMap {
+      try? $0.map(DefaultResponse.self)
+    }
+  }
+}
 
 extension Encodable {
   var dictionary: [String: Any]? {

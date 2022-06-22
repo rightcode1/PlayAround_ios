@@ -8,7 +8,7 @@
 import UIKit
 
 class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
-  
+  @IBOutlet weak var searchButton: UIButton!
   @IBOutlet weak var filterButton: UIButton!
   @IBOutlet weak var usedListCollectionView: UICollectionView!
   
@@ -72,6 +72,15 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
         let vc = FoodSortPopupVC.viewController()
         vc.delegate = self
         self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
+    searchButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = SearchFoodAndUsedVC.viewController()
+        vc.selectedDiff = .used
+        self.navigationController?.pushViewController(vc, animated: true)
       })
       .disposed(by: disposeBag)
   }

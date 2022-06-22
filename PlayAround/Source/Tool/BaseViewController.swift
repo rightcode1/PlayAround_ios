@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Moya
 import RxSwift
 import RxCocoa
 import RxGesture
@@ -89,6 +90,9 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
         DataHelper.set(response.data.id, forKey: .userAppId)
         result(response)
       }, onError: { error in
+        print("error StatusCode: \(APIProvider.shared.getErrorStatusCode(error))")
+        let backendError = (error as? MoyaError)?.backendError
+        print("backendError: \(backendError?.message ?? "")")
       })
       .disposed(by: disposeBag)
   }

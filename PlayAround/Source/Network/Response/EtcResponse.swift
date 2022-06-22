@@ -23,8 +23,8 @@ struct ResultResponse: Codable {
 }
 
 struct DefaultResponse: Codable {
-  let statusCode: Int
-  let message: String
+  var statusCode: Int
+  var message: String
 }
 struct LoginResponse: Codable {
   let statusCode: Int
