@@ -141,7 +141,7 @@ struct UsedListRequest: Codable {
   let isWish: Bool?
   let userId: Int?
   let isReport: String?
-  let sort: UsedSort?
+  let sort: FoodSort?
   
   init(
     category: UsedCategory? = nil,
@@ -155,7 +155,7 @@ struct UsedListRequest: Codable {
     isWish: Bool? = nil,
     userId: Int? = nil,
     isReport: String? = nil,
-    sort: UsedSort? = nil
+    sort: FoodSort? = nil
   ) {
     self.category = category
     self.search = search

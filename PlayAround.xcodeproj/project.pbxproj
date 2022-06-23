@@ -10,6 +10,10 @@
 		059FCB831FFF6B83804C6517 /* Pods_PlayAround_PlayAroundUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3A1E30C2CDD9B628E65CF6C /* Pods_PlayAround_PlayAroundUITests.framework */; };
 		CB3860782861D41100C4B688 /* ImageListWithScrolViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */; };
 		CB38607A2861D9D100C4B688 /* SearchFoodAndUsedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */; };
+		CB38607C2863116100C4B688 /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB38607B2863116100C4B688 /* MyPageVC.swift */; };
+		CB386080286315FE00C4B688 /* MyPageCommunityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB38607F286315FE00C4B688 /* MyPageCommunityCollectionViewCell.swift */; };
+		CB399D202864298A0084F9EF /* FollowListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB399D1F2864298A0084F9EF /* FollowListVC.swift */; };
+		CB399D2328642D3F0084F9EF /* FollowListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB399D2228642D3F0084F9EF /* FollowListCell.swift */; };
 		CB87B44E2848B3DE000297BB /* CommentListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44D2848B3DE000297BB /* CommentListCell.swift */; };
 		CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B44F2848B532000297BB /* FoodCommentAPI.swift */; };
 		CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB87B4512849FDA4000297BB /* FoodWishAPI.swift */; };
@@ -169,6 +173,10 @@
 		A4062B5B711D08DCF2E69834 /* Pods-PlayAround-PlayAroundUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround-PlayAroundUITests.debug.xcconfig"; path = "Target Support Files/Pods-PlayAround-PlayAroundUITests/Pods-PlayAround-PlayAroundUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListWithScrolViewViewController.swift; sourceTree = "<group>"; };
 		CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFoodAndUsedVC.swift; sourceTree = "<group>"; };
+		CB38607B2863116100C4B688 /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
+		CB38607F286315FE00C4B688 /* MyPageCommunityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCommunityCollectionViewCell.swift; sourceTree = "<group>"; };
+		CB399D1F2864298A0084F9EF /* FollowListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowListVC.swift; sourceTree = "<group>"; };
+		CB399D2228642D3F0084F9EF /* FollowListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowListCell.swift; sourceTree = "<group>"; };
 		CB87B44D2848B3DE000297BB /* CommentListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListCell.swift; sourceTree = "<group>"; };
 		CB87B44F2848B532000297BB /* FoodCommentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCommentAPI.swift; sourceTree = "<group>"; };
 		CB87B4512849FDA4000297BB /* FoodWishAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodWishAPI.swift; sourceTree = "<group>"; };
@@ -358,6 +366,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB38607D286315E000C4B688 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				CBDBEB9828600D7A00165352 /* FAQListCell.swift */,
+				CBDBEBA228603D9700165352 /* InquiryListCell.swift */,
+			);
+			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		CB38607E286315E700C4B688 /* CollecitonVIewCell */ = {
+			isa = PBXGroup;
+			children = (
+				CB38607F286315FE00C4B688 /* MyPageCommunityCollectionViewCell.swift */,
+			);
+			path = CollecitonVIewCell;
+			sourceTree = "<group>";
+		};
+		CB399D2128642D300084F9EF /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				CB399D2228642D3F0084F9EF /* FollowListCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		CB87B44C2848B3C8000297BB /* TableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,8 +452,8 @@
 		CBDBEB9728600D7300165352 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				CBDBEB9828600D7A00165352 /* FAQListCell.swift */,
-				CBDBEBA228603D9700165352 /* InquiryListCell.swift */,
+				CB38607E286315E700C4B688 /* CollecitonVIewCell */,
+				CB38607D286315E000C4B688 /* TableViewCell */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -428,7 +461,10 @@
 		CBDBEBA4286045E700165352 /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				CB399D2128642D300084F9EF /* Cell */,
+				CB38607B2863116100C4B688 /* MyPageVC.swift */,
 				CBDBEBA52860460C00165352 /* UpdateProfileVC.swift */,
+				CB399D1F2864298A0084F9EF /* FollowListVC.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -1107,12 +1143,14 @@
 				CBEE7DCB283B5D8C000BEC15 /* FoodCategoryReusableView.swift in Sources */,
 				CBE3DADB2850704900A2A1B6 /* FoodSortPopupVC.swift in Sources */,
 				DFA45224282B7A1A0059EEFC /* Class+ZoomAndSnapFolwLayout.swift in Sources */,
+				CB399D2328642D3F0084F9EF /* FollowListCell.swift in Sources */,
 				CBAD139728586BF300247EE6 /* SelectedDateView.swift in Sources */,
 				CBE3DAD8284F55C100A2A1B6 /* FollowAPI.swift in Sources */,
 				DF3C36D328364F2900BD05D8 /* MainHeaderCell.swift in Sources */,
 				CBAD13AB2859E82600247EE6 /* Used+Enum.swift in Sources */,
 				DFA4521E282B7A1A0059EEFC /* Functions.swift in Sources */,
 				CB87B4522849FDA4000297BB /* FoodWishAPI.swift in Sources */,
+				CB38607C2863116100C4B688 /* MyPageVC.swift in Sources */,
 				DFA40462282B86F3004E8859 /* UserApi.swift in Sources */,
 				CBDBEB9028600AEE00165352 /* NoticeVC.swift in Sources */,
 				DFA451C6282B762D0059EEFC /* AppDelegate.swift in Sources */,
@@ -1128,6 +1166,7 @@
 				DFA4521C282B7A1A0059EEFC /* UIImage+Extension.swift in Sources */,
 				CBAD139D28587D8A00247EE6 /* HashtagListVC.swift in Sources */,
 				DFA4047D282BA051004E8859 /* EtcResponse.swift in Sources */,
+				CB399D202864298A0084F9EF /* FollowListVC.swift in Sources */,
 				DFA45216282B7A1A0059EEFC /* JSONFileReader.swift in Sources */,
 				CBDBEBA62860460C00165352 /* UpdateProfileVC.swift in Sources */,
 				CBDBEBA328603D9700165352 /* InquiryListCell.swift in Sources */,
@@ -1149,6 +1188,7 @@
 				DFA4047B282BA02C004E8859 /* VersionResponse.swift in Sources */,
 				DFA4522A282B7A1A0059EEFC /* Date+Extension.swift in Sources */,
 				DF3D6485283264B500D72D36 /* CommunityApi.swift in Sources */,
+				CB386080286315FE00C4B688 /* MyPageCommunityCollectionViewCell.swift in Sources */,
 				DFA45223282B7A1A0059EEFC /* URL+Extension.swift in Sources */,
 				CBAD1391285738FC00247EE6 /* RegistFoodVC.swift in Sources */,
 				DFA4521F282B7A1A0059EEFC /* ImageViewZoom.swift in Sources */,

@@ -84,7 +84,6 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
       })
       .disposed(by: disposeBag)
   }
-  
 }
 
 extension UsedVC: FoodSortDelegate {

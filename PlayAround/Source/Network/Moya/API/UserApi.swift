@@ -125,7 +125,7 @@ struct Follow: Codable {
   let id: Int
   let name: String?
   let thumbnail: String?
-  let isFollowing: Bool
+  var isFollowing: Bool
 }
 
 struct UpdateUserInfoRequest: Codable {

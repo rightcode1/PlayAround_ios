@@ -13,7 +13,7 @@ enum Category: String, Codable {
   case 자유게시판
   case 채팅방
 }
-class CommunityDetailVC: BaseViewController{
+class CommunityDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var mainTableView: UITableView!
   @IBOutlet weak var imageCollectionView: UICollectionView!
   @IBOutlet weak var categoryCollectionView: UICollectionView!
@@ -52,6 +52,11 @@ class CommunityDetailVC: BaseViewController{
     tabBarController?.tabBar.isHidden = false
   }
   
+  static func viewController() -> CommunityDetailVC {
+    let viewController = CommunityDetailVC.viewController(storyBoardName: "Community")
+    return viewController
+  }
+  
   func initDelegate(){
     mainTableView.dataSource = self
     mainTableView.delegate = self
@@ -79,6 +84,7 @@ class CommunityDetailVC: BaseViewController{
       })
       .disposed(by: disposeBag)
   }
+  
   func initDetailNotice(_ communityId: Int){
     self.showHUD()
     let param = ComunityNoticeRequest(communityId: communityId)
@@ -96,6 +102,7 @@ class CommunityDetailVC: BaseViewController{
       })
       .disposed(by: disposeBag)
   }
+  
   func initDetailBoard(_ communityId: Int){
     self.showHUD()
     let param = ComunityNoticeRequest(communityId: communityId)

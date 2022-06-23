@@ -81,13 +81,15 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     // Dispose of any resources that can be recreated.
   }
   
-  func userInfo(result: @escaping (UserInfoResponse) -> Void) {
-    let param = UserInfoRequest()
+  func userInfo(_ id: Int? = nil, result: @escaping (UserInfoResponse) -> Void) {
+    let param = UserInfoRequest(id: id)
     APIProvider.shared.userAPI.rx.request(.userInfo(param: param))
       .filterSuccessfulStatusCodes()
       .map(UserInfoResponse.self)
       .subscribe(onSuccess: { response in
-        DataHelper.set(response.data.id, forKey: .userAppId)
+        if id == nil {
+          DataHelper.set(response.data.id, forKey: .userAppId)
+        }
         result(response)
       }, onError: { error in
         print("error StatusCode: \(APIProvider.shared.getErrorStatusCode(error))")
@@ -95,6 +97,10 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
         print("backendError: \(backendError?.message ?? "")")
       })
       .disposed(by: disposeBag)
+  }
+  
+  func communityLevelImage(level: Int) -> UIImage {
+    return UIImage(named: "communityLevel\(level)") ?? UIImage()
   }
   
   func foodLevelImage(level: Int) -> UIImage {
