@@ -31,13 +31,12 @@ class SplashVC: BaseViewController {
       .filterSuccessfulStatusCodes()
       .map(LoginResponse.self)
       .subscribe(onSuccess: { value in
-        
         DataHelper<String>.remove(forKey: .token)
         DataHelper.set("bearer \(value.token)", forKey: .token)
+        DataHelper.set("\(value.token)", forKey: .chatToken)
       
         self.dismissHUD()
         self.goMain()
-        
       }, onError: { error in
         let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LoginNC")
         vc.modalPresentationStyle = .fullScreen

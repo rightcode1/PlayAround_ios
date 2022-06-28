@@ -31,6 +31,7 @@ final class APIProvider {
   var noticeAPI = MoyaProvider<NoticeAPI>()
   var faqAPI = MoyaProvider<FAQAPI>()
   var inquiryAPI = MoyaProvider<InquiryAPI>()
+  var chatAPI = MoyaProvider<ChatAPI>()
   
   private init() {
     //
@@ -76,6 +77,7 @@ final class APIProvider {
     noticeAPI = MoyaProvider<NoticeAPI>(plugins: [MoyaLoggingPlugin()])
     faqAPI = MoyaProvider<FAQAPI>(plugins: [MoyaLoggingPlugin()])
     inquiryAPI = MoyaProvider<InquiryAPI>(plugins: [MoyaLoggingPlugin()])
+    chatAPI = MoyaProvider<ChatAPI>(plugins: [MoyaLoggingPlugin()])
   }
   
   func getErrorStatusCode(_ error: Error) -> Int {

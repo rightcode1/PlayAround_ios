@@ -35,6 +35,7 @@ class LoginVC: BaseViewController{
         
         if(value.statusCode <= 202){
           DataHelper.set("bearer \(value.token)", forKey: .token)
+          DataHelper.set("\(value.token)", forKey: .chatToken)
           DataHelper.set(self.idTextField.text!, forKey: .userId)
           DataHelper.set(self.pwdTextField.text!, forKey: .userPw)
           

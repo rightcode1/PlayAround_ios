@@ -464,6 +464,18 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .disposed(by: disposeBag)
   }
   
+  func startChat() {
+    let param = RegistChatRoomRequest(foodId: foodId, userId: foodUserId)
+    APIProvider.shared.chatAPI.rx.request(.roomRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(RegistChatRoomResponse.self)
+      .subscribe(onSuccess: { value in
+        
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func bindInput() {
     wishBarButtonItem.rx.tap
       .bind(onNext: { [weak self] in

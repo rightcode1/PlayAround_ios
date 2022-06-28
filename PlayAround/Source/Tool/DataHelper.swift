@@ -15,6 +15,7 @@ class DataHelper<T> {
     case userId = "userId"
     case userPw = "userPw"
     case token = "token"
+    case chatToken = "chatToken"
     
     case userAppId = "userAppId"
     
@@ -60,6 +61,11 @@ class DataHelperTool {
   static var token: String? {
     guard let token = DataHelper<String>.value(forKey: .token) else { return nil }
     return token
+  }
+  
+  static var chatToken: String? {
+    guard let chatToken = DataHelper<String>.value(forKey: .chatToken) else { return nil }
+    return chatToken
   }
   
   static var userAppId: Int? {
