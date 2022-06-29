@@ -9,8 +9,16 @@ import UIKit
 import SocketIO
 import SwiftyJSON
 import IQKeyboardManagerSwift
+import Photos
+import DKImagePickerController
 
-class ChatVC: BaseViewController, ViewControllerFromStoryboard {
+enum ChatDialogType: String, Codable {
+  case out
+  case expulsion
+  case cancel
+}
+
+class ChatVC: BaseViewController, ViewControllerFromStoryboard, UIViewControllerTransitioningDelegate, DialogPopupViewDelegate {
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var thumbnailImageView: UIImageView!
   @IBOutlet weak var isSecretView: UIView!
@@ -29,11 +37,20 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var inputTextViewPlaceHolder: UILabel!
   @IBOutlet weak var inputTextBottomConst: NSLayoutConstraint!
   
+  @IBOutlet weak var addFileButton: UIImageView!
   @IBOutlet weak var registButton: UIButton!
   
-  var chatRoomData: ChatRoomData?
+  @IBOutlet weak var outRoomButton: UIBarButtonItem!
+  
+  let pickerController = DKImagePickerController()
+  var assets: [DKAsset]?
+  var exportManually = false
   
   let socketManager = SocketIOManager.sharedInstance
+  
+  var communityId: Int?
+  var foodId: Int?
+  var usedId: Int?
   
   var chatRoomId: Int = -1
   var isMaster: Bool = false
@@ -41,11 +58,12 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    setTopViewInfo()
     setNotificationCenter()
+    setPickerController()
     setTableView()
     socketOn()
     bindInput()
-    setTopViewInfo()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -115,27 +133,80 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard {
   
   // 스크롤 맨 아래로
   func scrollToBottom() {
-    let index = IndexPath(row: self.messageList.count - 1, section: 0)
-    self.tableView.scrollToRow(at: index, at: UITableView.ScrollPosition.bottom, animated: true)
+    if self.messageList.count > 0 {
+      let index = IndexPath(row: self.messageList.count - 1, section: 0)
+      self.tableView.scrollToRow(at: index, at: UITableView.ScrollPosition.bottom, animated: true)
+    }
   }
   
   func setTopViewInfo() {
-    if let chatRoomData = chatRoomData {
-      updateRoomData(chatRoomData)
+    if let communityId = communityId {
+      print("communityId: \(communityId)")
+    }
+    
+    if let foodId = foodId {
+      initFoodDetail(foodId)
+    }
+    
+    if let usedId = usedId {
+      initUsedDetail(usedId)
     }
   }
   
-  func updateRoomData(_ data: ChatRoomData) {
-    if data.thumbnail != nil && !(data.thumbnail ?? "default").contains(find: "default") {
-      thumbnailImageView.kf.setImage(with: URL(string: data.thumbnail!))
-    } else {
-      thumbnailImageView.image = UIImage(named: "defaultBoardImage")
-    }
-    
-    isSecretView.isHidden = (data.isSecret ?? 0) == 0
-    navigationItem.title = data.name
-    nameLabel.text = data.name
-    subNameLabel.text = data.from
+  func initFoodDetail(_ id: Int) {
+    APIProvider.shared.foodAPI.rx.request(.foodDetail(id: id))
+      .filterSuccessfulStatusCodes()
+      .map(FoodDetailResponse.self)
+      .subscribe(onSuccess: { value in
+        guard let data = value.data else { return }
+        
+        if data.images.count > 0 {
+          self.thumbnailImageView.kf.setImage(with: URL(string: data.images[0].name))
+        } else {
+          self.thumbnailImageView.image = UIImage(named: "defaultProfileImage")
+        }
+        
+        self.navigationItem.title = data.user.name
+        self.nameLabel.text = data.name
+        self.subNameLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
+        self.topView.isHidden = false
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func initUsedDetail(_ id: Int) {
+    APIProvider.shared.usedAPI.rx.request(.detail(id: id))
+      .filterSuccessfulStatusCodes()
+      .map(UsedDetailResponse.self)
+      .subscribe(onSuccess: { value in
+        guard let data = value.data else { return }
+        
+        if data.images.count > 0 {
+          self.thumbnailImageView.kf.setImage(with: URL(string: data.images[0].name))
+        } else {
+          self.thumbnailImageView.image = UIImage(named: "defaultProfileImage")
+        }
+        
+        self.navigationItem.title = data.user.name
+        self.nameLabel.text = data.name
+        self.subNameLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
+        self.topView.isHidden = false
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func uploadMessageFile(image: UIImage) {
+    APIProvider.shared.chatAPI.rx.request(.chatMessageFileRegister(chatRoomId: chatRoomId, image: image))
+      .filterSuccessfulStatusCodes()
+      .map(RegistChatMessageImageResponse.self)
+      .subscribe(onSuccess: { response in
+        
+        self.socketManager.sendImage(chatRoomId: self.chatRoomId, messageId: response.data.id)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
   }
   
   func socketOn() {
@@ -159,7 +230,29 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard {
     self.view.endEditing(true)
   }
   
+  @objc func showDialogPopupView() {
+    let vc = DialogPopupView()
+    vc.modalPresentationStyle = .custom
+    vc.transitioningDelegate = self
+    vc.delegate = self
+    vc.titleString = "채팅방 나가기"
+    vc.contentString = "채팅방을 나가시면 대화목록이 삭제됩니다."
+    vc.okbuttonTitle = "확인"
+    self.present(vc, animated: true, completion: nil)
+  }
+  // DialogPopupViewDelegate
+  func dialogOkEvent() {
+    showDialogPopupView()
+  }
+  
   func bindInput() {
+    addFileButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        self.showImagePicker()
+      })
+      .disposed(by: disposeBag)
+    
     registButton.rx.tapGesture().when(.recognized)
       .bind(onNext: { [weak self] _ in
         guard let self = self else { return }
@@ -173,6 +266,13 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard {
     inputTextView.rx.text.orEmpty
       .bind(onNext: { [weak self] text in
         self?.inputTextViewPlaceHolder.isHidden = !text.isEmpty
+      })
+      .disposed(by: disposeBag)
+    
+    outRoomButton.rx.tap
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        
       })
       .disposed(by: disposeBag)
   }
@@ -211,7 +311,7 @@ extension ChatVC: UITableViewDataSource, UITableViewDelegate {
     cell.setHeaderDate(beforeData: beforeData, currentData: messageData, nextData: nextData)
     
     cell.update(messageData, myId: DataHelperTool.userAppId ?? 0)
-    
+  
     return cell
   }
   
@@ -223,7 +323,87 @@ extension ChatVC: UITableViewDataSource, UITableViewDelegate {
     return UITableView.automaticDimension
   }
   
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    cell.layoutMargins = .zero
+    cell.separatorInset = .zero
+    cell.selectionStyle = .none
+    cell.preservesSuperviewLayoutMargins = false
+  }
+  
   func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 150
+    return UITableView.automaticDimension
+  }
+}
+
+extension ChatVC {
+  func setPickerController() {
+    pickerController.assetType = .allPhotos
+    pickerController.maxSelectableCount = 1
+  }
+  
+  func showImagePicker() {
+    if self.exportManually {
+      DKImageAssetExporter.sharedInstance.add(observer: self)
+    }
+    
+    if let assets = self.assets {
+      pickerController.select(assets: assets)
+    }
+    
+    pickerController.exportStatusChanged = { status in
+      switch status {
+        case .exporting:
+          print("exporting")
+        case .none:
+          print("none")
+      }
+    }
+    
+    pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+      self.updateAssets(assets: assets)
+    }
+    
+    if UIDevice.current.userInterfaceIdiom == .pad {
+      pickerController.modalPresentationStyle = .formSheet
+    }
+    
+    if pickerController.UIDelegate == nil {
+      pickerController.UIDelegate = AssetClickHandler()
+    }
+    
+    pickerController.navigationBar.backgroundColor = .white
+    self.present(pickerController, animated: true) {}
+  }
+  
+  func updateAssets(assets: [DKAsset]) {
+    print("didSelectAssets")
+    
+    self.assets = assets
+    
+    if pickerController.exportsWhenCompleted {
+      for asset in assets {
+        if let error = asset.error {
+          print("exporterDidEndExporting with error:\(error.localizedDescription)")
+        } else {
+          print("exporterDidEndExporting:\(asset.localTemporaryPath!)")
+        }
+      }
+    }
+    
+    if (self.assets?.count ?? 0) > 0 {
+      DispatchQueue.global().sync {
+        for asset in assets {
+          asset.fetchOriginalImage { (image, nil) in
+            if let image = image {
+              self.uploadMessageFile(image: image)
+            }
+          }
+        }
+      }
+    }
+    
+    if self.exportManually {
+      DKImageAssetExporter.sharedInstance.exportAssetsAsynchronously(assets: assets, completion: nil)
+    }
   }
 }

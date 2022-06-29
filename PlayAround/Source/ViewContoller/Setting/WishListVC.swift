@@ -137,6 +137,7 @@ extension WishListVC: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         self.navigationController?.pushViewController(vc, animated: true)
       }
     }
+    
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

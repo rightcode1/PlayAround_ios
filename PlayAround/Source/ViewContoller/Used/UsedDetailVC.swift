@@ -88,6 +88,8 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   var replyCommentId: Int?
   var commentList: [UsedCommentListData] = []
   
+  var chatRoomHeaderData: ChatRoomHeaderData?
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     IQKeyboardManager.shared.enableAutoToolbar = false
@@ -282,6 +284,10 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.dislikeCount.onNext(data.dislikeCount)
         
         self.initCommentList()
+        
+        let chatRoomHeaderData = ChatRoomHeaderData(thumbnail: data.images.count > 0 ? data.images[0].name : nil, name: data.user.name, title: data.name)
+        self.chatRoomHeaderData = chatRoomHeaderData
+        
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
@@ -406,7 +412,10 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .filterSuccessfulStatusCodes()
       .map(RegistChatRoomResponse.self)
       .subscribe(onSuccess: { value in
-        
+        let vc = ChatVC.viewController()
+        vc.usedId = self.usedId
+        vc.chatRoomId = value.data.id
+        self.navigationController?.pushViewController(vc, animated: true)
       }, onError: { error in
       })
       .disposed(by: disposeBag)
@@ -504,6 +513,13 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
     inputTextView.rx.text.orEmpty
       .bind(onNext: { [weak self] text in
         self?.inputTextViewPlaceHolder.isHidden = !text.isEmpty
+      })
+      .disposed(by: disposeBag)
+    
+    chatButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.startChat()
       })
       .disposed(by: disposeBag)
   }

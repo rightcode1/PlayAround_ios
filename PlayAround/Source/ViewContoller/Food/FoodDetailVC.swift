@@ -9,6 +9,12 @@ import UIKit
 import RxSwift
 import IQKeyboardManagerSwift
 
+struct ChatRoomHeaderData: Codable {
+  let thumbnail: String?
+  let name: String
+  let title: String
+}
+
 class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var wishBarButtonItem: UIBarButtonItem!
   @IBOutlet weak var menuBarButtonItem: UIBarButtonItem!
@@ -100,6 +106,8 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   
   var replyCommentId: Int?
   var commentList: [FoodCommentListData] = []
+  
+  var chatRoomHeaderData: ChatRoomHeaderData?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -346,6 +354,10 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.dislikeCount.onNext(data.dislikeCount)
         
         self.initCommentList()
+        
+        let chatRoomHeaderData = ChatRoomHeaderData(thumbnail: data.images.count > 0 ? data.images[0].name : nil, name: data.user.name, title: data.name)
+        self.chatRoomHeaderData = chatRoomHeaderData
+        
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
@@ -471,6 +483,10 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .map(RegistChatRoomResponse.self)
       .subscribe(onSuccess: { value in
         
+        let vc = ChatVC.viewController()
+        vc.foodId = self.foodId
+        vc.chatRoomId = value.data.id
+        self.navigationController?.pushViewController(vc, animated: true)
       }, onError: { error in
       })
       .disposed(by: disposeBag)
@@ -566,6 +582,13 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     inputTextView.rx.text.orEmpty
       .bind(onNext: { [weak self] text in
         self?.inputTextViewPlaceHolder.isHidden = !text.isEmpty
+      })
+      .disposed(by: disposeBag)
+    
+    chatButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.startChat()
       })
       .disposed(by: disposeBag)
   }

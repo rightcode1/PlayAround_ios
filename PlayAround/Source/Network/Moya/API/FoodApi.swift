@@ -72,7 +72,7 @@ extension FoodApi: TargetType {
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
     case .imageRegister(let foodId, let imageList):
         let multipartList = imageList.map { image in
-          return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.5)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+          return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.3)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
         }
         return .uploadCompositeMultipart(
           multipartList,

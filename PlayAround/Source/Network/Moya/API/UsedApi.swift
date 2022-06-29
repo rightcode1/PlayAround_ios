@@ -27,6 +27,7 @@ enum UsedAPI {
   case commentList(usedId: Int)
   case commentRegister(param: RegistUsedCommentRequest)
 }
+
 extension UsedAPI: TargetType {
   public var baseURL: URL {
     switch self {
@@ -34,7 +35,6 @@ extension UsedAPI: TargetType {
       return URL(string: ApiEnvironment.baseUrl)!
     }
   }
-  
   
   var path: String {
     switch self {
@@ -95,7 +95,7 @@ extension UsedAPI: TargetType {
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
     case .imageRegister(let usedId, let imageList):
       let multipartList = imageList.map { image in
-        return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.5)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+        return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.3)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
       }
       return .uploadCompositeMultipart(
         multipartList,
@@ -109,7 +109,6 @@ extension UsedAPI: TargetType {
       return .requestJSONEncodable(param)
     case .wishRemove(let usedId):
       return .requestParameters(parameters: ["usedId": usedId], encoding: URLEncoding.queryString)
-      
     case .commentList(let usedId):
       return .requestParameters(parameters: ["usedId": usedId], encoding: URLEncoding.queryString)
     case .commentRegister(let param):

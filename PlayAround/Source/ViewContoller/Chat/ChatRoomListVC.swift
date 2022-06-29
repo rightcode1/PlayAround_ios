@@ -137,7 +137,9 @@ extension ChatRoomListVC: UITableViewDelegate, UITableViewDataSource {
     if chatRoomList.count != 0 {
       let dict = chatRoomList[indexPath.row]
       let vc = ChatVC.viewController()
-      vc.chatRoomData = dict
+      vc.communityId = dict.communityId
+      vc.foodId = dict.foodId
+      vc.usedId = dict.usedId
       vc.chatRoomId = dict.id ?? -1
       self.navigationController?.pushViewController(vc, animated: true)
     }

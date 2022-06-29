@@ -122,6 +122,7 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
       self.updateAssets(assets: assets)
     }
     
+    
     pickerController.modalPresentationStyle = .formSheet
     
     if pickerController.UIDelegate == nil {

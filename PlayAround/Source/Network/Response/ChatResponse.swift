@@ -103,7 +103,7 @@ enum MessageType: String, Codable {
 // MARK: - MessageData
 struct MessageData: Codable {
   var id: Int?
-  var type: MessageType?
+  var type: String?
   var message, userName: String?
   var thumbnail: String?
   var userId: Int?
@@ -117,7 +117,7 @@ struct MessageData: Codable {
     }
     
     if let obj = dict["type"] {
-      self.type = obj as? MessageType
+      self.type = obj as? String
     }
     
     if let obj = dict["message"] {

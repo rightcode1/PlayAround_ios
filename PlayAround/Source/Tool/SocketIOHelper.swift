@@ -75,6 +75,10 @@ class SocketIOManager: NSObject {
     manager.defaultSocket.emit("sendMessage", ["chatRoomId": "\(chatRoomId)", "message": message])
   }
   
+  func sendImage(chatRoomId: Int, messageId: Int) {
+    manager.defaultSocket.emit("sendMessage", ["chatRoomId": "\(chatRoomId)", "messageId": "\(messageId)"])
+  }
+  
   func checkOutRoom() {
     manager.defaultSocket.emit("checkout")
   }

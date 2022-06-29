@@ -36,10 +36,16 @@ class ChatMessageCell: UITableViewCell {
     super.awakeFromNib()
     bubbleView.layer.cornerRadius = 7.5
     photoImageView.layer.cornerRadius = 7.5
+    photoImageView.contentMode = .scaleAspectFill
   }
   
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
+    
+  }
+  
+  override func didMoveToSuperview() {
+    super.didMoveToSuperview()
     
   }
   
@@ -81,8 +87,10 @@ class ChatMessageCell: UITableViewCell {
   }
   
   func update(_ data: MessageData, myId: Int) {
-    messageLabel.isHidden = data.type == .file
-    photoImageView.isHidden = data.type == .message
+    let isFile = data.type != "message"
+    
+    messageLabel.isHidden = isFile
+    photoImageView.isHidden = !isFile
     
     let isMine = myId == data.userId
     
@@ -90,7 +98,11 @@ class ChatMessageCell: UITableViewCell {
     profilButton.isHidden = isMine
     userNameLabel.isHidden = isMine
     
-    bubbleView.backgroundColor = isMine ? UIColor(displayP3Red: 255/255, green: 230/255, blue: 192/255, alpha: 1.0) : UIColor(displayP3Red: 255/255, green: 230/255, blue: 192/255, alpha: 1.0)
+    if isFile {
+      bubbleView.backgroundColor = .clear
+    } else {
+      bubbleView.backgroundColor = isMine ? UIColor(displayP3Red: 255/255, green: 230/255, blue: 192/255, alpha: 1.0) : UIColor(displayP3Red: 255/255, green: 230/255, blue: 192/255, alpha: 1.0)
+    }
 
     messageDateLabel.isHidden = isMine
     messageReadCountLabel.isHidden = isMine
@@ -104,12 +116,37 @@ class ChatMessageCell: UITableViewCell {
       profileImage.image = UIImage(named: "defaultBoardImage")
     }
     
-    let message = data.message ?? ""
-    let widthValue = estimateFrameForText(message).width + 14.5
+    userNameLabel.text = data.userName
     
-    messageLabel.textAlignment = isMine ? .right : .left
-    messageLabel.text = message
-    widthConstraint.constant = widthValue
+    if !isFile {
+      photoImageView.image = nil
+      let message = data.message ?? ""
+      let widthValue = estimateFrameForText(message).width + 14.5
+      
+      messageLabel.textAlignment = isMine ? .right : .left
+      messageLabel.text = message
+      widthConstraint.constant = widthValue
+      messageLabel.updateConstraints() // 이미지가 있을때 스크롤 하면서 각 cell에 label 사이즈가 달라짐
+    } else {
+      messageLabel.text = nil
+      
+      let data = try! Data(contentsOf: URL(string: data.message ?? "")!)
+      let uiImage = UIImage(data: data)!
+      let image = uiImage.resizeToWidth(newWidth: 125)
+      
+      photoImageView.image = image
+      widthConstraint.constant = 250
+    }
+    
+    if isMine {
+      bubbleTopConstraint.constant = 10
+      bubbleRightConstraint.constant = 15
+      bubbleLeftConstraint.constant = UIScreen.main.bounds.width - widthConstraint.constant - bubbleRightConstraint.constant
+    } else {
+      bubbleTopConstraint.constant = 31
+      bubbleLeftConstraint.constant = 63.5
+      bubbleRightConstraint.constant = UIScreen.main.bounds.width - widthConstraint.constant - bubbleLeftConstraint.constant
+    }
     
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier:"ko_KR")
@@ -127,17 +164,6 @@ class ChatMessageCell: UITableViewCell {
     myMessageReadCountLabel.isHidden = isEveryoneRead
     messageReadCountLabel.text = "\(data.readCount ?? 0)"
     myMessageReadCountLabel.text = "\(data.readCount ?? 0)"
-    
-    if isMine {
-      bubbleTopConstraint.constant = 15
-      bubbleRightConstraint.constant = 15
-      bubbleLeftConstraint.constant = UIScreen.main.bounds.width - widthConstraint.constant - bubbleRightConstraint.constant
-    } else {
-      bubbleTopConstraint.constant = 31
-      bubbleLeftConstraint.constant = 63.5
-      bubbleRightConstraint.constant = UIScreen.main.bounds.width - widthConstraint.constant - bubbleLeftConstraint.constant
-    }
-
   }
   
   func estimateFrameForText(_ text: String) -> CGRect {

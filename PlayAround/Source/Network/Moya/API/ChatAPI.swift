@@ -13,6 +13,8 @@ enum ChatAPI {
   
   case roomJoinRegister(param: RegistChatRoomJoinRequest)
   case roomJoinRemove(chatRoomId: Int, userId: Int, diff: ChatRommJoinRemoveDiff)
+  
+  case chatMessageFileRegister(chatRoomId: Int, image: UIImage)
 }
 
 extension ChatAPI: TargetType {
@@ -31,13 +33,16 @@ extension ChatAPI: TargetType {
       return "/v1/chatRoomJoin/list"
     case .roomJoinRemove:
       return "/v1/chatRoom/remove"
+    case .chatMessageFileRegister:
+      return "/v1/chatMessage/file/register"
     }
   }
   
   var method: Moya.Method {
     switch self {
     case .roomRegister,
-        .roomJoinRegister:
+        .roomJoinRegister,
+        .chatMessageFileRegister:
       return .post
     case .roomJoinRemove:
       return .delete
@@ -56,6 +61,9 @@ extension ChatAPI: TargetType {
       return .requestJSONEncodable(param)
     case .roomJoinRemove(let chatRoomId, let userId, let diff):
       return .requestParameters(parameters: ["chatRoomId": chatRoomId, "userId": userId, "diff": diff], encoding: URLEncoding.queryString)
+    case .chatMessageFileRegister(let chatRoomId, let image):
+      let multipart = MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.3)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+      return .uploadCompositeMultipart([multipart], urlParameters: ["chatRoomId": chatRoomId])
     }
   }
   
@@ -116,5 +124,16 @@ struct RegistChatRoomResponse: Codable {
     let userId: Int
     let updatedAt: String
     let createdAt: String
+  }
+}
+
+struct RegistChatMessageImageResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let data: Data
+  
+  // MARK: - Data
+  struct Data: Codable {
+    let id: Int
   }
 }
