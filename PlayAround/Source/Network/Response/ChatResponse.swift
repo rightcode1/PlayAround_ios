@@ -23,6 +23,7 @@ struct ChatRoomData: Codable {
   var id: Int?
   var message, name, from: String?
   var thumbnail: String?
+  var type: String?
   var userId: Int?
   var foodId: Int?
   var usedId: Int?
@@ -51,6 +52,10 @@ struct ChatRoomData: Codable {
     
     if let obj = dict["thumbnail"] {
       self.thumbnail = obj as? String
+    }
+    
+    if let obj = dict["type"] {
+      self.type = obj as? String
     }
     
     if let obj = dict["userId"] {
@@ -98,6 +103,8 @@ struct MessageListResponse: Codable {
 enum MessageType: String, Codable {
   case message = "message"
   case file = "file"
+  case image = "image"
+  case system = "system"
 }
 
 // MARK: - MessageData

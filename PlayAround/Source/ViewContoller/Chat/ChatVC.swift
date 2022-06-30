@@ -18,7 +18,7 @@ enum ChatDialogType: String, Codable {
   case cancel
 }
 
-class ChatVC: BaseViewController, ViewControllerFromStoryboard, UIViewControllerTransitioningDelegate, DialogPopupViewDelegate {
+class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewDelegate {
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var thumbnailImageView: UIImageView!
   @IBOutlet weak var isSecretView: UIView!
@@ -55,6 +55,8 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, UIViewController
   var chatRoomId: Int = -1
   var isMaster: Bool = false
   var messageList: [MessageData] = []
+  
+  var chatDialogType: ChatDialogType = .out
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -235,14 +237,20 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, UIViewController
     vc.modalPresentationStyle = .custom
     vc.transitioningDelegate = self
     vc.delegate = self
+    
     vc.titleString = "채팅방 나가기"
     vc.contentString = "채팅방을 나가시면 대화목록이 삭제됩니다."
     vc.okbuttonTitle = "확인"
+    vc.cancelButtonTitle = "취소"
     self.present(vc, animated: true, completion: nil)
   }
   // DialogPopupViewDelegate
   func dialogOkEvent() {
-    showDialogPopupView()
+    socketManager.outRoom(chatRoomId: chatRoomId) { result in
+      if result {
+        self.backPress()
+      }
+    }
   }
   
   func bindInput() {
@@ -272,7 +280,7 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, UIViewController
     outRoomButton.rx.tap
       .bind(onNext: { [weak self] _ in
         guard let self = self else { return }
-        
+        self.showDialogPopupView()
       })
       .disposed(by: disposeBag)
   }
@@ -280,6 +288,13 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, UIViewController
   @IBAction func tapBack(_ sender: UIBarButtonItem) {
     socketManager.checkOutRoom()
     backPress()
+  }
+  
+}
+
+extension ChatVC: UIViewControllerTransitioningDelegate {
+  func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    PresentationController(presentedViewController: presented, presenting: presenting)
   }
 }
 
@@ -321,13 +336,6 @@ extension ChatVC: UITableViewDataSource, UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return UITableView.automaticDimension
-  }
-  
-  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    cell.layoutMargins = .zero
-    cell.separatorInset = .zero
-    cell.selectionStyle = .none
-    cell.preservesSuperviewLayoutMargins = false
   }
   
   func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {

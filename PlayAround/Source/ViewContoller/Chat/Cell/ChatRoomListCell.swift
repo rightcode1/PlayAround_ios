@@ -42,8 +42,10 @@ class ChatRoomListCell: UITableViewCell {
     
     isSecretView.isHidden = (data.isSecret ?? 0) == 0
     nameLabel.text = data.name
-    messageCountView.isHidden = (data.count ?? 0) <= 0
+    
     messageCountLabel.text = "\(data.count ?? 0)"
+    messageCountView.isHidden = (data.count ?? 0) <= 0
+    messageCountView.layer.cornerRadius = messageCountView.frame.height / 2
     
     dateLabel.text = data.updatedAt
     
@@ -53,7 +55,7 @@ class ChatRoomListCell: UITableViewCell {
     userCountLabel.isHidden = data.communityId == nil
     userCountLabel.text = "\(data.userCount ?? 0)명"
     
-    messageLabel.text = data.message
+    messageLabel.text = data.type == "message" ? data.message : "사진"
   }
   
 }

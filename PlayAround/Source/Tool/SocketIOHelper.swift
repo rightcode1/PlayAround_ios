@@ -45,6 +45,15 @@ class SocketIOManager: NSObject {
     }
   }
   
+  func roomListUpdate(result: @escaping ([[String: Any]]) -> Void) {
+    manager.defaultSocket.on("listUpdate") { data, ack  in
+      guard let listData = data[0] as? [String: Any] else { return }
+      let list = listData["data"] as? [[String: Any]]
+      
+      result(list ?? [])
+    }
+  }
+  
   func enterRoom(chatRoomId: Int, result: @escaping ((isMaster: Bool, messageList: [MessageData])) -> Void) {
     manager.defaultSocket.emitWithAck("enterRoom", ["chatRoomId": "\(chatRoomId)"]).timingOut(after: 0) { data in
       guard let responseData = data[0] as? [String: Any] else { return }
@@ -60,6 +69,15 @@ class SocketIOManager: NSObject {
       }
       
       result((isMaster ?? false, messageList))
+    }
+  }
+  
+  func outRoom(chatRoomId: Int, result: @escaping (Bool) -> Void) {
+    manager.defaultSocket.emitWithAck("outRoom", ["chatRoomId": "\(chatRoomId)"]).timingOut(after: 0) { data in
+      guard let responseData = data[0] as? [String: Any] else { return }
+      let success = responseData["result"] as? Bool
+      
+      result(success ?? false)
     }
   }
   

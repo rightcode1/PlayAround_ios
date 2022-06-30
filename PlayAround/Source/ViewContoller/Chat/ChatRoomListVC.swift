@@ -32,6 +32,7 @@ class ChatRoomListVC: UIViewController {
     setCollectionView()
     
     initChatRoomList()
+    socketOn()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +55,18 @@ class ChatRoomListVC: UIViewController {
   
   func initChatRoomList() {
     socketManager.getRoomList(type: selectedType.rawValue) { list in
+      self.chatRoomList.removeAll()
+      if list.count > 0 {
+        for data in list {
+          self.chatRoomList.append(ChatRoomData(dict: data))
+        }
+      }
+      self.tableView.reloadData()
+    }
+  }
+  
+  func socketOn() {
+    socketManager.roomListUpdate { list in
       self.chatRoomList.removeAll()
       if list.count > 0 {
         for data in list {

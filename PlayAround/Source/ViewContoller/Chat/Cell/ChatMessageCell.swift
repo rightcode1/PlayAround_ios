@@ -87,7 +87,12 @@ class ChatMessageCell: UITableViewCell {
   }
   
   func update(_ data: MessageData, myId: Int) {
-    let isFile = data.type != "message"
+    let isSystem = data.type == "system"
+    let isFile = data.type == "image" || data.type == "file"
+    
+    contentsView.isHidden = isSystem
+    noticeCommentView.isHidden = !isSystem
+    noticeCommentLabel.text = data.message
     
     messageLabel.isHidden = isFile
     photoImageView.isHidden = !isFile
@@ -130,11 +135,15 @@ class ChatMessageCell: UITableViewCell {
     } else {
       messageLabel.text = nil
       
-      let data = try! Data(contentsOf: URL(string: data.message ?? "")!)
-      let uiImage = UIImage(data: data)!
-      let image = uiImage.resizeToWidth(newWidth: 125)
+      if let url = URL(string: data.message ?? ""), let data = try? Data(contentsOf: url) {
+        let uiImage = UIImage(data: data)!
+        let image = uiImage.resizeToWidth(newWidth: 125)
+        
+        photoImageView.image = image
+      } else {
+        photoImageView.image = UIImage(named: "defaultBoardImage")
+      }
       
-      photoImageView.image = image
       widthConstraint.constant = 250
     }
     

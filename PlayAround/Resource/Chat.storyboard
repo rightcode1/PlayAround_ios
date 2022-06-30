@@ -170,21 +170,21 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WwN-2c-yFp">
-                                                            <rect key="frame" x="134" y="21" width="10" height="10"/>
+                                                            <rect key="frame" x="134" y="19" width="14" height="14"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LNJ-wj-QEa">
-                                                                    <rect key="frame" x="1" y="0.0" width="8" height="10"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                                                                    <rect key="frame" x="2" y="1" width="10" height="12"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
                                                             <color key="backgroundColor" red="1" green="0.27450980390000002" blue="0.27450980390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="LNJ-wj-QEa" secondAttribute="trailing" constant="1" id="e5k-rd-9PX"/>
-                                                                <constraint firstAttribute="bottom" secondItem="LNJ-wj-QEa" secondAttribute="bottom" id="lXu-md-MxF"/>
-                                                                <constraint firstItem="LNJ-wj-QEa" firstAttribute="top" secondItem="WwN-2c-yFp" secondAttribute="top" id="mGU-xX-Aic"/>
-                                                                <constraint firstItem="LNJ-wj-QEa" firstAttribute="leading" secondItem="WwN-2c-yFp" secondAttribute="leading" constant="1" id="xlV-wP-p1c"/>
+                                                                <constraint firstAttribute="trailing" secondItem="LNJ-wj-QEa" secondAttribute="trailing" constant="2" id="e5k-rd-9PX"/>
+                                                                <constraint firstAttribute="bottom" secondItem="LNJ-wj-QEa" secondAttribute="bottom" constant="1" id="lXu-md-MxF"/>
+                                                                <constraint firstItem="LNJ-wj-QEa" firstAttribute="top" secondItem="WwN-2c-yFp" secondAttribute="top" constant="1" id="mGU-xX-Aic"/>
+                                                                <constraint firstItem="LNJ-wj-QEa" firstAttribute="leading" secondItem="WwN-2c-yFp" secondAttribute="leading" constant="2" id="xlV-wP-p1c"/>
                                                             </constraints>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -612,10 +612,10 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W17-m0-4Fg">
-                                                                    <rect key="frame" x="0.0" y="114" width="414" height="19.5"/>
+                                                                    <rect key="frame" x="0.0" y="114" width="414" height="24.5"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AFy-RG-Qn1">
-                                                                            <rect key="frame" x="82" y="0.0" width="250" height="9"/>
+                                                                            <rect key="frame" x="82" y="5" width="250" height="9"/>
                                                                             <subviews>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="님이 " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ezA-ty-UBN">
                                                                                     <rect key="frame" x="114" y="4.5" width="22.5" height="0.0"/>
@@ -643,7 +643,7 @@
                                                                     <constraints>
                                                                         <constraint firstItem="AFy-RG-Qn1" firstAttribute="centerX" secondItem="W17-m0-4Fg" secondAttribute="centerX" id="5Wy-qk-Oeu"/>
                                                                         <constraint firstAttribute="bottom" secondItem="AFy-RG-Qn1" secondAttribute="bottom" constant="10.5" id="NIL-G9-Suf"/>
-                                                                        <constraint firstItem="AFy-RG-Qn1" firstAttribute="top" secondItem="W17-m0-4Fg" secondAttribute="top" id="fgM-qa-vUD"/>
+                                                                        <constraint firstItem="AFy-RG-Qn1" firstAttribute="top" secondItem="W17-m0-4Fg" secondAttribute="top" constant="5" id="fgM-qa-vUD"/>
                                                                     </constraints>
                                                                 </view>
                                                             </subviews>
