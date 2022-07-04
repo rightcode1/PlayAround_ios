@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Moya
 import RxSwift
 import RxCocoa
 import RxGesture
@@ -81,37 +80,17 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     // Dispose of any resources that can be recreated.
   }
   
-  func userInfo(_ id: Int? = nil, result: @escaping (UserInfoResponse) -> Void) {
-    let param = UserInfoRequest(id: id)
+  func userInfo(result: @escaping (UserInfoResponse) -> Void) {
+    let param = UserInfoRequest()
     APIProvider.shared.userAPI.rx.request(.userInfo(param: param))
       .filterSuccessfulStatusCodes()
       .map(UserInfoResponse.self)
       .subscribe(onSuccess: { response in
-        if id == nil {
-          DataHelper.set(response.data.id, forKey: .userAppId)
-        }
-        result(response)
-      }, onError: { error in
-        print("error StatusCode: \(APIProvider.shared.getErrorStatusCode(error))")
-        let backendError = (error as? MoyaError)?.backendError
-        print("backendError: \(backendError?.message ?? "")")
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  func userLogout(result: @escaping (DefaultResponse) -> Void) {
-    APIProvider.shared.userAPI.rx.request(.userLogout)
-      .filterSuccessfulStatusCodes()
-      .map(DefaultResponse.self)
-      .subscribe(onSuccess: { response in
+        DataHelper.set(response.data.id, forKey: .userAppId)
         result(response)
       }, onError: { error in
       })
       .disposed(by: disposeBag)
-  }
-  
-  func communityLevelImage(level: Int) -> UIImage {
-    return UIImage(named: "communityLevel\(level)") ?? UIImage()
   }
   
   func foodLevelImage(level: Int) -> UIImage {

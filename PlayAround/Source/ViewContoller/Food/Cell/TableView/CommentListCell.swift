@@ -53,11 +53,7 @@ class CommentListCell: UITableViewCell {
     userName = data.user.name
     
     let isReply = data.depth == 1
-    if data.user.thumbnail != nil {
-      self.thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
-    } else {
-      self.thumbnailImageView.image = UIImage(named: "defaultProfileImage")
-    }
+    thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
     thumbnailImageViewLeadingConstraint.constant = isReply ? 50 : 15
     levelImageView.image = foodLevelImage(level: data.user.foodLevel ?? 1)
     
@@ -72,11 +68,7 @@ class CommentListCell: UITableViewCell {
     userName = data.user.name
     
     let isReply = data.depth == 1
-    if data.user.thumbnail != nil {
-      self.thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
-    } else {
-      self.thumbnailImageView.image = UIImage(named: "defaultProfileImage")
-    }
+    thumbnailImageView.kf.setImage(with: URL(string: data.user.thumbnail ?? ""))
     thumbnailImageViewLeadingConstraint.constant = isReply ? 50 : 15
     levelImageView.image = usedLevelImage(level: data.user.usedLevel ?? 1)
     

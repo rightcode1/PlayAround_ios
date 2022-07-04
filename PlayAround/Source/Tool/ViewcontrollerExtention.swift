@@ -283,32 +283,6 @@ extension UIViewController {
     }
   }
   
-  func initUIImageList(_ images: [Image]) -> [UIImage] {
-    var imageList: [UIImage] = []
-    
-    if images.count > 0 {
-      for i in 0..<images.count {
-        let dict = images[i]
-        do {
-          let data = try! Data(contentsOf: URL(string: dict.name)!)
-          let image = UIImage(data: data)
-          imageList.append(image!.resizeToWidth(newWidth: self.view.frame.width))
-        }
-      }
-    }
-    
-    return imageList
-  }
-  
-  func showImageList(imageList: [UIImage], index: Int? = nil) {
-    let vc = UIStoryboard(name: "Common", bundle: nil).instantiateViewController(withIdentifier: "imageListScroll") as! ImageListWithScrolViewViewController
-    vc.indexRow = index
-    vc.imageList = imageList
-    vc.modalPresentationStyle = .overFullScreen
-    vc.modalTransitionStyle = .crossDissolve
-    self.present(vc, animated: true)
-  }
-  
   @IBAction func backPress(){
     if let navigationController = navigationController{
       if let rootViewController = navigationController.viewControllers.first, rootViewController.isEqual(self){

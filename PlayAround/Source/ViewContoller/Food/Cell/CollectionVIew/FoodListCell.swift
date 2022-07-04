@@ -33,7 +33,7 @@ class FoodListCell: UICollectionViewCell {
     }
     
     titleLabel.text = data.name
-    priceLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
+    priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
     wishCountLabel.text = "\(data.wishCount)"
     likeCountLabel.text = "좋아요 \(data.likeCount)"
     disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"
@@ -51,7 +51,7 @@ class FoodListCell: UICollectionViewCell {
     }
     
     titleLabel.text = data.name
-    priceLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
+    priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
     wishCountLabel.text = "\(data.wishCount)"
     likeCountLabel.text = "좋아요 \(data.likeCount)"
     disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"

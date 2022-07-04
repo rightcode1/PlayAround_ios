@@ -258,7 +258,7 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
     }
     
     guard !priceTextField.text!.isEmpty else {
-      showToast(message: "가격을 입력해주세요.")
+      showToast(message: "달란트를 입력해주세요.")
       return
     }
     

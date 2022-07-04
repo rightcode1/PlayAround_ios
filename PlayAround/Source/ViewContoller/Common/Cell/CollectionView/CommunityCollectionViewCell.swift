@@ -27,7 +27,7 @@ class CommunityCollectionViewCell: UICollectionViewCell {
     self.distancLabel.text = "\(data.distance)"
     self.peopleLabel.text = "\(data.people)"
     self.likeLabel.text = "좋아요 \(data.likeCount)"
-    self.disLikeLabel.text = "싫어요 \(data.dislikeCount)" 
+    //    self.disLikeLabel.text = data.li
   }
   
 }

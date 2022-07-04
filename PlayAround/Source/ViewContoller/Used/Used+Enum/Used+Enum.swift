@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+enum UsedSort: String, Codable {
+  case 최신순
+  case 추천순
+  case 가격낮은순
+  case 가격높은순
+  case 인기순
+}
+
 enum UsedCategory: String, Codable {
   case 전체
   case 육아

@@ -8,7 +8,6 @@
 import UIKit
 
 class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
-  @IBOutlet weak var searchButton: UIButton!
   @IBOutlet weak var filterButton: UIButton!
   @IBOutlet weak var foodListCollectionView: UICollectionView!
   
@@ -72,14 +71,6 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
         let vc = FoodSortPopupVC.viewController()
         vc.delegate = self
         self.present(vc, animated: true)
-      })
-      .disposed(by: disposeBag)
-    
-    searchButton.rx.tap
-      .bind(onNext: { [weak self] in
-        guard let self = self else { return }
-        let vc = SearchFoodAndUsedVC.viewController()
-        self.navigationController?.pushViewController(vc, animated: true)
       })
       .disposed(by: disposeBag)
   }

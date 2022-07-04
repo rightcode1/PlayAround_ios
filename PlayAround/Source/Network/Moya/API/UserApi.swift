@@ -75,7 +75,7 @@ extension UserAPI: TargetType {
       return .requestPlain
       
     case .userFileRegister(let image):
-      let multipart = MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.3)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+      let multipart = MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.9)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
       return .uploadMultipart([multipart])
     }
   }
@@ -125,7 +125,7 @@ struct Follow: Codable {
   let id: Int
   let name: String?
   let thumbnail: String?
-  var isFollowing: Bool
+  let isFollowing: Bool
 }
 
 struct UpdateUserInfoRequest: Codable {

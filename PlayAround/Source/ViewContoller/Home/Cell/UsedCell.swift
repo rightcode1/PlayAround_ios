@@ -24,7 +24,7 @@ class UsedCell: UICollectionViewCell{
 //      self.thumbnail?.kf.setImage(with: URL(string: data.thumbnail ))
     }
     title.text = data.name
-    pay.text = "\(data.price.formattedProductPrice() ?? "")원"
+    pay.text = "\(data.price) 달란트"
 //    listecount.text = "\(data.wishCount)"
     listecount.text = "좋아요 \(data.likeCount)"
     dislike.text = "싫어요 \(data.dislikeCount)"

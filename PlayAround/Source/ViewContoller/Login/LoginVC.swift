@@ -17,7 +17,6 @@ class LoginVC: BaseViewController{
   override func viewDidLoad() {
     navigationController?.isNavigationBarHidden = true
   }
-  
   override func viewDidDisappear(_ animated: Bool) {
     navigationController?.isNavigationBarHidden = false
   }
@@ -31,16 +30,14 @@ class LoginVC: BaseViewController{
       .filterSuccessfulStatusCodes()
       .map(LoginResponse.self)
       .subscribe(onSuccess: { value in
-        self.dismissHUD()
-        
         if(value.statusCode <= 202){
           DataHelper.set("bearer \(value.token)", forKey: .token)
-          DataHelper.set("\(value.token)", forKey: .chatToken)
           DataHelper.set(self.idTextField.text!, forKey: .userId)
           DataHelper.set(self.pwdTextField.text!, forKey: .userPw)
-          
+
           self.goMain()
         }
+        self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
       })
