@@ -38,10 +38,10 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3U5-Xk-CDQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="324"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="s4R-29-eeG">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="324"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FJq-cF-WaI">
                                                         <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
@@ -239,47 +239,6 @@
                                                             <constraint firstItem="UOm-Ze-SMY" firstAttribute="top" secondItem="byV-fH-w5r" secondAttribute="bottom" id="gjU-gC-KI9"/>
                                                             <constraint firstAttribute="bottom" secondItem="UOm-Ze-SMY" secondAttribute="bottom" id="id8-jU-Tod"/>
                                                             <constraint firstItem="byV-fH-w5r" firstAttribute="top" secondItem="9Zy-Nv-9NV" secondAttribute="top" id="rtx-E0-Nq2"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8nx-bl-YiU">
-                                                        <rect key="frame" x="0.0" y="240" width="414" height="84"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iT4-MJ-PKs">
-                                                                <rect key="frame" x="360" y="52.5" width="39" height="16.5"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="16.5" id="0hp-Mc-4S3"/>
-                                                                </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                                <state key="normal" title="탈퇴하기">
-                                                                    <color key="titleColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                                </state>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WVn-TA-3nh">
-                                                                <rect key="frame" x="309" y="52.5" width="39" height="16.5"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="16.5" id="UgZ-wD-tde"/>
-                                                                </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                                <state key="normal" title="로그아웃">
-                                                                    <color key="titleColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                                </state>
-                                                            </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ㅣ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MwV-Cg-4ve">
-                                                                <rect key="frame" x="349" y="54.5" width="10" height="13.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                                <color key="textColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                        <constraints>
-                                                            <constraint firstItem="iT4-MJ-PKs" firstAttribute="leading" secondItem="MwV-Cg-4ve" secondAttribute="trailing" constant="1" id="5Ln-4O-aEB"/>
-                                                            <constraint firstAttribute="trailing" secondItem="iT4-MJ-PKs" secondAttribute="trailing" constant="15" id="6en-sK-xIB"/>
-                                                            <constraint firstItem="MwV-Cg-4ve" firstAttribute="leading" secondItem="WVn-TA-3nh" secondAttribute="trailing" constant="1" id="KOl-M9-9bf"/>
-                                                            <constraint firstItem="MwV-Cg-4ve" firstAttribute="centerY" secondItem="iT4-MJ-PKs" secondAttribute="centerY" constant="0.5" id="Lqd-Qx-dbq"/>
-                                                            <constraint firstItem="MwV-Cg-4ve" firstAttribute="centerY" secondItem="WVn-TA-3nh" secondAttribute="centerY" constant="0.5" id="b9z-Zr-h4o"/>
-                                                            <constraint firstAttribute="bottom" secondItem="iT4-MJ-PKs" secondAttribute="bottom" constant="15" id="kfA-6v-7Q5"/>
-                                                            <constraint firstItem="iT4-MJ-PKs" firstAttribute="top" secondItem="8nx-bl-YiU" secondAttribute="top" constant="52.5" id="wjv-9P-yzN"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>

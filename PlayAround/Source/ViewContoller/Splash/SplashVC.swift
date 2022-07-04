@@ -8,7 +8,7 @@
 import UIKit
 import TAKUUID
 
-class SplashVC: BaseViewController {
+class SplashVC: BaseViewController, ViewControllerFromStoryboard {
   
   var version: String? {
     guard let dictionary = Bundle.main.infoDictionary,
@@ -20,6 +20,11 @@ class SplashVC: BaseViewController {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
       self.checkVersion()
     }
+  }
+  
+  static func viewController() -> SplashVC {
+    let viewController = SplashVC.viewController(storyBoardName: "Splash")
+    return viewController
   }
   
   func login() {

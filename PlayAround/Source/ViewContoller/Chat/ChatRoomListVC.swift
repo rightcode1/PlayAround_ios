@@ -83,6 +83,12 @@ class ChatRoomListVC: UIViewController {
   
 }
 
+extension ChatRoomListVC: ChatVCDelegate {
+  func outRoomEevent() {
+    initChatRoomList()
+  }
+}
+
 extension ChatRoomListVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return typeList.count
@@ -154,6 +160,7 @@ extension ChatRoomListVC: UITableViewDelegate, UITableViewDataSource {
       vc.foodId = dict.foodId
       vc.usedId = dict.usedId
       vc.chatRoomId = dict.id ?? -1
+      vc.delegate = self
       self.navigationController?.pushViewController(vc, animated: true)
     }
   }

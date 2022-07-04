@@ -18,6 +18,10 @@ enum ChatDialogType: String, Codable {
   case cancel
 }
 
+protocol ChatVCDelegate {
+  func outRoomEevent()
+}
+
 class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewDelegate {
   @IBOutlet weak var topView: UIView!
   @IBOutlet weak var thumbnailImageView: UIImageView!
@@ -41,6 +45,8 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
   @IBOutlet weak var registButton: UIButton!
   
   @IBOutlet weak var outRoomButton: UIBarButtonItem!
+  
+  var delegate: ChatVCDelegate?
   
   let pickerController = DKImagePickerController()
   var assets: [DKAsset]?
@@ -249,6 +255,7 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
     socketManager.outRoom(chatRoomId: chatRoomId) { result in
       if result {
         self.backPress()
+        self.delegate?.outRoomEevent()
       }
     }
   }

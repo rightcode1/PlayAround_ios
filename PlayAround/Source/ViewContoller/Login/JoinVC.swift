@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTransitioningDelegate{
+class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTransitioningDelegate {
  
   @IBOutlet weak var idTextField: UITextField!
   @IBOutlet weak var pwdTextField: UITextField!

@@ -99,6 +99,17 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
       .disposed(by: disposeBag)
   }
   
+  func userLogout(result: @escaping (DefaultResponse) -> Void) {
+    APIProvider.shared.userAPI.rx.request(.userLogout)
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { response in
+        result(response)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func communityLevelImage(level: Int) -> UIImage {
     return UIImage(named: "communityLevel\(level)") ?? UIImage()
   }

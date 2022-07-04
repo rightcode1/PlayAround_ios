@@ -40,16 +40,11 @@ class CommunityDetailVC: BaseViewController, ViewControllerFromStoryboard {
   var category: [Category] = [.공지사항, .자유게시판, .채팅방]
   
   override func viewDidLoad() {
-    tabBarController?.tabBar.isHidden = true
     initDelegate()
     
     initDetail()
     
     initDetailNotice(communityId)
-  }
-  
-  override func viewDidDisappear(_ animated: Bool) {
-    tabBarController?.tabBar.isHidden = false
   }
   
   static func viewController() -> CommunityDetailVC {

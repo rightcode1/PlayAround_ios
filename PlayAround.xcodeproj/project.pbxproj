@@ -824,12 +824,12 @@
 				DFA40458282B8067004E8859 /* Splash */,
 				DFA4047E282BB1DE004E8859 /* Login */,
 				DF7EE3FB2832331100788CFE /* Home */,
-				CBDBEBA4286045E700165352 /* MyPage */,
-				CBDBEB8C28600A8000165352 /* Setting */,
 				CBEE7DC0283B3476000BEC15 /* Food */,
 				CBAD139F2859CFD300247EE6 /* Used */,
 				DFBDF45F283DD9E700404D44 /* Community */,
 				CB399D2728645F8C0084F9EF /* Chat */,
+				CBDBEBA4286045E700165352 /* MyPage */,
+				CBDBEB8C28600A8000165352 /* Setting */,
 				DF770AC6282CD8480038380E /* Common */,
 			);
 			path = ViewContoller;
@@ -853,13 +853,13 @@
 				DFA4047F282BB1F3004E8859 /* Login.storyboard */,
 				DFA451CB282B762D0059EEFC /* Main.storyboard */,
 				DF7937FC2831EC2800ED0E2D /* Home.storyboard */,
-				CBAD13B0285C4CD300247EE6 /* MyPage.storyboard */,
-				CBAD13B2285C54F300247EE6 /* Setting.storyboard */,
 				CBEE7DC1283B348C000BEC15 /* Food.storyboard */,
 				CBAD13A02859CFE400247EE6 /* Used.storyboard */,
 				CBEE7DD4283B78DB000BEC15 /* Follow.storyboard */,
 				DFBDF45D283DCE9800404D44 /* Community.storyboard */,
 				CB399D25286447B90084F9EF /* Chat.storyboard */,
+				CBAD13B0285C4CD300247EE6 /* MyPage.storyboard */,
+				CBAD13B2285C54F300247EE6 /* Setting.storyboard */,
 				DF7EE3ED2832217200788CFE /* Common */,
 			);
 			path = Resource;
