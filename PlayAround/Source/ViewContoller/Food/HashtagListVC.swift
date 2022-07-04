@@ -88,10 +88,18 @@ class HashtagListVC: BaseViewController, ViewControllerFromStoryboard {
   
   @IBAction func tapBack(_ sender: UIBarButtonItem) {
     backPress()
+//    if selectHashtag.count > 0 {
+//      delegate?.setHashtag(selectHashtag: selectHashtag)
+//    }
+  }
+  
+  @IBAction func tapRegist(_ sender: UIButton) {
+    backPress()
     if selectHashtag.count > 0 {
       delegate?.setHashtag(selectHashtag: selectHashtag)
     }
   }
+  
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate

@@ -39,7 +39,7 @@ enum FoodCategory: String, Codable {
   func offImage() -> UIImage {
     switch self {
     case .전체:
-      return UIImage(named: "sideCategoryRegistOff1") ?? UIImage()
+      return UIImage(named: "sideCategoryFullColorOff1") ?? UIImage()
     case .국물:
       return UIImage(named: "sideDishCategoryFullColorOff2") ?? UIImage()
     case .찜:

@@ -8,12 +8,14 @@
 import UIKit
 
 class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
-  
+  @IBOutlet weak var searchButton: UIButton!
   @IBOutlet weak var filterButton: UIButton!
   @IBOutlet weak var usedListCollectionView: UICollectionView!
   
   var category: UsedCategory = .전체
   var usedList: [UsedListData] = []
+  
+  var sort: FoodSort?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -47,7 +49,7 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
     initUsedList()
   }
   
-  func initUsedList(sort: UsedSort? = nil) {
+  func initUsedList() {
     self.showHUD()
     let param = UsedListRequest(category: category == .전체 ? nil : category, sort: sort == nil ? .최신순 : sort)
     APIProvider.shared.usedAPI.rx.request(.list(param: param))
@@ -67,14 +69,30 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
     filterButton.rx.tap
       .bind(onNext: { [weak self] in
         guard let self = self else { return }
-//        let vc = FoodSortPopupVC.viewController()
-//        vc.delegate = self
-//        self.present(vc, animated: true)
+        let vc = FoodSortPopupVC.viewController()
+        vc.delegate = self
+        self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
+    searchButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = SearchFoodAndUsedVC.viewController()
+        vc.selectedDiff = .used
+        self.navigationController?.pushViewController(vc, animated: true)
       })
       .disposed(by: disposeBag)
   }
-  
 }
+
+extension UsedVC: FoodSortDelegate {
+  func setFoodSort(sort: FoodSort) {
+    self.sort = sort
+    initUsedList()
+  }
+}
+
 extension UsedVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
     switch kind {

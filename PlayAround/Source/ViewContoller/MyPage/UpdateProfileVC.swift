@@ -7,6 +7,11 @@
 
 import UIKit
 
+enum UpdateProfilePopupDiff: String {
+  case logout
+  case withdrawal
+}
+
 class UpdateProfileVC: BaseViewController {
   
   @IBOutlet weak var userImageView: UIImageView!
@@ -16,14 +21,33 @@ class UpdateProfileVC: BaseViewController {
   
   @IBOutlet weak var updateButton: UIBarButtonItem!
   
+  @IBOutlet weak var logoutButton: UIButton!
+  @IBOutlet weak var withdrawalButton: UIButton!
+  
   var userId: Int = -1
   
   var updateImage: UIImage?
+  
+  var popupDiff: UpdateProfilePopupDiff = .logout
   
   override func viewDidLoad() {
     super.viewDidLoad()
     bindInput() 
     initUserInfo()
+  }
+  
+  func showDialogPopupView(with diff: UpdateProfilePopupDiff) {
+    popupDiff = diff
+    
+    let vc = DialogPopupView()
+    vc.modalPresentationStyle = .custom
+    vc.transitioningDelegate = self
+    vc.delegate = self
+    vc.titleString = diff == .logout ? "로그아웃" : "탈퇴하기"
+    vc.contentString = diff == .logout ? "플레이어라운드를 로그아웃 하시겠습니까?" : "플레이 어라운드를 탈퇴하시겠습니까?\n기록된 정보들은 모두 사라집니다."
+    vc.okbuttonTitle = diff == .logout ? "로그아웃" : "회원탈퇴"
+    vc.cancelButtonTitle = "취소"
+    self.present(vc, animated: true, completion: nil)
   }
   
   func initUserInfo() {
@@ -75,6 +99,34 @@ class UpdateProfileVC: BaseViewController {
     }
   }
   
+  func logout() {
+    userLogout() { result in
+      if result.statusCode == 200 {
+        DataHelper<Any>.clearAll()
+        let vc = SplashVC.viewController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+      }
+    }
+  }
+  
+  func withdrawal() {
+    APIProvider.shared.userAPI.rx.request(.userWithDrawal)
+      .filterSuccessfulStatusCodes()
+      .subscribe(onSuccess: { response in
+        DataHelper<Any>.clearAll()
+        self.okActionAlert(message: "회원탈퇴가 완료되었습니다.") {
+          let vc = SplashVC.viewController()
+          vc.modalPresentationStyle = .fullScreen
+          self.present(vc, animated: true, completion: nil)
+        }
+      }, onError: { error in
+        self.dismissHUD()
+        self.showToast(message: error.localizedDescription)
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func bindInput() {
     userImageView.rx.tapGesture().when(.recognized)
       .bind(onNext: { [weak self] _ in
@@ -91,6 +143,37 @@ class UpdateProfileVC: BaseViewController {
         }
       })
       .disposed(by: disposeBag)
+    
+    logoutButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.showDialogPopupView(with: .logout)
+      })
+      .disposed(by: disposeBag)
+    
+    withdrawalButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.showDialogPopupView(with: .withdrawal)
+      })
+      .disposed(by: disposeBag)
+  }
+}
+
+extension UpdateProfileVC: UIViewControllerTransitioningDelegate {
+  func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    PresentationController(presentedViewController: presented, presenting: presenting)
+  }
+}
+
+extension UpdateProfileVC: DialogPopupViewDelegate {
+  func dialogOkEvent() {
+    switch popupDiff {
+    case .logout:
+      logout()
+    case .withdrawal:
+      withdrawal()
+    }
   }
 }
 

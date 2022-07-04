@@ -63,7 +63,7 @@ enum HashtagDiff: String, Codable {
 
 struct HashtagListRequest: Codable {
   let search: String
-  let diff: HashtagDiff
+  let diff: HashtagDiff?
 }
 
 // MARK: - HashtagListResponse

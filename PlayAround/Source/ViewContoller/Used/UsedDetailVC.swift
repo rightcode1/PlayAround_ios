@@ -57,6 +57,7 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   }
   @IBOutlet weak var inputTextViewPlaceHolder: UILabel!
   @IBOutlet weak var inputTextBottomConst: NSLayoutConstraint!
+  @IBOutlet weak var bottomConst: NSLayoutConstraint!
   
   @IBOutlet weak var registCommentButton2: UIButton!
   
@@ -67,6 +68,7 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   var isMine: Bool = false
   
   var thumbnailList: [Image] = []
+  var thumbnailUIImageList: [UIImage] = []
   
   var usedUserId: Int = -1
   let isFollow = BehaviorSubject<Bool>(value: false)
@@ -85,6 +87,8 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   
   var replyCommentId: Int?
   var commentList: [UsedCommentListData] = []
+  
+  var chatRoomHeaderData: ChatRoomHeaderData?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -148,8 +152,10 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         
         if APP_WIDTH() >= 375 && APP_HEIGHT() > 750 {
           self.inputTextBottomConst.constant = keyboardRect.height - 34
+          self.bottomConst.constant = keyboardRect.height - 34
         } else {
           self.inputTextBottomConst.constant = keyboardRect.height
+          self.bottomConst.constant = keyboardRect.height
         }
         
         self.inputCommentView.isHidden = false
@@ -163,6 +169,7 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
     UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
       self.resetReplyInfo()
       self.inputTextBottomConst.constant = 0
+      self.bottomConst.constant = 0
       self.inputCommentView.isHidden = true
       self.chatButton.isHidden = false
       self.view.layoutIfNeeded()
@@ -228,8 +235,12 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .map(UsedDetailResponse.self)
       .subscribe(onSuccess: { value in
         guard let data = value.data else { return }
+        self.navigationItem.title = data.category.rawValue
         
         self.thumbnailList = data.images
+        DispatchQueue.main.async {
+          self.thumbnailUIImageList = self.initUIImageList(data.images)
+        }
         self.thumbnailCountLabel.text = "1/\(self.thumbnailList.count)"
         self.thumbnailCollectionView.reloadData()
         
@@ -238,14 +249,26 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         
         self.isWish.onNext(data.isWish)
         self.titleLabel.text = data.name
-        self.priceLabel.text = "\(data.price.formattedProductPrice() ?? "0") 달란트"
+        self.priceLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
         
         let userData = data.user
         self.usedUserId = userData.id
-        self.userThumbnailImageView.kf.setImage(with: URL(string: userData.thumbnail ?? ""))
+        if userData.thumbnail != nil {
+          self.userThumbnailImageView.kf.setImage(with: URL(string: userData.thumbnail ?? ""))
+        } else {
+          self.userThumbnailImageView.image = UIImage(named: "defaultProfileImage")
+        }
         self.userUsedLevelImageView.image = self.usedLevelImage(level: userData.usedLevel ?? 1)
         self.userNameLabel.text = userData.name
-        self.dateLabel.text = data.createdAt
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        if let createdAtDate = dateFormatter.date(from: data.createdAt) {
+          self.dateLabel.text = createdAtDate.toString(dateFormat: "yyyy-MM-dd HH:mm")
+        } else {
+          self.dateLabel.text = data.createdAt
+        }
+        
         self.wishCountLabel.text = "\(data.wishCount)"
         self.viewCountLabel.text = "조회 \(data.viewCount)"
         self.isFollow.onNext(userData.isFollowing)
@@ -261,6 +284,10 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.dislikeCount.onNext(data.dislikeCount)
         
         self.initCommentList()
+        
+        let chatRoomHeaderData = ChatRoomHeaderData(thumbnail: data.images.count > 0 ? data.images[0].name : nil, name: data.user.name, title: data.name)
+        self.chatRoomHeaderData = chatRoomHeaderData
+        
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
@@ -379,6 +406,21 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .disposed(by: disposeBag)
   }
   
+  func startChat() {
+    let param = RegistChatRoomRequest(usedId: usedId, userId: usedUserId)
+    APIProvider.shared.chatAPI.rx.request(.roomRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(RegistChatRoomResponse.self)
+      .subscribe(onSuccess: { value in
+        let vc = ChatVC.viewController()
+        vc.usedId = self.usedId
+        vc.chatRoomId = value.data.id
+        self.navigationController?.pushViewController(vc, animated: true)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func bindInput() {
     wishBarButtonItem.rx.tap
       .bind(onNext: { [weak self] in
@@ -473,6 +515,13 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self?.inputTextViewPlaceHolder.isHidden = !text.isEmpty
       })
       .disposed(by: disposeBag)
+    
+    chatButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        self.startChat()
+      })
+      .disposed(by: disposeBag)
   }
   
   func bindOutput() {
@@ -510,13 +559,13 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
     likeCount
       .bind(onNext: { [weak self] count in
         guard let self = self else { return }
-        self.likeCountLabel.text = "좋아요 \(count)"
+        self.likeCountLabel.text = "\(count)"
       }).disposed(by: disposeBag)
     
     dislikeCount
       .bind(onNext: { [weak self] count in
         guard let self = self else { return }
-        self.disLikeCountLabel.text = "싫어요 \(count)"
+        self.disLikeCountLabel.text = "\(count)"
       }).disposed(by: disposeBag)
   }
   
@@ -623,7 +672,7 @@ extension UsedDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if collectionView == thumbnailCollectionView {
-      
+      showImageList(imageList: thumbnailUIImageList, index: indexPath.row)
     } else {
       
     }

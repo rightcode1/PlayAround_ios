@@ -1,0 +1,6 @@
+framework module Pods_PlayAround {
+  umbrella header "Pods-PlayAround-umbrella.h"
+
+  export *
+  module * { export * }
+}
