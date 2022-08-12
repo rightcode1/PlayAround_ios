@@ -7,6 +7,15 @@
 
 import Foundation
 
+struct CommunityRowResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let list: CommunityRow
+}
+struct CommunityRow: Codable {
+  let rows: [CommuintyList]
+}
+
 
 struct CommunityResponse: Codable {
   let statusCode: Int
@@ -104,5 +113,36 @@ struct Comment: Codable {
     let content: String
     let depth: Int
     let createdAt: String
-//    let user: [User]
+    let user: User
+}
+
+struct CommunityJoinResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let data: CommunityJoin
+}
+struct CommunityJoin: Codable {
+  let userId,communityId,id: Int
+  let authorityNotice: Bool
+  let authorityBoard: Bool
+  let authorityChat: Bool
+  let authorityDelete: Bool
+  let master: Bool
+  let updatedAt,createdAt, status: String
+  
+}
+struct CommunityJoinerResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let list: [CommunityJoiner]
+}
+struct CommunityJoiner: Codable {
+  let id: Int
+  let authorityNotice: Bool
+  let authorityBoard: Bool
+  let authorityChat: Bool
+  let authorityDelete: Bool
+  let master: Bool
+  let createdAt, status: String
+  let user : User
 }
