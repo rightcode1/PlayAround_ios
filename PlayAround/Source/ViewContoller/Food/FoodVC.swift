@@ -66,7 +66,7 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
         if value.list.count > 0 {
           for i in 0..<value.list.count {
             let checkCount = ((i + 1) * 5)
-            if self.foodList.indices.contains(checkCount) {
+            if self.foodList.indices.contains(checkCount) && self.foodList.indices.contains(checkCount + i) {
               let foodListData = FoodListData(id: 0, thumbnail: nil, category: "", name: "", price: 0, wishCount: 0, isWish: true, isLike: nil, likeCount: 0, dislikeCount: 0, statusSale: true, address: "", viewCount: 0, villageId: 0, user: nil, commentCount: 0, status: .조리예정, userCount: nil, dueDate: nil, requestCount: 0, isRequest: true, hashtag: [], isReport: true, advertisementData: value.list[i])
               self.foodList.insert(foodListData, at: checkCount + i)
               print("checkCount + (i): \(checkCount + (i))")
