@@ -23,6 +23,7 @@ enum AuthApi {
   case findId(param: FindMyIdRequest)
   case changePassword(param: ChangePasswordRequest)
   case advertisement(location: String)
+  case notificationLogList
 
 }
 extension AuthApi: TargetType {
@@ -48,6 +49,9 @@ extension AuthApi: TargetType {
     case .changePassword : return "/v1/auth/passwordChange"
     case .advertisement: return "/v1/advertisement/list"
       
+      
+    case .notificationLogList: return "/v1/notificationLog/list"
+      
     }
     
   }
@@ -60,6 +64,7 @@ extension AuthApi: TargetType {
         .sendCode,
         .findId,
         .confirm,
+        .notificationLogList,
         .advertisement:
       return .get
     case .login,
@@ -76,6 +81,9 @@ extension AuthApi: TargetType {
     switch self {
       
     case .versionCheck :
+      return .requestPlain
+      
+    case .notificationLogList:
       return .requestPlain
       
     case .advertisement(let advertisement) :
@@ -100,7 +108,7 @@ extension AuthApi: TargetType {
       return .requestParameters(parameters: ["tel": tel , "confirm": confirm], encoding: URLEncoding.queryString)
 
     case .changePassword(let param) :
-      return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
+      return .requestJSONEncodable(param)
       
     case .findId(let param) :
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)

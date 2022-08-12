@@ -8,13 +8,23 @@
 import Foundation
 import UIKit
 import TAKUUID
+import Gifu
 
 class LoginVC: BaseViewController{
   @IBOutlet weak var idTextField: UITextField!
-  
   @IBOutlet weak var pwdTextField: UITextField!
+  @IBOutlet weak var loginSplash: GIFImageView!
+  @IBOutlet weak var backView: UIView!
   
   override func viewDidLoad() {
+    loginSplash.animate(withGIFNamed:"login")
+    
+//    backView.layer.applySketchShadow(color: UIColor(red: 117, green: 117, blue: 117), alpha: 0.16, x: 0, y: 1.5, blur: 5, spread: 0)
+    backView?.layer.cornerRadius  = 10
+    backView?.layer.maskedCorners = CACornerMask(arrayLiteral: .layerMinXMinYCorner, .layerMaxXMinYCorner)
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
     navigationController?.isNavigationBarHidden = true
   }
   
@@ -31,17 +41,23 @@ class LoginVC: BaseViewController{
       .filterSuccessfulStatusCodes()
       .map(LoginResponse.self)
       .subscribe(onSuccess: { value in
-        self.dismissHUD()
-        
         if(value.statusCode <= 202){
           DataHelper.set("bearer \(value.token)", forKey: .token)
           DataHelper.set("\(value.token)", forKey: .chatToken)
           DataHelper.set(self.idTextField.text!, forKey: .userId)
           DataHelper.set(self.pwdTextField.text!, forKey: .userPw)
-          
-          self.goMain()
+          if DataHelperTool.villageName != nil{
+            self.goMain()
+          }else{
+            let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "VillageListVC") as! VillageListVC
+            vc.viewController = "login"
+            self.navigationController?.pushViewController(vc, animated: true)
+          }
         }
+        self.dismissHUD()
       }, onError: { error in
+        self.callOkActionMSGDialog(message: "로그인 정보를 확인해주세요.") {
+        }
         self.dismissHUD()
       })
       .disposed(by: disposeBag)

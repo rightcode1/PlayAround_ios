@@ -8,17 +8,30 @@
 import Foundation
 import UIKit
 
-class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
+class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate, CommunitySortDelegate {
+  
+  func setCommunitySort(sort: CommunitySort) {
+    selectFilter = sort
+    initCommunityList()
+  }
+  
   
   @IBOutlet weak var communityListCollectionView: UICollectionView!
+  @IBOutlet weak var filterButton: UIButton!
+  @IBOutlet weak var villageButton: UIButton!
+  @IBOutlet weak var writCommunityImageView: UIImageView!
   
+  
+  var selectFilter: CommunitySort = .인기순
   var category: CommunityCategory = .전체
   var communityList: [CommuintyList] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
     setCollectionView()
     setCommunityListCollectionViewLayout()
+    rxtap()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -38,15 +51,16 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
   
   func setCommunityListCollectionViewLayout() {
     let layout = UICollectionViewFlowLayout()
-    layout.itemSize = CGSize(width: APP_WIDTH(), height: 120)
+    layout.itemSize = CGSize(width: APP_WIDTH(), height: 122)
     layout.headerReferenceSize = CGSize(width: APP_WIDTH(), height: 87)
     layout.invalidateLayout()
     communityListCollectionView.collectionViewLayout = layout
   }
   
   func initCommunityList() {
+    
     self.showHUD()
-    let param = categoryListRequest(category: category == .전체 ? nil : category)
+    let param = categoryListRequest(category: category == .전체 ? nil : category, gu:DataHelperTool.villageName ,latitude: "\(currentLocation?.0 ?? 0.0)", longitude: "\(currentLocation?.1 ?? 0.0)" , sort: selectFilter == .최신순 ? nil : selectFilter.rawValue)
     APIProvider.shared.communityAPI.rx.request(.CommuntyList(param: param))
       .filterSuccessfulStatusCodes()
       .map(CommunityResponse.self)
@@ -54,7 +68,7 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
         self.communityList = value.list
         self.communityListCollectionView.reloadData()
         
-        print("self.foodList.count : \(self.communityList.count)")
+        print("self.communityList.count : \(self.communityList.count)")
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
@@ -69,6 +83,34 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate {
     initCommunityList()
   }
   
+  func rxtap(){
+    filterButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = CommunitySortPopupVC.viewController()
+        vc.delegate = self
+        self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
+    villageButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "VillageListVC") as! VillageListVC
+        vc.delegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
+    writCommunityImageView.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+      let vc = UIStoryboard.init(name: "Setting", bundle: nil).instantiateViewController(withIdentifier: "MyCommunityRegisterVC") as! MyCommunityRegisterVC
+      self.navigationController?.pushViewController(vc, animated: true)
+    })
+      .disposed(by: disposeBag)
+    
+  }
 }
 
 extension CommunityVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -102,4 +144,12 @@ extension CommunityVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     vc.communityId = dict.id
     self.navigationController?.pushViewController(vc, animated: true)
   }
+}
+
+extension CommunityVC: SelectVillage{
+  func select() {
+    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
+  }
+  
+  
 }

@@ -112,6 +112,7 @@ PODS:
     - nanopb (~> 2.30908.0)
   - FSCalendar (2.8.2)
   - FSPagerView (0.8.3)
+  - Gifu (3.3.1)
   - GoogleAppMeasurement (8.12.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.12.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
@@ -256,6 +257,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - FSCalendar
   - FSPagerView
+  - Gifu
   - Hero
   - IGListKit
   - IQKeyboardManagerSwift (= 6.4.2)
@@ -303,6 +305,7 @@ SPEC REPOS:
     - FirebaseMessaging
     - FSCalendar
     - FSPagerView
+    - Gifu
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
@@ -365,6 +368,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 23db8bf05585e929ada8af0f0968933c25252808
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
   FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
+  Gifu: 416d4e38c4c2fed012f019e0a1d3ffcb58e5b842
   GoogleAppMeasurement: ae033c3aad67e68294369373056b4d74cc8ae0d6
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
@@ -407,6 +411,6 @@ SPEC CHECKSUMS:
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 0ab9f23f98db9dbd1768950b371aa4d86d57830b
+PODFILE CHECKSUM: b1e074b8b5966405cd18bd456eea4051f96dfab0
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

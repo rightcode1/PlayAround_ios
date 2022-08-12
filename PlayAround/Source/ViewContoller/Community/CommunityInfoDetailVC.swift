@@ -7,21 +7,45 @@
 
 import Foundation
 import UIKit
+import IQKeyboardManagerSwift
 
-class CommunityInfoDetailVC:BaseViewController{
+class CommunityInfoDetailVC:BaseViewController,CommunityDetailMenuDelegate{
+  
   @IBOutlet weak var mainTableView: UITableView!
   @IBOutlet weak var imageCollectionView: UICollectionView!
   
   @IBOutlet weak var infoImageView: UIImageView!
+  @IBOutlet weak var userImageView: UIImageView!
+  
+  
   @IBOutlet weak var headerView: UIView!
   @IBOutlet weak var voteHiddenView: UIView!
+  @IBOutlet weak var commentView: UIView!
+  @IBOutlet weak var replyView: UIView!
+  
   @IBOutlet weak var titleLabel: UILabel!
-  @IBOutlet weak var userImageView: UIImageView!
   @IBOutlet weak var userNameLabel: UILabel!
   @IBOutlet weak var dateLabel: UILabel!
   @IBOutlet weak var contentLabel: UILabel!
   @IBOutlet weak var commentCountLabel: UILabel!
+  @IBOutlet weak var replyLabel: UILabel!
   
+  @IBOutlet weak var commentButton: UIImageView!
+  @IBOutlet weak var reigstCommentButton: UIButton!
+  @IBOutlet weak var naviMenuButton: UIBarButtonItem!
+  
+  @IBOutlet weak var resetLabel: UILabel!
+  @IBOutlet weak var inputTextView: UITextView! {
+    didSet {
+      inputTextView.delegate = self
+    }
+  }
+  
+  
+  var isMine : Bool = false
+  
+
+  var replyCommentId: Int?
   var naviTitle: String?
   var detailId: Int?
   var imageList: [Image?] = []
@@ -31,15 +55,23 @@ class CommunityInfoDetailVC:BaseViewController{
     navigationController?.title  = naviTitle
     self.showHUD()
     initDelegate()
-    
+    navigationItem.title = naviTitle
     if naviTitle == "공지사항"{
       initNoticeDetail()
     }else{
       initBoardDetail()
     }
   }
+  override func viewWillAppear(_ animated: Bool) {
+    IQKeyboardManager.shared.enableAutoToolbar = false
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    IQKeyboardManager.shared.enableAutoToolbar = true
+  }
   
   func initDelegate(){
+    initrx()
     mainTableView.delegate = self
     mainTableView.dataSource = self
     voteHiddenView.isHidden = true
@@ -78,6 +110,7 @@ class CommunityInfoDetailVC:BaseViewController{
           self.commentCountLabel.text = "\(value.list.count)"
           self.comment = value.list
           self.mainTableView.reloadData()
+          self.mainTableView.scrollToBottom()
         }
       }, onError: { error in
       })
@@ -116,6 +149,31 @@ class CommunityInfoDetailVC:BaseViewController{
       .disposed(by: disposeBag)
   }
   
+  func registComment() {
+    let param = RegistCommunityCommentRequest(communityNoticeId: detailId!, content: inputTextView.text, communityNoticeCommentId: replyCommentId)
+    APIProvider.shared.communityAPI.rx.request(.NoticeCommentRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.inputTextView.text = nil
+        self.initNoticeComment(self.detailId ?? 0)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  func registBoardComment() {
+    let param = RegistCommunityBoardCommentRequest(communityBoardId: detailId!, content: inputTextView.text, communityBoardCommentId: replyCommentId)
+    APIProvider.shared.communityAPI.rx.request(.BoardCommentRegister(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+        self.inputTextView.text = nil
+        self.initBoardComment(self.detailId ?? 0)
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func initDetail(_ data: CommunityInfo){
     if(data.images.count != 0){
       imageList = data.images
@@ -135,6 +193,72 @@ class CommunityInfoDetailVC:BaseViewController{
     self.dismissHUD()
   }
   
+  func initrx(){
+    commentButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        self.commentView.isHidden = false
+      })
+      .disposed(by: disposeBag)
+    
+    inputTextView.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        self.inputTextView.becomeFirstResponder() // ?
+      })
+      .disposed(by: disposeBag)
+    
+    reigstCommentButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        if !self.inputTextView.text.isEmpty {
+          
+          if self.naviTitle == "공지사항"{
+            self.registComment()
+          }else{
+            self.registBoardComment()
+          }
+        }
+      })
+      .disposed(by: disposeBag)
+    
+    naviMenuButton.rx.tap
+      .bind(onNext: { [weak self] in
+        guard let self = self else { return }
+        let vc = CommunityDetailMenuPopupVC.viewController()
+        vc.isMine.onNext(self.isMine)
+        vc.delegate = self
+        self.present(vc, animated: true)
+      })
+      .disposed(by: disposeBag)
+    
+  }
+  
+  func shareCommunity() {
+    
+  }
+  
+  func updateCommunity() {
+    
+  }
+  
+  func removeCommunity() {
+    
+  }
+  
+  func reportCommunity() {
+    
+  }
+  func setTextViewHeight() {
+    let size = CGSize(width: inputTextView.frame.width, height: .infinity)
+    let estimatedSize = inputTextView.sizeThatFits(size)
+    inputTextView.constraints.forEach { (constraint) in
+      
+      if constraint.firstAttribute == .height {
+        constraint.constant = estimatedSize.height
+      }
+    }
+  }
 }
 
 extension CommunityInfoDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -161,6 +285,8 @@ extension CommunityInfoDetailVC: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = self.mainTableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentCell
     let dict = comment[indexPath.row]
+    cell.initComment(dict)
+    cell.delegate = self
     return cell
   }
 
@@ -178,3 +304,26 @@ extension CommunityInfoDetailVC: UITableViewDataSource, UITableViewDelegate {
 
 }
 
+extension CommunityInfoDetailVC: UITextViewDelegate {
+  func textViewDidChange(_ textView: UITextView) {
+    resetLabel.isHidden = true
+    let spacing = CharacterSet.whitespacesAndNewlines
+    if !textView.text.trimmingCharacters(in: spacing).isEmpty || !textView.text.isEmpty {
+      textView.textColor = .black
+    } else if textView.text.isEmpty {
+      textView.textColor = .lightGray
+    }
+    setTextViewHeight()
+  }
+}
+extension CommunityInfoDetailVC:tapCommentProtocol{
+  func tapComment(commentId: Int?, userName: String) {
+    replyCommentId = commentId
+    commentView.isHidden = false
+    replyLabel.text = "\(userName)님에게 답글 다는 중..."
+    UIView.animate(withDuration: 0.5) {
+      self.replyView.alpha = 1.0
+      self.replyView.layoutIfNeeded()
+    }
+  }
+}

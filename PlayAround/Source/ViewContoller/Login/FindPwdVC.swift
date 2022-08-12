@@ -38,6 +38,8 @@ class FindPwdVC :BaseViewController{
         }
       }, onError: { error in
         self.dismissHUD()
+        self.callOkActionMSGDialog(message: "인증번호를 확인해주세요.") {
+        }
       })
       .disposed(by: disposeBag)
   }
@@ -47,16 +49,13 @@ class FindPwdVC :BaseViewController{
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
         self.dismissHUD()
-        if(value.message == "아이디가 없습니다."){
-          self.callOkActionMSGDialog(message: "아이디가 존재하지않습니다.") {
-            self.checkId = true
-          }
-        }else{
-          self.callOkActionMSGDialog(message: "아이디가 존재합니다.") {
-          }
+        self.callOkActionMSGDialog(message: "아이디가 존재하지않습니다.") {
         }
       }, onError: { error in
         self.dismissHUD()
+        self.callOkActionMSGDialog(message: "인증되었습니다.") {
+          self.checkId = true
+        }
       })
       .disposed(by: disposeBag)
   }

@@ -6,9 +6,13 @@
 //
 
 import UIKit
+import CoreLocation
 import TAKUUID
 
 class SplashVC: BaseViewController, ViewControllerFromStoryboard {
+  
+  let manager = CLLocationManager()
+
   
   var version: String? {
     guard let dictionary = Bundle.main.infoDictionary,
@@ -18,9 +22,25 @@ class SplashVC: BaseViewController, ViewControllerFromStoryboard {
   
   override func viewDidLoad() {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-      self.checkVersion()
+      self.setMyLocation()
     }
   }
+  
+func setMyLocation() {
+  manager.delegate = self
+  manager.desiredAccuracy = kCLLocationAccuracyBest
+  let status = CLLocationManager.authorizationStatus()
+  print(status)
+  if status == .notDetermined {
+    manager.requestWhenInUseAuthorization()
+    self.checkVersion()
+  } else if status == .restricted || status == .denied {
+    self.checkVersion()
+  } else {
+    manager.startUpdatingLocation()
+    self.checkVersion()
+  }
+}
   
   static func viewController() -> SplashVC {
     let viewController = SplashVC.viewController(storyBoardName: "Splash")
@@ -28,6 +48,7 @@ class SplashVC: BaseViewController, ViewControllerFromStoryboard {
   }
   
   func login() {
+    
     TAKUUIDStorage.sharedInstance().migrate()
     let uuid = TAKUUIDStorage.sharedInstance().findOrCreate() ?? ""
     self.showHUD()
@@ -36,10 +57,9 @@ class SplashVC: BaseViewController, ViewControllerFromStoryboard {
       .filterSuccessfulStatusCodes()
       .map(LoginResponse.self)
       .subscribe(onSuccess: { value in
-        DataHelper<String>.remove(forKey: .token)
         DataHelper.set("bearer \(value.token)", forKey: .token)
         DataHelper.set("\(value.token)", forKey: .chatToken)
-      
+        
         self.dismissHUD()
         self.goMain()
       }, onError: { error in
@@ -60,7 +80,7 @@ class SplashVC: BaseViewController, ViewControllerFromStoryboard {
         if versionNumber < value.data.ios {
           self.performSegue(withIdentifier: "update", sender: nil)
         } else {
-          if(DataHelperTool.token != nil){
+          if(DataHelperTool.userId != nil && DataHelperTool.userPw != nil){
             self.login()
           }else{
             let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "LoginNC")
@@ -74,4 +94,31 @@ class SplashVC: BaseViewController, ViewControllerFromStoryboard {
       })
       .disposed(by: disposeBag)
   }
+  
+}
+extension SplashVC: CLLocationManagerDelegate {
+  func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    if status == .restricted || status == .denied {
+      
+    } else {
+      manager.startUpdatingLocation()
+    }
+  }
+  
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    //위치가 업데이트될때마다
+    if let location = manager.location {
+      print("latitude :" + String(location.coordinate.latitude) + " / longitude :" + String(location.coordinate.longitude))
+      currentLocation = (location.coordinate.latitude, location.coordinate.longitude)
+      manager.stopUpdatingLocation()
+      let geoCoder = CLGeocoder()
+      geoCoder.reverseGeocodeLocation(location) { (placemarks, error) -> Void in
+        if let error = error {
+          NSLog("\(error)")
+          return
+        }
+      }
+    }
+  }
+  
 }

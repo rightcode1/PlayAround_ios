@@ -18,6 +18,7 @@ class DataHelper<T> {
     case chatToken = "chatToken"
     
     case userAppId = "userAppId"
+    case villageName = "villageName"
     
     case searchKeywordHistoryList = "searchKeywordHistoryList"
   }
@@ -71,6 +72,11 @@ class DataHelperTool {
   static var userAppId: Int? {
     guard let userAppId = DataHelper<Int>.value(forKey: .userAppId) else { return nil }
     return userAppId
+  }
+  
+  static var villageName: String? {
+    guard let villageName = DataHelper<String>.value(forKey: .villageName) else { return nil }
+    return villageName
   }
   
   static var searchKeywordHistoryList: [String]? {

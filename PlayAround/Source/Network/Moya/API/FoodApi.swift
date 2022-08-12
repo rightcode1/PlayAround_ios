@@ -95,6 +95,8 @@ extension FoodApi: TargetType {
 
 
 struct FoodListRequest: Codable {
+  let page: Int?
+  let limit: Int?
   let category: FoodCategory?
   let search: String?
   let statusSale: String?
@@ -109,6 +111,8 @@ struct FoodListRequest: Codable {
   let sort: FoodSort?
   
   init(
+    page: Int? = nil,
+    limit: Int? = nil,
     category: FoodCategory? = nil,
     search: String? = nil,
     statusSale: String? = nil,
@@ -122,6 +126,8 @@ struct FoodListRequest: Codable {
     isReport: String? = nil,
     sort: FoodSort? = nil
   ) {
+    self.page = page
+    self.limit = limit
     self.category = category
     self.search = search
     self.statusSale = statusSale

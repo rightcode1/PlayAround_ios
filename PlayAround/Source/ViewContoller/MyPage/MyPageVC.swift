@@ -91,7 +91,7 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
       let isMine = (DataHelperTool.userAppId ?? 0) == self.userId
       
       self.navigationItem.title = isMine ? "마이페이지" : nil
-      self.updateInfoButton.isHidden = !isMine
+//      self.updateInfoButton.isHidden = !isMine
       
       self.showFollowingButton.isHidden = !isMine
       self.showFollowerButton.isHidden = !isMine

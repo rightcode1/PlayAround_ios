@@ -75,6 +75,17 @@ struct AdvertiseList: Codable {
   let url, thumbnail, image: String?
 }
 
+struct NotifyListResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let list: [NotifyList]
+}
+
+struct NotifyList: Codable {
+  let id, userId, data : Int
+  let userThumbnail,thumbnail, message, diff, createdAt: String?
+}
+
 enum StringAndInt: Codable {
   case integer(Int)
   case string(String)

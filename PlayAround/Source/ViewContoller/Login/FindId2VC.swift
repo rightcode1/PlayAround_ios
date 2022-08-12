@@ -10,7 +10,9 @@ import UIKit
 
 class FindId2VC: BaseViewController{
   @IBOutlet weak var myIdTextField: UILabel!
+  var id: String?
   override func viewDidLoad() {
+    myIdTextField.text = id
   }
   @IBAction func tapGoLogin(_ sender: Any) {
       self.backTwo()

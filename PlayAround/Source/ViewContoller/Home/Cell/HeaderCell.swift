@@ -10,6 +10,7 @@ import UIKit
 
 class HeaderCell : UICollectionViewCell {
   @IBOutlet weak var backView: UIView!
+  @IBOutlet weak var emptyView: UIView!
   @IBOutlet weak var thumbnail: UIImageView!
   @IBOutlet weak var category: UILabel!
   @IBOutlet weak var Title: UILabel!

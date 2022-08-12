@@ -122,6 +122,8 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     return UIImage(named: "usedLevel\(level)") ?? UIImage()
   }
   
+  
+  
   func clearImageCache() {
     let cache = ImageCache.default
     cache.clearMemoryCache()

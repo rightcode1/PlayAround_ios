@@ -12,6 +12,8 @@ class FindIdVC:BaseViewController{
   @IBOutlet weak var phoneTextField: UITextField!
   @IBOutlet weak var smsTextField: UITextField!
   
+  var certify : Bool = false
+  
   func smsSend(){
     let param = SendCodeRequest(tel: phoneTextField.text!, diff: .find)
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
@@ -33,29 +35,44 @@ class FindIdVC:BaseViewController{
       .subscribe(onSuccess: { value in
         self.dismissHUD()
         self.callOkActionMSGDialog(message: "인증되었습니다.") {
+          self.certify = true
         }
       }, onError: { error in
         self.dismissHUD()
+        self.callOkActionMSGDialog(message: "인증번호를 확인해주세요.") {
+          self.certify = false
+        }
       })
       .disposed(by: disposeBag)
   }
   
   func findId(){
-    let param = FindMyIdRequest(tel: phoneTextField.text!)
-    APIProvider.shared.authAPI.rx.request(.findId(param: param))
-      .filterSuccessfulStatusCodes()
-      .map(FindIdResponse.self)
-      .subscribe(onSuccess: { value in
-        self.dismissHUD()
-        if(value.statusCode <= 202){
-            let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "FindId2VC") as! FindId2VC
-          vc.myIdTextField.text = value.data?.loginId
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-      }, onError: { error in
-        self.dismissHUD()
-      })
-      .disposed(by: disposeBag)
+    if phoneTextField.text!.isEmpty{
+      self.callOkActionMSGDialog(message: "휴대폰 번호를 입력해주세요.") {
+      }
+    }else if smsTextField.text!.isEmpty{
+      self.callOkActionMSGDialog(message: "인증번호를 입력해주세요.") {
+      }
+    }else if !certify{
+      self.callOkActionMSGDialog(message: "인증번호를 인증해주세요.") {
+      }
+    }else{
+      let param = FindMyIdRequest(tel: phoneTextField.text!)
+      APIProvider.shared.authAPI.rx.request(.findId(param: param))
+        .filterSuccessfulStatusCodes()
+        .map(FindIdResponse.self)
+        .subscribe(onSuccess: { value in
+          self.dismissHUD()
+          if(value.statusCode <= 202){
+              let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "FindId2VC") as! FindId2VC
+              vc.id = value.data?.loginId
+              self.navigationController?.pushViewController(vc, animated: true)
+          }
+        }, onError: { error in
+          self.dismissHUD()
+        })
+        .disposed(by: disposeBag)
+    }
   }
   
   

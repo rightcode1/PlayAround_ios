@@ -7,9 +7,10 @@
 
 import Foundation
 import UIKit
+import TAKUUID
 
 class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTransitioningDelegate {
- 
+  
   @IBOutlet weak var idTextField: UITextField!
   @IBOutlet weak var pwdTextField: UITextField!
   @IBOutlet weak var pwdTextFieldConfirm: UITextField!
@@ -18,27 +19,28 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
   @IBOutlet weak var nicknameTextField: UITextField!
   
   var checkId : Bool = false
-
   
   func idcheck(){
-    APIProvider.shared.authAPI.rx.request(.isExistLoginId(email: idTextField.text!))
-      .filterSuccessfulStatusCodes()
-      .map(DefaultResponse.self)
-      .subscribe(onSuccess: { value in
-        self.dismissHUD()
-        if(value.message == "아이디가 없습니다."){
+    if idTextField.text!.isEmpty{
+      callMSGDialog(message: "아이디를 입력해주세요.")
+    }else{
+      APIProvider.shared.authAPI.rx.request(.isExistLoginId(email: idTextField.text!))
+        .filterSuccessfulStatusCodes()
+        .map(DefaultResponse.self)
+        .subscribe(onSuccess: { value in
+          self.dismissHUD()
           self.callOkActionMSGDialog(message: "사용 가능한 아이디입니다.") {
             self.checkId = true
           }
-        }else{
+        }, onError: { error in
+          self.dismissHUD()
           self.callOkActionMSGDialog(message: "중복된 아이디입니다.") {
           }
-        }
-      }, onError: { error in
-        self.dismissHUD()
-      })
-      .disposed(by: disposeBag)
+        })
+        .disposed(by: disposeBag)
+    }
   }
+  
   func smsSend(){
     let param = SendCodeRequest(tel: phoneTextField.text!, diff: .join)
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
@@ -50,11 +52,14 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
         }
       }, onError: { error in
         self.dismissHUD()
+        self.callOkActionMSGDialog(message: "중복된 휴대폰번호입니다.") {
+        }
       })
       .disposed(by: disposeBag)
   }
+  
   func smsCheck(){
-//    let param = CheckphoneCodeRequest()
+    //    let param = CheckphoneCodeRequest()
     APIProvider.shared.authAPI.rx.request(.confirm(tel: phoneTextField.text!, confirm: smsTextField.text!))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
@@ -64,12 +69,14 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
         }
       }, onError: { error in
         self.dismissHUD()
+        self.callOkActionMSGDialog(message: "인증번호를 확인해주세요.") {
+        }
       })
       .disposed(by: disposeBag)
   }
   
   func Register(){
-    if nicknameTextField.text!.isEmpty{
+    if idTextField.text!.isEmpty{
       callMSGDialog(message: "아이디를 입력해주세요.")
     }else if !checkId {
       callMSGDialog(message: "아이디 중복확인을 해주세요..")
@@ -85,6 +92,8 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
       callMSGDialog(message: "전화번호를 입력해주세요.")
     }else if smsTextField.text!.isEmpty{
       callMSGDialog(message: "인증번호를 입력해주세요.")
+    }else if nicknameTextField.text!.isEmpty{
+      callMSGDialog(message: "닉네임을 입력해주세요.")
     }else{
       let param = JoinRequest(loginId: idTextField.text!, password: pwdTextField.text!, tel: phoneTextField.text!, name: nicknameTextField.text!)
       APIProvider.shared.authAPI.rx.request(.join(param: param))
@@ -92,13 +101,38 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
         .map(DefaultResponse.self)
         .subscribe(onSuccess: { value in
           self.dismissHUD()
-            let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "JoinOkVC") as! JoinOkVC
-            self.navigationController?.pushViewController(vc, animated: true)
+          self.login()
         }, onError: { error in
           self.dismissHUD()
         })
         .disposed(by: disposeBag)
     }
+  }
+  func login() {
+    TAKUUIDStorage.sharedInstance().migrate()
+    let uuid = TAKUUIDStorage.sharedInstance().findOrCreate() ?? ""
+    self.showHUD()
+    let param = LoginRequest(loginId: idTextField.text!, password: pwdTextField.text!, deviceId: uuid)
+    APIProvider.shared.authAPI.rx.request(.login(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(LoginResponse.self)
+      .subscribe(onSuccess: { value in
+        if(value.statusCode <= 202){
+          DataHelper.set("bearer \(value.token)", forKey: .token)
+          DataHelper.set("\(value.token)", forKey: .chatToken)
+          DataHelper.set(self.idTextField.text!, forKey: .userId)
+          DataHelper.set(self.pwdTextField.text!, forKey: .userPw)
+          
+          let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "JoinOkVC") as! JoinOkVC
+          self.navigationController?.pushViewController(vc, animated: true)
+        }
+        self.dismissHUD()
+      }, onError: { error in
+        self.callOkActionMSGDialog(message: "로그인 정보를 확인해주세요.") {
+        }
+        self.dismissHUD()
+      })
+      .disposed(by: disposeBag)
   }
   
   func dialogOkEvent() {

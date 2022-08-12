@@ -8,6 +8,16 @@
 import Foundation
 
 // MARK: - Welcome
+struct FoodRowResponse: Codable {
+    let statusCode: Int
+    let message: String
+    let list: FoodRow
+}
+struct FoodRow: Codable {
+    let rows: [FoodListData]
+}
+
+
 struct FoodResponse: Codable {
     let statusCode: Int
     let message: String

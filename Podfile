@@ -42,6 +42,7 @@ target 'PlayAround' do
   
   # Image
   pod 'CropViewController'
+pod 'Gifu'
   
   # Download and Caching Images
   pod 'Kingfisher'

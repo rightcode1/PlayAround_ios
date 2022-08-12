@@ -13,6 +13,7 @@ final class APIProvider {
   
   var userAPI = MoyaProvider<UserAPI>()
   var authAPI = MoyaProvider<AuthApi>()
+  var villageAPI = MoyaProvider<VillageApi>()
   
   var communityAPI = MoyaProvider<CommunityApi>()
   
@@ -59,6 +60,7 @@ final class APIProvider {
     
     userAPI = MoyaProvider<UserAPI>(plugins: [MoyaLoggingPlugin()])
     authAPI = MoyaProvider<AuthApi>(plugins: [MoyaLoggingPlugin()])
+    villageAPI = MoyaProvider<VillageApi>(plugins: [MoyaLoggingPlugin()])
     
     communityAPI = MoyaProvider<CommunityApi>(plugins: [MoyaLoggingPlugin()])
     
