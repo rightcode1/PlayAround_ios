@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		059FCB831FFF6B83804C6517 /* Pods_PlayAround_PlayAroundUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3A1E30C2CDD9B628E65CF6C /* Pods_PlayAround_PlayAroundUITests.framework */; };
+		CB225DE428A664F50024C2D5 /* AdvertisementAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB225DE328A664F50024C2D5 /* AdvertisementAPI.swift */; };
+		CB225DE628A671000024C2D5 /* AdvertisementDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB225DE528A671000024C2D5 /* AdvertisementDetailVC.swift */; };
 		CB3860782861D41100C4B688 /* ImageListWithScrolViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */; };
 		CB38607A2861D9D100C4B688 /* SearchFoodAndUsedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */; };
 		CB38607C2863116100C4B688 /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB38607B2863116100C4B688 /* MyPageVC.swift */; };
@@ -200,6 +202,8 @@
 		9700BC72A55D67CD210741D7 /* Pods-PlayAround.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround.release.xcconfig"; path = "Target Support Files/Pods-PlayAround/Pods-PlayAround.release.xcconfig"; sourceTree = "<group>"; };
 		A3A1E30C2CDD9B628E65CF6C /* Pods_PlayAround_PlayAroundUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayAround_PlayAroundUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4062B5B711D08DCF2E69834 /* Pods-PlayAround-PlayAroundUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround-PlayAroundUITests.debug.xcconfig"; path = "Target Support Files/Pods-PlayAround-PlayAroundUITests/Pods-PlayAround-PlayAroundUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		CB225DE328A664F50024C2D5 /* AdvertisementAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementAPI.swift; sourceTree = "<group>"; };
+		CB225DE528A671000024C2D5 /* AdvertisementDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementDetailVC.swift; sourceTree = "<group>"; };
 		CB3860772861D41100C4B688 /* ImageListWithScrolViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListWithScrolViewViewController.swift; sourceTree = "<group>"; };
 		CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFoodAndUsedVC.swift; sourceTree = "<group>"; };
 		CB38607B2863116100C4B688 /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
@@ -684,6 +688,7 @@
 				CBEE7DCC283B62B7000BEC15 /* Cell */,
 				DF770AC9282CDEAD0038380E /* DialogPopupView.swift */,
 				DF770ACA282CDEAD0038380E /* DialogPopupView.xib */,
+				CB225DE528A671000024C2D5 /* AdvertisementDetailVC.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -743,6 +748,7 @@
 				CBDBEBA028603C3A00165352 /* InquiryAPI.swift */,
 				CB399D342869B9D90084F9EF /* ChatAPI.swift */,
 				DF3E8DE12872C5EB006251AF /* VillageApi.swift */,
+				CB225DE328A664F50024C2D5 /* AdvertisementAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -1329,12 +1335,14 @@
 				DF3E8DDA2872C562006251AF /* VillageListVC.swift in Sources */,
 				DFA45223282B7A1A0059EEFC /* URL+Extension.swift in Sources */,
 				CBAD1391285738FC00247EE6 /* RegistFoodVC.swift in Sources */,
+				CB225DE428A664F50024C2D5 /* AdvertisementAPI.swift in Sources */,
 				DF3E8DD22872C552006251AF /* CommunityInfoDetailVC.swift in Sources */,
 				DFA4521F282B7A1A0059EEFC /* ImageViewZoom.swift in Sources */,
 				DFA45219282B7A1A0059EEFC /* UIButton+Extension.swift in Sources */,
 				DF3E8DD72872C552006251AF /* CommunityDetailVC.swift in Sources */,
 				DF3D64832832607D00D72D36 /* UsedResponse.swift in Sources */,
 				DF63D87828341FA100711E53 /* UsedAPI.swift in Sources */,
+				CB225DE628A671000024C2D5 /* AdvertisementDetailVC.swift in Sources */,
 				CB399D3228697CEA0084F9EF /* ChatRoomListCell.swift in Sources */,
 				DFA40465282B8707004E8859 /* Environment.swift in Sources */,
 				CBDBEB9628600CE800165352 /* FAQVC.swift in Sources */,
@@ -1552,7 +1560,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PlayAround/PlayAround.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 85PXJB7ANP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PlayAround/Info.plist;
@@ -1571,7 +1579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rightcode.PlayAround;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1588,7 +1596,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PlayAround/PlayAround.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 85PXJB7ANP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PlayAround/Info.plist;
@@ -1607,7 +1615,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rightcode.PlayAround;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

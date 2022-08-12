@@ -34,6 +34,8 @@ final class APIProvider {
   var inquiryAPI = MoyaProvider<InquiryAPI>()
   var chatAPI = MoyaProvider<ChatAPI>()
   
+  var advertisementAPI = MoyaProvider<AdvertisementAPI>()
+  
   private init() {
     //
     //    let networkLoggerPlugin = NetworkLoggerPlugin(configuration: .init(formatter: .init(entry: { (string1, string2, targetType) -> String in
@@ -80,6 +82,7 @@ final class APIProvider {
     faqAPI = MoyaProvider<FAQAPI>(plugins: [MoyaLoggingPlugin()])
     inquiryAPI = MoyaProvider<InquiryAPI>(plugins: [MoyaLoggingPlugin()])
     chatAPI = MoyaProvider<ChatAPI>(plugins: [MoyaLoggingPlugin()])
+    advertisementAPI = MoyaProvider<AdvertisementAPI>(plugins: [MoyaLoggingPlugin()])
   }
   
   func getErrorStatusCode(_ error: Error) -> Int {

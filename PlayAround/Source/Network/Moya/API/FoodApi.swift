@@ -163,7 +163,7 @@ struct FoodListData: Codable {
   let statusSale: Bool
   let address: String
   let viewCount, villageId: Int
-  let user: User
+  let user: User?
   let commentCount: Int
   let status: FoodStatus
   let userCount: Int?
@@ -172,6 +172,7 @@ struct FoodListData: Codable {
   let isRequest: Bool
   let hashtag: [String]
   let isReport: Bool
+  var advertisementData: AdvertisementData?
 }
 
 enum FoodStatus: String, Codable {

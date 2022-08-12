@@ -56,11 +56,34 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
       .filterSuccessfulStatusCodes()
       .map(UsedListResponse.self)
       .subscribe(onSuccess: { value in
-        self.usedList = value.list
+        self.initAdvertisementList(usedList: value.list)
+      }, onError: { error in
+        self.dismissHUD()
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func initAdvertisementList(usedList: [UsedListData]) {
+    let param = AdvertisementListRequest(location: .광고리스트, category: .중고거래)
+    APIProvider.shared.advertisementAPI.rx.request(.list(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(AdvertisementListResponse.self)
+      .subscribe(onSuccess: { value in
+        self.usedList = usedList
+        
+        if value.list.count > 0 {
+          for i in 0..<value.list.count {
+            let checkCount = ((i + 1) * 5)
+            if self.usedList.indices.contains(checkCount) && self.usedList.indices.contains(checkCount + i) {
+              let usedListData = UsedListData(id: 0, thumbnail: nil, category: .가전, name: "", price: 0, wishCount: 0, isWish: true, statusSale: false, isLike: nil, likeCount: 0, dislikeCount: 0, user: nil, address: "", villageId: 0, viewCount: 0, commentCount: 0, hashtag: [], isReport: false, advertisementData: value.list[i])
+              self.usedList.insert(usedListData, at: checkCount + i)
+            }
+          }
+        }
+        
         self.usedListCollectionView.reloadData()
         self.dismissHUD()
       }, onError: { error in
-        self.dismissHUD()
       })
       .disposed(by: disposeBag)
   }
@@ -114,14 +137,34 @@ extension UsedVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = usedListCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FoodListCell
     let dict = usedList[indexPath.row]
-    cell.update(dict)
+    if dict.advertisementData == nil {
+      cell.update(dict)
+    } else {
+      cell.updateWithAdvertisementData(dict.advertisementData!)
+    }
+    
     return cell
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let dict = usedList[indexPath.row]
-    let vc = UsedDetailVC.viewController()
-    vc.usedId = dict.id
-    self.navigationController?.pushViewController(vc, animated: true)
+    if dict.advertisementData == nil {
+      let vc = UsedDetailVC.viewController()
+      vc.usedId = dict.id
+      self.navigationController?.pushViewController(vc, animated: true)
+    } else {
+      if let advertisement = dict.advertisementData {
+        if advertisement.diff == "url" {
+          if let openUrl = URL(string: advertisement.url!) {
+            UIApplication.shared.open(openUrl, options: [:])
+          }
+        } else {
+          let vc = AdvertisementDetailVC.viewController()
+          vc.images = [Image(id: 0, name: advertisement.image ?? "")]
+          navigationController?.pushViewController(vc, animated: true)
+        }
+      }
+      
+    }
   }
 }

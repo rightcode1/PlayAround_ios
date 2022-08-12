@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="S3p-gm-xhP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="S3p-gm-xhP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -65,11 +65,8 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="의정부 부대찌개" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D52-gV-9yu">
-                                                            <rect key="frame" x="5" y="133" width="82.5" height="18"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="18" id="SBJ-db-iUM"/>
-                                                            </constraints>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="의정부 부대찌개" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D52-gV-9yu">
+                                                            <rect key="frame" x="5" y="134" width="156" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -81,8 +78,8 @@
                                                                 <constraint firstAttribute="width" secondItem="b3m-X5-Ji6" secondAttribute="height" multiplier="1:1" id="nRo-zh-hwI"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10달란트" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivc-Dv-0hs">
-                                                            <rect key="frame" x="5" y="155" width="44.5" height="14.5"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivc-Dv-0hs">
+                                                            <rect key="frame" x="5" y="155" width="3.5" height="14.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="14.5" id="XB8-ns-GfY"/>
                                                             </constraints>
@@ -207,6 +204,7 @@
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="D52-gV-9yu" secondAttribute="trailing" constant="5" id="1w9-IA-r60"/>
                                                         <constraint firstItem="eF3-DY-oxJ" firstAttribute="bottom" secondItem="bxh-Pq-V8t" secondAttribute="bottom" id="2EY-w8-FIs"/>
                                                         <constraint firstItem="Cg7-E8-ZeK" firstAttribute="top" secondItem="bxh-Pq-V8t" secondAttribute="bottom" constant="5" id="3Lf-ko-z6Y"/>
                                                         <constraint firstItem="ivc-Dv-0hs" firstAttribute="centerY" secondItem="b3m-X5-Ji6" secondAttribute="centerY" id="8Ql-jT-x7i"/>
@@ -217,12 +215,12 @@
                                                         <constraint firstItem="eF3-DY-oxJ" firstAttribute="top" secondItem="bxh-Pq-V8t" secondAttribute="top" id="I30-AK-hJe"/>
                                                         <constraint firstItem="eF3-DY-oxJ" firstAttribute="leading" secondItem="bxh-Pq-V8t" secondAttribute="leading" id="Ijs-IS-I0j"/>
                                                         <constraint firstItem="uFi-3G-e8s" firstAttribute="centerY" secondItem="YTp-uJ-cXH" secondAttribute="centerY" id="Mnf-FC-hLS"/>
-                                                        <constraint firstItem="D52-gV-9yu" firstAttribute="top" secondItem="Cg7-E8-ZeK" secondAttribute="bottom" constant="3" id="THm-CP-brE"/>
+                                                        <constraint firstItem="D52-gV-9yu" firstAttribute="top" secondItem="Cg7-E8-ZeK" secondAttribute="bottom" constant="4" id="THm-CP-brE"/>
                                                         <constraint firstItem="YTp-uJ-cXH" firstAttribute="top" secondItem="ivc-Dv-0hs" secondAttribute="bottom" constant="6" id="UDg-f4-zgC"/>
                                                         <constraint firstItem="Qoo-W7-eag" firstAttribute="leading" secondItem="KMQ-NQ-Whw" secondAttribute="trailing" constant="4" id="XMY-4a-tdA"/>
                                                         <constraint firstItem="uFi-3G-e8s" firstAttribute="leading" secondItem="YTp-uJ-cXH" secondAttribute="trailing" id="Xbh-Al-bk3"/>
                                                         <constraint firstItem="ivc-Dv-0hs" firstAttribute="leading" secondItem="b3m-X5-Ji6" secondAttribute="trailing" id="aGF-Pf-D2Y"/>
-                                                        <constraint firstItem="ivc-Dv-0hs" firstAttribute="top" secondItem="D52-gV-9yu" secondAttribute="bottom" constant="4" id="gFQ-hx-blr"/>
+                                                        <constraint firstItem="ivc-Dv-0hs" firstAttribute="top" secondItem="D52-gV-9yu" secondAttribute="bottom" constant="5" id="gFQ-hx-blr"/>
                                                         <constraint firstItem="Qoo-W7-eag" firstAttribute="centerY" secondItem="KMQ-NQ-Whw" secondAttribute="centerY" id="jgY-M2-MK7"/>
                                                         <constraint firstItem="KMQ-NQ-Whw" firstAttribute="centerY" secondItem="uFi-3G-e8s" secondAttribute="centerY" id="jnR-d9-bTo"/>
                                                         <constraint firstItem="YTp-uJ-cXH" firstAttribute="leading" secondItem="b3m-X5-Ji6" secondAttribute="leading" id="qeX-fl-TcH"/>
@@ -244,6 +242,7 @@
                                         <connections>
                                             <outlet property="disLikeCountLabel" destination="Qoo-W7-eag" id="ukN-2E-kTX"/>
                                             <outlet property="foodStatusStackView" destination="Cg7-E8-ZeK" id="3Wq-dM-D4H"/>
+                                            <outlet property="heartImageView" destination="YTp-uJ-cXH" id="6fU-bm-dCP"/>
                                             <outlet property="likeCountLabel" destination="KMQ-NQ-Whw" id="cv9-yu-KLf"/>
                                             <outlet property="priceLabel" destination="ivc-Dv-0hs" id="Yi4-pp-nWq"/>
                                             <outlet property="soldOutView" destination="eF3-DY-oxJ" id="1Qr-7f-bCk"/>

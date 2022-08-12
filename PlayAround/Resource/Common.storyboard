@@ -214,8 +214,82 @@
             </objects>
             <point key="canvasLocation" x="2539" y="131"/>
         </scene>
+        <!--Advertisement DetailVC-->
+        <scene sceneID="HrW-da-hh5">
+            <objects>
+                <viewController storyboardIdentifier="AdvertisementDetailVC" hidesBottomBarWhenPushed="YES" id="1wo-h8-5Pg" customClass="AdvertisementDetailVC" customModule="PlayAround" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dCZ-M1-buH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7La-jF-hV1">
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xdg-Ap-BGT">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="d3h-IY-HuK">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zsA-dc-wNS">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" id="udu-by-Z6k"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="d3h-IY-HuK" secondAttribute="trailing" id="INZ-g3-gkc"/>
+                                            <constraint firstItem="d3h-IY-HuK" firstAttribute="top" secondItem="xdg-Ap-BGT" secondAttribute="top" id="Yqk-Vf-YG1"/>
+                                            <constraint firstItem="d3h-IY-HuK" firstAttribute="leading" secondItem="xdg-Ap-BGT" secondAttribute="leading" id="dHO-zc-srt"/>
+                                            <constraint firstAttribute="bottom" secondItem="d3h-IY-HuK" secondAttribute="bottom" id="gAr-Xu-YZO"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="xdg-Ap-BGT" secondAttribute="bottom" id="1lU-3q-ifW"/>
+                                    <constraint firstItem="xdg-Ap-BGT" firstAttribute="leading" secondItem="7La-jF-hV1" secondAttribute="leading" id="3pX-wZ-l9T"/>
+                                    <constraint firstItem="xdg-Ap-BGT" firstAttribute="top" secondItem="7La-jF-hV1" secondAttribute="top" id="5Aa-Q6-hcu"/>
+                                    <constraint firstAttribute="trailing" secondItem="xdg-Ap-BGT" secondAttribute="trailing" id="N2d-bh-lFj"/>
+                                    <constraint firstAttribute="width" secondItem="xdg-Ap-BGT" secondAttribute="width" id="hAi-gM-Swc"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="YoP-O5-J9C"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="YoP-O5-J9C" firstAttribute="trailing" secondItem="7La-jF-hV1" secondAttribute="trailing" id="PXu-9z-BK8"/>
+                            <constraint firstItem="7La-jF-hV1" firstAttribute="top" secondItem="YoP-O5-J9C" secondAttribute="top" id="RBA-eE-P8I"/>
+                            <constraint firstItem="7La-jF-hV1" firstAttribute="leading" secondItem="dCZ-M1-buH" secondAttribute="leading" id="WIV-7V-x6t"/>
+                            <constraint firstAttribute="bottom" secondItem="7La-jF-hV1" secondAttribute="bottom" id="fhY-e9-UZd"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="e14-zN-qj9">
+                        <leftBarButtonItems>
+                            <barButtonItem image="btnBack" id="vKR-Wf-8SP">
+                                <connections>
+                                    <action selector="backPress" destination="1wo-h8-5Pg" id="5En-Xf-fWU"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title=" " id="jqK-Ce-T4x"/>
+                        </leftBarButtonItems>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="imageStackView" destination="d3h-IY-HuK" id="nT8-s2-WeB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hJA-Qw-shK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1800" y="862"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="btnBack" width="16" height="14"/>
         <image name="closeWhite" width="35" height="35"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

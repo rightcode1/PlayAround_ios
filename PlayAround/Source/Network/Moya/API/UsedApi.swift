@@ -194,11 +194,12 @@ struct UsedListData: Codable {
   let isWish, statusSale: Bool
   let isLike: Bool?
   let likeCount, dislikeCount: Int
-  let user: User
+  let user: User?
   let address: String
   let villageId, viewCount, commentCount: Int
   let hashtag: [String]
   let isReport: Bool
+  var advertisementData: AdvertisementData?
 }
 
 // MARK: - UsedDetailResponse

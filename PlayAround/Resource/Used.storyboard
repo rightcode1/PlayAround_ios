@@ -228,6 +228,7 @@
                                         <connections>
                                             <outlet property="disLikeCountLabel" destination="fhw-wb-6Pj" id="Yae-55-jpH"/>
                                             <outlet property="foodStatusStackView" destination="HnI-7P-a0G" id="ygf-yG-Rpo"/>
+                                            <outlet property="heartImageView" destination="92Z-SM-rQs" id="hVg-ug-Teh"/>
                                             <outlet property="likeCountLabel" destination="GyQ-4h-qgn" id="hQE-mQ-52W"/>
                                             <outlet property="priceLabel" destination="M2R-jb-avp" id="2pi-pK-OzI"/>
                                             <outlet property="soldOutView" destination="lj3-r1-hTa" id="M1y-xS-nfB"/>

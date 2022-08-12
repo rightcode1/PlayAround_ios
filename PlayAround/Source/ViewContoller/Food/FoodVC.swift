@@ -48,13 +48,35 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
       .filterSuccessfulStatusCodes()
       .map(FoodListResponse.self)
       .subscribe(onSuccess: { value in
-        self.foodList = value.list
-        self.foodListCollectionView.reloadData()
-        
-        print("self.foodList.count : \(self.foodList.count)")
-        self.dismissHUD()
+        self.initAdvertisementList(foodList: value.list)
       }, onError: { error in
         self.dismissHUD()
+      })
+      .disposed(by: disposeBag)
+  }
+  
+  func initAdvertisementList(foodList: [FoodListData]) {
+    let param = AdvertisementListRequest(location: .광고리스트, category: .반찬공유)
+    APIProvider.shared.advertisementAPI.rx.request(.list(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(AdvertisementListResponse.self)
+      .subscribe(onSuccess: { value in
+        self.foodList = foodList
+        
+        if value.list.count > 0 {
+          for i in 0..<value.list.count {
+            let checkCount = ((i + 1) * 5)
+            if self.foodList.indices.contains(checkCount) {
+              let foodListData = FoodListData(id: 0, thumbnail: nil, category: "", name: "", price: 0, wishCount: 0, isWish: true, isLike: nil, likeCount: 0, dislikeCount: 0, statusSale: true, address: "", viewCount: 0, villageId: 0, user: nil, commentCount: 0, status: .조리예정, userCount: nil, dueDate: nil, requestCount: 0, isRequest: true, hashtag: [], isReport: true, advertisementData: value.list[i])
+              self.foodList.insert(foodListData, at: checkCount + i)
+              print("checkCount + (i): \(checkCount + (i))")
+            }
+          }
+        }
+        
+        self.foodListCollectionView.reloadData()
+        self.dismissHUD()
+      }, onError: { error in
       })
       .disposed(by: disposeBag)
   }
@@ -113,14 +135,32 @@ extension FoodVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = foodListCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FoodListCell
     let dict = foodList[indexPath.row]
-    cell.update(dict)
+    if dict.advertisementData == nil {
+      cell.update(dict)
+    } else {
+      cell.updateWithAdvertisementData(dict.advertisementData!)
+    }
     return cell
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let dict = foodList[indexPath.row]
-    let vc = FoodDetailVC.viewController()
-    vc.foodId = dict.id
-    self.navigationController?.pushViewController(vc, animated: true)
+    if dict.advertisementData == nil {
+      let vc = FoodDetailVC.viewController()
+      vc.foodId = dict.id
+      self.navigationController?.pushViewController(vc, animated: true)
+    } else {
+      if let advertisement = dict.advertisementData {
+        if advertisement.diff == "url" {
+          if let openUrl = URL(string: advertisement.url!) {
+            UIApplication.shared.open(openUrl, options: [:])
+          }
+        } else {
+          let vc = AdvertisementDetailVC.viewController()
+          vc.images = [Image(id: 0, name: advertisement.image ?? "")]
+          navigationController?.pushViewController(vc, animated: true)
+        }
+      }
+    }
   }
 }
