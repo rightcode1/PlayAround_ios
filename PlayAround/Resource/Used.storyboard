@@ -383,6 +383,7 @@
                         <outlet property="filterButton" destination="yH2-5o-CGF" id="Iud-Wl-VUK"/>
                         <outlet property="searchButton" destination="ykl-4F-2WV" id="ksi-oj-asE"/>
                         <outlet property="usedListCollectionView" destination="2AS-87-ue2" id="xdd-8G-I9M"/>
+                        <outlet property="villageButton" destination="HaC-Jt-teP" id="mjx-MB-XEn"/>
                         <segue destination="NbV-7q-n5g" kind="show" id="Ajk-bt-HGe"/>
                     </connections>
                 </viewController>

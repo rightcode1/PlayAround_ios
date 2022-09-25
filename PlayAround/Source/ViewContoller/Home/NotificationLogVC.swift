@@ -84,13 +84,14 @@ extension NotificationLogVC: UITableViewDataSource, UITableViewDelegate {
       vc.foodId = dict.data
       self.navigationController?.pushViewController(vc, animated: true)
       
-    }else  if dict.diff == "community"  {
+    }else  if dict.diff == "community" {
       let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityDetailVC") as! CommunityDetailVC
       vc.communityId = dict.data
       self.navigationController?.pushViewController(vc, animated: true)
       
     }else {
       let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityInfoDetailVC") as! CommunityInfoDetailVC
+      vc.naviTitle = "공지사항"
       vc.detailId = dict.data
       self.navigationController?.pushViewController(vc, animated: true)
       

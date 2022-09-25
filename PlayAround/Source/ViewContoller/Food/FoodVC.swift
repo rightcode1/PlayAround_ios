@@ -11,6 +11,7 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
   @IBOutlet weak var searchButton: UIButton!
   @IBOutlet weak var filterButton: UIButton!
   @IBOutlet weak var foodListCollectionView: UICollectionView!
+  @IBOutlet weak var villageButton: UIButton!
   
   var category: FoodCategory = .전체
   var foodList: [FoodListData] = []
@@ -23,6 +24,8 @@ class FoodVC: BaseViewController, FoodCategoryReusableViewDelegate {
   
   override func viewWillAppear(_ animated: Bool) {
     self.navigationController?.navigationBar.isHidden = true
+    
+    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
     initFoodList()
   }
   

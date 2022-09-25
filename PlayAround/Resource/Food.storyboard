@@ -301,6 +301,18 @@
                                     <outlet property="delegate" destination="Y6W-OH-hqX" id="CIa-TE-SYO"/>
                                 </connections>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4c-w8-kGz">
+                                <rect key="frame" x="351.5" y="750.5" width="47.5" height="47.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="a4c-w8-kGz" secondAttribute="height" multiplier="1:1" id="Q1v-rw-45j"/>
+                                    <constraint firstAttribute="height" constant="47.5" id="rfw-lX-rO3"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="registBoardButton1"/>
+                                <connections>
+                                    <segue destination="yfj-hA-Owg" kind="show" id="4Ld-i1-IpV"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JVQ-PR-IJZ">
                                 <rect key="frame" x="0.0" y="88" width="414" height="48"/>
                                 <subviews>
@@ -363,18 +375,6 @@
                                     <constraint firstItem="qZM-7f-adG" firstAttribute="centerX" secondItem="JVQ-PR-IJZ" secondAttribute="centerX" id="xjm-VT-T5b"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4c-w8-kGz">
-                                <rect key="frame" x="351.5" y="750.5" width="47.5" height="47.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="a4c-w8-kGz" secondAttribute="height" multiplier="1:1" id="Q1v-rw-45j"/>
-                                    <constraint firstAttribute="height" constant="47.5" id="rfw-lX-rO3"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="registBoardButton1"/>
-                                <connections>
-                                    <segue destination="yfj-hA-Owg" kind="show" id="4Ld-i1-IpV"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -397,6 +397,7 @@
                         <outlet property="filterButton" destination="LYG-2f-tac" id="9jd-cZ-Xvn"/>
                         <outlet property="foodListCollectionView" destination="HoQ-f0-fhG" id="ke7-Go-vug"/>
                         <outlet property="searchButton" destination="mzO-nu-eP0" id="8pp-AK-J9T"/>
+                        <outlet property="villageButton" destination="bAZ-b1-5Aq" id="b1B-8P-Ad0"/>
                         <segue destination="IgP-Ah-K9Y" kind="show" id="qoO-Fg-ECK"/>
                     </connections>
                 </viewController>

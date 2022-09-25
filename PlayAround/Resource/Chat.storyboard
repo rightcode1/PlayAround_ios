@@ -406,6 +406,7 @@
                     <connections>
                         <outlet property="tableView" destination="MeA-p2-rhM" id="wf0-Kv-qhb"/>
                         <outlet property="typeCollectionView" destination="dKn-l0-6DG" id="ffv-2g-QUj"/>
+                        <outlet property="villageButton" destination="jlF-2I-IOf" id="vxq-Xt-m0k"/>
                         <segue destination="aKM-hl-BTp" kind="show" id="toq-R9-hpF"/>
                     </connections>
                 </viewController>

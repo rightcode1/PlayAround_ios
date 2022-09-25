@@ -31,6 +31,7 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var diffCollectionView: UICollectionView!
   @IBOutlet weak var listCollectionView: UICollectionView!
   @IBOutlet weak var listCollectionViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var qustionButton: UIImageView!
   
   var showUserId: Int?
   var userId: Int?
@@ -202,6 +203,14 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
         self.navigationController?.pushViewController(vc, animated: true)
       })
       .disposed(by: disposeBag)
+    
+    qustionButton.rx.tapGesture().when(.recognized)
+        .bind(onNext: { [weak self] _ in
+          guard let self = self else { return }
+          let vc = LevelVC.viewController()
+          self.navigationController?.pushViewController(vc, animated: true)
+        })
+        .disposed(by: disposeBag)
     
     showFollowerButton.rx.tap
       .bind(onNext: { [weak self] in

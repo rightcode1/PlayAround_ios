@@ -47,7 +47,7 @@ class HomeContentCell : UITableViewCell{
     
     let layout = UICollectionViewFlowLayout()
     layout.sectionInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
-    let height = ((APP_WIDTH() - 40) / 2) / 142 * 100 + 72
+    let height = ((APP_WIDTH() - 40) / 2) / 142 * 100 + 93
     layout.itemSize = CGSize(width: (APP_WIDTH() - 70) / 2, height: height )
     layout.minimumInteritemSpacing = 10
     layout.minimumLineSpacing = 10
@@ -85,15 +85,22 @@ extension HomeContentCell: UICollectionViewDelegate, UICollectionViewDataSource{
             let price = cell.viewWithTag(3) as? UILabel,
             let wish = cell.viewWithTag(4) as? UILabel,
             let like = cell.viewWithTag(5) as? UILabel,
-            let disslike = cell.viewWithTag(6) as? UILabel else {
+            let disslike = cell.viewWithTag(6) as? UILabel,
+            let complete = cell.viewWithTag(7) as? UILabel,
+            let discomplete = cell.viewWithTag(8) as? UILabel else {
               return cell
             }
       thumbnail.kf.setImage(with: URL(string: dict.thumbnail ?? ""))
       title.text = dict.name
-      price.text = "\(dict.price)달란트"
+      price.text = "\(dict.price.formattedProductPrice() ?? "0")원"
       wish.text = "\(dict.wishCount)"
       like.text = "좋아요 \(dict.likeCount)"
       disslike.text = "싫어요 \(dict.dislikeCount)"
+      if dict.status == .조리완료{
+        discomplete.isHidden = true
+      }else{
+        complete.isHidden = true
+      }
       return cell
       
     }

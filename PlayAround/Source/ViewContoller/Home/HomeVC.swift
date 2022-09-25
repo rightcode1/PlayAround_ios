@@ -354,7 +354,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     if indexPath.section == 0{
       return CGFloat(122 * communityList.count)
     } else {
-      let height = ((APP_WIDTH() - 40) / 2) / 142 * 100 + 87
+      let height = ((APP_WIDTH() - 40) / 2) / 142 * 100 + 87 + 25.2
       let size : Int = Int(height) * (foodList.count / 2 + (foodList.count % 2))
       return CGFloat(size)
     }

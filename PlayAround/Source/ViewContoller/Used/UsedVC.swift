@@ -11,6 +11,8 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
   @IBOutlet weak var searchButton: UIButton!
   @IBOutlet weak var filterButton: UIButton!
   @IBOutlet weak var usedListCollectionView: UICollectionView!
+  @IBOutlet weak var villageButton: UIButton!
+
   
   var category: UsedCategory = .전체
   var usedList: [UsedListData] = []
@@ -25,6 +27,7 @@ class UsedVC: BaseViewController, UsedCategoryReusableViewDelegate {
   
   override func viewWillAppear(_ animated: Bool) {
     self.navigationController?.navigationBar.isHidden = true
+    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
     initUsedList()
   }
   

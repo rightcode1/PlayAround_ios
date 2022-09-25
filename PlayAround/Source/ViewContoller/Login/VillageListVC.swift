@@ -21,10 +21,8 @@ class VillageListVC: BaseViewController, UIViewControllerTransitioningDelegate{
   
   var delegate: SelectVillage?
   
-  override func viewDidLoad() {
-    setMainTableView()
-    initVillageList()
-  }
+//  override func viewDidLoad() {
+//  }
   func setMainTableView(){
     DataHelper<String>.remove(forKey: .token)
     mainTableView.delegate = self
@@ -32,6 +30,8 @@ class VillageListVC: BaseViewController, UIViewControllerTransitioningDelegate{
   }
   override func viewWillAppear(_ animated: Bool) {
     navigationController?.isNavigationBarHidden = false
+    setMainTableView()
+    initVillageList()
   }
   
 
@@ -113,7 +113,8 @@ extension VillageListVC: UITableViewDataSource, UITableViewDelegate {
 extension VillageListVC: villageProtocol{
   func villageState(state: String, indexPath: IndexPath) {
     if state == "이동"{
-      DataHelper.set(villageList[indexPath.row].address.split(separator: " ")[2], forKey: .villageName)
+      let data : Array<Substring> = villageList[indexPath.row].address.split(separator: " ")
+      DataHelper.set(data.last, forKey: .villageName)
       delegate?.select()
       if viewController == "login"{
         goMain()

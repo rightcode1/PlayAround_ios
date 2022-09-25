@@ -96,6 +96,7 @@
 		DF47674628780F7E00F6BDB1 /* AdminCommunityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF47674528780F7E00F6BDB1 /* AdminCommunityCell.swift */; };
 		DF513F65287E8BE7003B7E01 /* CommunitySortPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF513F64287E8BE7003B7E01 /* CommunitySortPopUpVC.swift */; };
 		DF513F67287EB3F7003B7E01 /* CommunityDetailMenuPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF513F66287EB3F7003B7E01 /* CommunityDetailMenuPopupVC.swift */; };
+		DF5FB1FF28E0996A00200D2A /* LevelVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF5FB1FE28E0996A00200D2A /* LevelVC.swift */; };
 		DF6112DA2891113900DF4BD8 /* login.gif in Resources */ = {isa = PBXBuildFile; fileRef = DF6112D82891113700DF4BD8 /* login.gif */; };
 		DF6112DB2891113900DF4BD8 /* home.gif in Resources */ = {isa = PBXBuildFile; fileRef = DF6112D92891113800DF4BD8 /* home.gif */; };
 		DF6112DE2891307900DF4BD8 /* VillageDialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF6112DD2891307900DF4BD8 /* VillageDialog.storyboard */; };
@@ -291,6 +292,7 @@
 		DF47674528780F7E00F6BDB1 /* AdminCommunityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCommunityCell.swift; sourceTree = "<group>"; };
 		DF513F64287E8BE7003B7E01 /* CommunitySortPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySortPopUpVC.swift; sourceTree = "<group>"; };
 		DF513F66287EB3F7003B7E01 /* CommunityDetailMenuPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDetailMenuPopupVC.swift; sourceTree = "<group>"; };
+		DF5FB1FE28E0996A00200D2A /* LevelVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelVC.swift; sourceTree = "<group>"; };
 		DF6112D82891113700DF4BD8 /* login.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = login.gif; sourceTree = "<group>"; };
 		DF6112D92891113800DF4BD8 /* home.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = home.gif; sourceTree = "<group>"; };
 		DF6112DD2891307900DF4BD8 /* VillageDialog.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VillageDialog.storyboard; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				CB38607B2863116100C4B688 /* MyPageVC.swift */,
 				CBDBEBA52860460C00165352 /* UpdateProfileVC.swift */,
 				CB399D1F2864298A0084F9EF /* FollowListVC.swift */,
+				DF5FB1FE28E0996A00200D2A /* LevelVC.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -1366,6 +1369,7 @@
 				DFA40479282B9661004E8859 /* AuthRequest.swift in Sources */,
 				DFF528B72885B3C50060B082 /* HomeContentCell.swift in Sources */,
 				DF7EE3F5283222AA00788CFE /* TableViewCell.swift in Sources */,
+				DF5FB1FF28E0996A00200D2A /* LevelVC.swift in Sources */,
 				CB87B4502848B532000297BB /* FoodCommentAPI.swift in Sources */,
 				DFA4521B282B7A1A0059EEFC /* ViewcontrollerExtention.swift in Sources */,
 				CBAD13A52859DB5800247EE6 /* UsedDetailVC.swift in Sources */,

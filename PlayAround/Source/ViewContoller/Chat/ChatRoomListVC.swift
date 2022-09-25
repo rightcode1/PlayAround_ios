@@ -18,6 +18,7 @@ enum ChatRoomType: String, Codable {
 class ChatRoomListVC: UIViewController {
   @IBOutlet weak var typeCollectionView: UICollectionView!
   @IBOutlet weak var tableView: UITableView!
+  @IBOutlet weak var villageButton: UIButton!
   
   let socketManager = SocketIOManager.sharedInstance
   
@@ -37,6 +38,7 @@ class ChatRoomListVC: UIViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     self.navigationController?.navigationBar.isHidden = true
+    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
   }
   
   override func viewWillDisappear(_ animated: Bool) {
