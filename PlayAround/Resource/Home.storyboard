@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YnQ-sY-KS3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YnQ-sY-KS3">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -1301,15 +1301,25 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2MG-Bx-eel">
+                                <rect key="frame" x="0.0" y="812" width="414" height="1"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="eHd-76-Ke3"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="2MG-Bx-eel" secondAttribute="bottom" id="30X-qE-o95"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="x89-E8-aHx" secondAttribute="trailing" id="G3K-Ux-29E"/>
                             <constraint firstItem="x89-E8-aHx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="Jao-oV-cN6"/>
                             <constraint firstItem="x89-E8-aHx" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="MFt-Lb-Gkp"/>
                             <constraint firstItem="mp4-Uy-xYT" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="VSF-Af-dSm"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="mp4-Uy-xYT" secondAttribute="bottom" id="aM9-n4-JgZ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="2MG-Bx-eel" secondAttribute="trailing" id="eHD-wk-kF3"/>
+                            <constraint firstItem="2MG-Bx-eel" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="lRs-aZ-yip"/>
                             <constraint firstItem="mp4-Uy-xYT" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="lkh-8t-KQu"/>
                             <constraint firstItem="mp4-Uy-xYT" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="vL8-om-JyF"/>
                         </constraints>
@@ -1481,6 +1491,9 @@
         <image name="tabHomeOn" width="25" height="25"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

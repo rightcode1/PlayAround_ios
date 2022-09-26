@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="S3p-gm-xhP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="S3p-gm-xhP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -375,11 +375,21 @@
                                     <constraint firstItem="qZM-7f-adG" firstAttribute="centerX" secondItem="JVQ-PR-IJZ" secondAttribute="centerX" id="xjm-VT-T5b"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Cx-ju-Zq7">
+                                <rect key="frame" x="0.0" y="812" width="414" height="1"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="zja-Gd-uqW"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="9Cx-ju-Zq7" secondAttribute="trailing" id="0PM-QG-UyB"/>
                             <constraint firstItem="HoQ-f0-fhG" firstAttribute="top" secondItem="JVQ-PR-IJZ" secondAttribute="bottom" id="1oO-nu-EDt"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="9Cx-ju-Zq7" secondAttribute="bottom" id="ANd-Kn-6Gf"/>
+                            <constraint firstItem="9Cx-ju-Zq7" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Fyv-AO-x5i"/>
                             <constraint firstItem="HoQ-f0-fhG" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="L5k-5r-vWD"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="a4c-w8-kGz" secondAttribute="bottom" constant="15" id="ONR-Rh-JjP"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="HoQ-f0-fhG" secondAttribute="bottom" id="QWI-Ba-hGM"/>

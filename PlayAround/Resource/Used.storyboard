@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iFr-Ck-QKb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iFr-Ck-QKb">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -361,6 +361,13 @@
                                     <segue destination="bge-kW-MdV" kind="show" id="kmR-SU-vHz"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1hR-zD-zXp">
+                                <rect key="frame" x="0.0" y="812" width="414" height="1"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="7lk-Cs-2W3"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="guz-uy-DVw"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -368,12 +375,15 @@
                             <constraint firstItem="guz-uy-DVw" firstAttribute="trailing" secondItem="lgf-7P-k4x" secondAttribute="trailing" id="0P7-cb-T9N"/>
                             <constraint firstItem="2AS-87-ue2" firstAttribute="leading" secondItem="guz-uy-DVw" secondAttribute="leading" id="2Nt-4n-XDX"/>
                             <constraint firstItem="lgf-7P-k4x" firstAttribute="leading" secondItem="8ab-lt-LFS" secondAttribute="leading" id="52u-NX-gyR"/>
+                            <constraint firstAttribute="trailing" secondItem="1hR-zD-zXp" secondAttribute="trailing" id="8RH-YK-ZOo"/>
                             <constraint firstItem="2AS-87-ue2" firstAttribute="top" secondItem="lgf-7P-k4x" secondAttribute="bottom" id="8WK-2D-2Au"/>
                             <constraint firstItem="guz-uy-DVw" firstAttribute="trailing" secondItem="2AS-87-ue2" secondAttribute="trailing" id="9YH-mJ-Fem"/>
                             <constraint firstItem="lgf-7P-k4x" firstAttribute="top" secondItem="guz-uy-DVw" secondAttribute="top" id="E1x-Ip-tio"/>
                             <constraint firstItem="guz-uy-DVw" firstAttribute="bottom" secondItem="2AS-87-ue2" secondAttribute="bottom" id="bX8-82-Fm0"/>
                             <constraint firstItem="guz-uy-DVw" firstAttribute="trailing" secondItem="Pz4-Ni-zM0" secondAttribute="trailing" constant="15" id="iaY-Zq-DoW"/>
                             <constraint firstItem="guz-uy-DVw" firstAttribute="bottom" secondItem="Pz4-Ni-zM0" secondAttribute="bottom" constant="15" id="kiY-bC-1RO"/>
+                            <constraint firstItem="guz-uy-DVw" firstAttribute="bottom" secondItem="1hR-zD-zXp" secondAttribute="bottom" id="uaY-kb-QKq"/>
+                            <constraint firstItem="1hR-zD-zXp" firstAttribute="leading" secondItem="8ab-lt-LFS" secondAttribute="leading" id="yz9-Y6-RaM"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tabUsedOff" selectedImage="tabUsedOn" id="BJE-g2-5oh"/>

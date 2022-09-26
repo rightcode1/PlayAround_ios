@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xob-xH-rpb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xob-xH-rpb">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -148,6 +148,13 @@
                                     <constraint firstItem="0fz-l4-bKl" firstAttribute="leading" secondItem="yjU-1h-Ddm" secondAttribute="leading" constant="13" id="t84-QY-ScC"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hEd-4C-406">
+                                <rect key="frame" x="0.0" y="812" width="414" height="1"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="IdO-xR-ogi"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PYU-9n-TPU"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -157,7 +164,10 @@
                             <constraint firstItem="PYU-9n-TPU" firstAttribute="bottom" secondItem="K36-49-h82" secondAttribute="bottom" id="Rke-P3-Dbc"/>
                             <constraint firstItem="K36-49-h82" firstAttribute="top" secondItem="yjU-1h-Ddm" secondAttribute="bottom" id="Rpn-yf-dtI"/>
                             <constraint firstItem="yjU-1h-Ddm" firstAttribute="leading" secondItem="7wj-xm-lYq" secondAttribute="leading" id="bDa-ew-1oW"/>
+                            <constraint firstItem="PYU-9n-TPU" firstAttribute="bottom" secondItem="hEd-4C-406" secondAttribute="bottom" id="cBM-Yo-LAz"/>
                             <constraint firstItem="yjU-1h-Ddm" firstAttribute="top" secondItem="PYU-9n-TPU" secondAttribute="top" id="f4A-n7-o3g"/>
+                            <constraint firstAttribute="trailing" secondItem="hEd-4C-406" secondAttribute="trailing" id="fqz-2A-Kf2"/>
+                            <constraint firstItem="hEd-4C-406" firstAttribute="leading" secondItem="7wj-xm-lYq" secondAttribute="leading" id="jNH-93-GD1"/>
                             <constraint firstItem="PYU-9n-TPU" firstAttribute="bottom" secondItem="GKA-99-srf" secondAttribute="bottom" constant="15" id="l4D-73-olK"/>
                             <constraint firstItem="PYU-9n-TPU" firstAttribute="trailing" secondItem="yjU-1h-Ddm" secondAttribute="trailing" id="ubT-hr-jaK"/>
                             <constraint firstItem="PYU-9n-TPU" firstAttribute="trailing" secondItem="K36-49-h82" secondAttribute="trailing" id="yga-oc-aOm"/>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eLX-Zo-N02">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eLX-Zo-N02">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -384,6 +384,13 @@
                                     <constraint firstAttribute="height" constant="30" id="vu8-zk-wEO"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MuI-IE-g4M">
+                                <rect key="frame" x="0.0" y="812" width="414" height="1"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="9xO-lx-UPq"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -396,6 +403,9 @@
                             <constraint firstItem="MeA-p2-rhM" firstAttribute="top" secondItem="kzU-nA-ffz" secondAttribute="bottom" id="H4N-eo-6o5"/>
                             <constraint firstItem="685-QV-Kff" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="IP9-65-7bH"/>
                             <constraint firstAttribute="trailing" secondItem="kzU-nA-ffz" secondAttribute="trailing" id="JHG-BW-dLt"/>
+                            <constraint firstAttribute="trailing" secondItem="MuI-IE-g4M" secondAttribute="trailing" id="LAG-Dp-hf8"/>
+                            <constraint firstItem="MuI-IE-g4M" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="QjQ-My-ZOw"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="MuI-IE-g4M" secondAttribute="bottom" id="Sd0-JZ-Bbd"/>
                             <constraint firstItem="685-QV-Kff" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="lEj-sS-wUk"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="MeA-p2-rhM" secondAttribute="trailing" id="o4S-LN-7uK"/>
                         </constraints>
