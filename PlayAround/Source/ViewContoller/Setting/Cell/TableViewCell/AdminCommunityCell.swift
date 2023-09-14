@@ -15,7 +15,9 @@ enum PermissionMenu: String, Codable {
   case chat = "채팅방"
   case delete = "글내리기"
 }
-
+protocol reloadPermit{
+    func reload()
+}
 class AdminCommunityCell: UITableViewCell{
   @IBOutlet weak var permissionCollectionView: UICollectionView!
   
@@ -30,6 +32,7 @@ class AdminCommunityCell: UITableViewCell{
   var MyCommunitiyUpdateVC: MyCommunitiyUpdateVC?
   var disposeBag = DisposeBag()
   var indexpath : IndexPath?
+    var delegate: reloadPermit?
   var checkStatus: String?
   
   
@@ -41,11 +44,16 @@ class AdminCommunityCell: UITableViewCell{
     }else{
       permissionCollectionView.isHidden = false
     }
+      permissionCollectionView.reloadData()
   }
   
   func initdata(_ data: CommunityJoiner,_ index: IndexPath, status: String?){
     dict = data
-    userImageView.kf.setImage(with: URL(string: dict?.user.thumbnail ?? ""))
+      if dict?.user.thumbnail != nil{
+          userImageView.kf.setImage(with: URL(string: dict?.user.thumbnail ?? ""))
+      }else{
+              userImageView.image = UIImage(named: "defaultProfileImage")
+      }
     if !(dict?.master ?? false){
       roomKingView.isHidden = true
     }else{
@@ -55,9 +63,9 @@ class AdminCommunityCell: UITableViewCell{
     indexpath = index
     checkStatus = status
     if checkStatus == "참여" {
-      tapOnOff.image = UIImage(named: "confirmYes")
+        tapOnOff.image = UIImage(named: "confirmNo")
     }else{
-      tapOnOff.image = UIImage(named: "confirmNo")
+        tapOnOff.image = UIImage(named: "confirmYes")
     }
     intrx()
     
@@ -68,7 +76,15 @@ class AdminCommunityCell: UITableViewCell{
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
-        self.MyCommunitiyUpdateVC?.adminMainTableView.reloadRows(at: [self.indexpath!], with: .none)
+          if status != nil {
+              if status == "참여"{
+                  self.tapOnOff.image = UIImage(named: "confirmNo")
+              }else{
+                  self.tapOnOff.image = UIImage(named: "confirmYes")
+              }
+          }else{
+              self.delegate?.reload()
+          }
       }, onError: { error in
       })
       .disposed(by: disposeBag)
@@ -108,7 +124,14 @@ extension AdminCommunityCell: UICollectionViewDelegate, UICollectionViewDataSour
     return cell
   }
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    initupdate(dict!.id,status: nil)
+      if dict?.user.id == DataHelperTool.userAppId{
+          MyCommunitiyUpdateVC?.callOkActionMSGDialog(message:"방장의 권한은 해제할 수 없습니다.", okAction: {
+          })
+      }else{
+          checkBool[indexPath.row] = !checkBool[indexPath.row]
+          print("!!!!!!!")
+          initupdate(dict!.id,status: nil)
+      }
   }
   
 }

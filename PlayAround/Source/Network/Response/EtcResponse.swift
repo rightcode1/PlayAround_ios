@@ -56,6 +56,7 @@ struct myinfo: Codable {
 
 struct DefaultID: Codable {
   let id: Int
+    let communityId :Int?
 }
 
 struct Image: Codable {

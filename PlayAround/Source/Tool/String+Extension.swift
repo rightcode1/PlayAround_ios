@@ -33,7 +33,7 @@ extension String {
   
   func isIdValidate() -> Bool {
     // 영문 + 숫자 5 ~ 20 자리
-    let regex = "^[a-zA-Z0-9]{5,20}$"
+    let regex = "^[a-zA-Z0-9]{8,16}$"
     return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
   }
   

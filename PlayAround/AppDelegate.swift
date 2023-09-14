@@ -8,16 +8,19 @@
 import UIKit
 import IQKeyboardManagerSwift
 import SocketIO
+import KakaoSDKCommon
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   
   var window: UIWindow?
+    
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
     IQKeyboardManager.shared.enable = true
     IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+    KakaoSDK.initSDK(appKey: "f3787f1b7a1bf6f61a6755ee7406163a")
     return true
   }
   

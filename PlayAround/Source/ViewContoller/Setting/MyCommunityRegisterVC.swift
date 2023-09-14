@@ -150,7 +150,7 @@ class MyCommunityRegisterVC: BaseViewController{
   
   func initVillageList(){
     self.showHUD()
-    APIProvider.shared.villageAPI.rx.request(.villageList(param: VillageListRequest(latitude: "\(currentLocation?.0 ?? 0.0)", longitude: "\(currentLocation?.1 ?? 0.0)", isMyVillage: "true")))
+    APIProvider.shared.villageAPI.rx.request(.villageList(param: VillageListRequest( isMyVillage: "true")))
       .filterSuccessfulStatusCodes()
       .map(VillageListResponse.self)
       .subscribe(onSuccess: { value in

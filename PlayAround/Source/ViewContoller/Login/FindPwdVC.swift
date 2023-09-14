@@ -15,7 +15,7 @@ class FindPwdVC :BaseViewController{
   var checkId = false
   
   func smsSend(){
-    let param = SendCodeRequest(tel: PhoneTextField.text!, diff: .update)
+      let param = SendCodeRequest(tel: PhoneTextField.text!, diff: SendCodeDiff.find.rawValue)
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)

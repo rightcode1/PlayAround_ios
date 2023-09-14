@@ -41,7 +41,13 @@ class CheckCrimeHistoryPopupVC: BaseViewController, ViewControllerFromStoryboard
       .bind(onNext: { [weak self] in
         guard let self = self else { return }
         self.backPress()
-        self.delegate?.moveToCheckCheatWithWeb(urlString: "https://thecheat.co.kr/rb/?mod=_search")
+          if let url = URL(string: "https://apps.apple.com/kr/app/%ED%8F%AC%EC%95%84%EB%B8%8C/id634456915"), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+              UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+              UIApplication.shared.openURL(url)
+            }
+          }
       })
       .disposed(by: disposeBag)
   }

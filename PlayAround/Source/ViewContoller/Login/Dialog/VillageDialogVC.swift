@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 protocol villageProtocol{
-  func villageState(state:String,indexPath: IndexPath)
+  func villageState(state:String,indexPath: IndexPath,myVillage: Bool)
 }
 
 class VillageDialogVC: BaseViewController {
@@ -35,17 +35,20 @@ class VillageDialogVC: BaseViewController {
   var okbuttonTitle: String?
   
   var isRemove: Bool = false
+  var myVillage: Bool = false
   
   override func viewDidLoad() {
     super.viewDidLoad()
     initContents()
+    initrx()
   }
   
   func initrx(){
     villageDelete.rx.tapGesture().when(.recognized)
       .bind(onNext: { [weak self] _ in
         guard let self = self else { return }
-        self.delegate?.villageState(state: "삭제",indexPath: self.indexPath)
+          self.dismiss(animated: true, completion: nil)
+        self.delegate?.villageState(state: "삭제",indexPath: self.indexPath,myVillage: self.myVillage)
       })
       .disposed(by: disposeBag)
   }
@@ -93,7 +96,7 @@ class VillageDialogVC: BaseViewController {
   
   @IBAction func tapOk(_ sender: UIButton) {
     dismiss(animated: true, completion: nil)
-    delegate?.villageState(state: "이동",indexPath: self.indexPath)
+    delegate?.villageState(state: "이동",indexPath: self.indexPath,myVillage: self.myVillage)
   }
   
 }

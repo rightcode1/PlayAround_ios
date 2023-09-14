@@ -28,7 +28,7 @@ class FindPwd2VC:BaseViewController{
           }
         }
       }, onError: { error in
-        if self.PwdTextField.text == self.PwdCheckTextField.text{
+        if self.PwdTextField.text != self.PwdCheckTextField.text{
           self.callOkActionMSGDialog(message: "비밀번호를 확인해주세요.") {
           }
         }else{

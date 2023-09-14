@@ -69,6 +69,7 @@ struct CommunityNoticeResponse: Codable {
 struct CommunityNotice: Codable {
   let id,communityId,likeCount,dislikeCount: Int
   let title,createdAt, content: String
+  let user: User
 }
 struct CommunityBoardResponse: Codable {
   let statusCode: Int
@@ -80,6 +81,7 @@ struct CommunityBoard: Codable {
   let outCount: Int?
   let isOut: Bool
   let title,createdAt, content: String
+  let user: User
 }
 struct CommunityInfoDetailResponse: Codable {
   let statusCode: Int
@@ -146,3 +148,34 @@ struct CommunityJoiner: Codable {
   let createdAt, status: String
   let user : User
 }
+struct CommunityVote: Codable {
+  var communityNoticeId: Int
+    var title: String
+    var endDate: String
+    var overlap: Bool
+    var choices : [Choice]
+}
+struct Choice: Codable {
+    var content: String
+}
+struct CommunityVoteResponse: Codable {
+  let statusCode: Int
+  let message: String
+  let list: [CommunityVoteList]
+}
+struct CommunityVoteList: Codable {
+    var id: Int
+    var communityNoticeId: Int
+    var title: String
+    var endDate: String
+    var overlap: Bool
+    var choice : [choice]
+}
+
+struct choice: Codable {
+    var id: Int
+    var count: Int
+    var content: String
+    var isCheck: Bool
+}
+

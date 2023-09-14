@@ -57,39 +57,41 @@ enum UsedCategory: String, Codable {
   
   func onRegistImage() -> UIImage {
     switch self {
-    case .전체:
-      return UIImage(named: "usedCategoryRegistOn1") ?? UIImage()
     case .육아:
-      return UIImage(named: "usedCategoryRegistOn2") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOn1") ?? UIImage()
     case .골프:
-      return UIImage(named: "usedCategoryRegistOn3") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOn2") ?? UIImage()
     case .서적:
-      return UIImage(named: "usedCategoryRegistOn4") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOn3") ?? UIImage()
     case .가전:
-      return UIImage(named: "usedCategoryRegistOn5") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOn4") ?? UIImage()
     case .IT:
+      return UIImage(named: "usedCategoryRegistOn5") ?? UIImage()
+    case .소형가전:
       return UIImage(named: "usedCategoryRegistOn6") ?? UIImage()
     case .소형가전:
       return UIImage(named: "usedCategoryRegistOn7") ?? UIImage()
+    default:
+        return UIImage(named: "usedCategoryOn1") ?? UIImage()
     }
   }
   
   func offRegistImage() -> UIImage {
     switch self {
-    case .전체:
-      return UIImage(named: "usedCategoryRegistOff1") ?? UIImage()
     case .육아:
-      return UIImage(named: "usedCategoryRegistOff2") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOff1") ?? UIImage()
     case .골프:
-      return UIImage(named: "usedCategoryRegistOff3") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOff2") ?? UIImage()
     case .서적:
-      return UIImage(named: "usedCategoryRegistOff4") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOff3") ?? UIImage()
     case .가전:
-      return UIImage(named: "usedCategoryRegistOff5") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOff4") ?? UIImage()
     case .IT:
-      return UIImage(named: "usedCategoryRegistOff6") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOff5") ?? UIImage()
     case .소형가전:
-      return UIImage(named: "usedCategoryRegistOff7") ?? UIImage()
+      return UIImage(named: "usedCategoryRegistOff6") ?? UIImage()
+    default:
+        return UIImage(named: "usedCategoryOff1") ?? UIImage()
     }
   }
 }

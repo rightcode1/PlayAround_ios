@@ -26,12 +26,16 @@ class SearchFoodAndUsedVC: BaseViewController, ViewControllerFromStoryboard, UIT
   
   var foodList: [FoodListData] = []
   var usedList: [UsedListData] = []
+  var searchText : String?
   
   var hashtagList: [HashtagListData] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    if searchText != nil{
+      searchTextField.text = String(searchText!.dropFirst())
+      search()
+    }
     setTextField()
     setTableViews()
     setCollectionViews()
@@ -136,8 +140,10 @@ class SearchFoodAndUsedVC: BaseViewController, ViewControllerFromStoryboard, UIT
   
   func appendSearchKeywordHistory() {
     var keywordList: [String] = DataHelperTool.searchKeywordHistoryList ?? []
-    if keywordList.count > 0 {
-      if (keywordList[0] != self.searchTextField.text!) {
+    if keywordList.count >= 0 {
+        if keywordList.isEmpty{
+        keywordList.append(self.searchTextField.text!)
+        }else if (keywordList.first != self.searchTextField.text!) {
         keywordList.insert(self.searchTextField.text!, at: 0)
       }
     }

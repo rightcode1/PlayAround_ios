@@ -11,6 +11,7 @@ import SwiftUI
 
 protocol tapCommentProtocol{
   func tapComment(commentId: Int?, userName: String)
+    func tapDelete(commentId: Int,index: Int)
 }
 
 class CommentCell:UITableViewCell{
@@ -19,9 +20,12 @@ class CommentCell:UITableViewCell{
   @IBOutlet weak var nameLabel: UILabel!
   @IBOutlet weak var contentLabel: UILabel!
   @IBOutlet weak var dateLabel: UILabel!
-  
+    @IBOutlet weak var deleteButton: UIButton!
+    
   var data: Comment?
   var delegate: tapCommentProtocol?
+    var index: Int?
+    var ismine: Bool = false
   
   func initComment(_ data: Comment){
     self.data = data
@@ -33,6 +37,7 @@ class CommentCell:UITableViewCell{
     nameLabel.text = data.user.name
     contentLabel.text = data.content
     dateLabel.text = data.createdAt
+    deleteButton.isHidden = !ismine
   }
   func usedLevelImage(level: Int) -> UIImage {
     return UIImage(named: "usedLevel\(level)") ?? UIImage()
@@ -40,6 +45,9 @@ class CommentCell:UITableViewCell{
   @IBAction func tapComment(_ sender: Any) {
     delegate?.tapComment(commentId: data?.id,userName: data?.user.name ?? "")
   }
-  
+    @IBAction func tapDelete(_ sender: Any) {
+        delegate?.tapDelete(commentId: data!.id,index: self.index ?? 0)
+    }
+    
 }
 

@@ -67,9 +67,11 @@ struct NoticeListResponse: Codable {
   let list: [NoticeListData]
 }
 
+
 // MARK: - NoticeListData
 struct NoticeListData: Codable {
   let id: Int
   let title, content, createdAt: String
-  let viewCount: Int
+    var isContent :Bool? = true
+//  let viewCount: Int
 }

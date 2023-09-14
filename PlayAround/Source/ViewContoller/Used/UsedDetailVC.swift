@@ -8,11 +8,17 @@
 import UIKit
 import RxSwift
 import IQKeyboardManagerSwift
+import KakaoSDKShare
+import KakaoSDKTemplate
+import KakaoSDKCommon
+import KakaoSDKAuth
+import KakaoSDKUser
 
 class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var wishBarButtonItem: UIBarButtonItem!
   @IBOutlet weak var menuBarButtonItem: UIBarButtonItem!
   
+  @IBOutlet weak var hashTagCollectionView: UICollectionView!
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var thumbnailCollectionView: UICollectionView!
   @IBOutlet weak var thumbnailCountLabel: UILabel!
@@ -34,9 +40,9 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var dislikeButton: UIImageView!
   @IBOutlet weak var likeCountLabel: UILabel!
   @IBOutlet weak var disLikeCountLabel: UILabel!
-  
+    @IBOutlet weak var soldOutView: UIView!
+    
   @IBOutlet weak var usedContentLabel: UILabel!
-  @IBOutlet weak var hashtagLabel: UILabel!
   
   @IBOutlet weak var userNameLabel2: UILabel!
   @IBOutlet weak var anotherUsedView: UIStackView!
@@ -62,6 +68,7 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var registCommentButton2: UIButton!
   
   @IBOutlet weak var chatButton: UIButton!
+  var hashTagList: [String] = []
   
   var usedId: Int = -1
   
@@ -78,11 +85,9 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
   var isRequest = false
   
   let isWish = BehaviorSubject<Bool>(value: false)
-  
-  let isLike = BehaviorSubject<Bool?>(value: nil)
-  let likeCount = BehaviorSubject<Int>(value: 0)
-  let dislikeCount = BehaviorSubject<Int>(value: 0)
-  
+    
+    var status: Bool?
+    var detaildata : UsedDetailData?
   var anotherUsedList: [UsedListData] = []
   
   var replyCommentId: Int?
@@ -235,6 +240,7 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .map(UsedDetailResponse.self)
       .subscribe(onSuccess: { value in
         guard let data = value.data else { return }
+          self.detaildata = value.data
         self.navigationItem.title = data.category.rawValue
         
         self.thumbnailList = data.images
@@ -250,13 +256,18 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.isWish.onNext(data.isWish)
         self.titleLabel.text = data.name
         self.priceLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
+          self.soldOutView.isHidden = !data.statusSale
+          if data.statusSale{
+              self.chatButton.backgroundColor = .systemGray3
+              self.chatButton.setTitle("판매완료", for: .normal)
+          }
         
         let userData = data.user
         self.usedUserId = userData.id
         if userData.thumbnail != nil {
           self.userThumbnailImageView.kf.setImage(with: URL(string: userData.thumbnail ?? ""))
         } else {
-          self.userThumbnailImageView.image = UIImage(named: "defaultProfileImage")
+          self.userThumbnailImageView.image = UIImage(named: "defaultBoardImage")
         }
         self.userUsedLevelImageView.image = self.usedLevelImage(level: userData.usedLevel ?? 1)
         self.userNameLabel.text = userData.name
@@ -268,20 +279,22 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         } else {
           self.dateLabel.text = data.createdAt
         }
-        
+      
         self.wishCountLabel.text = "\(data.wishCount)"
         self.viewCountLabel.text = "조회 \(data.viewCount)"
         self.isFollow.onNext(userData.isFollowing)
         
         self.isMine = data.userId == DataHelperTool.userAppId ?? 0
-        
+        self.userNameLabel2.text = userData.name
+
         self.usedContentLabel.text = data.content
-        let hashTagList = data.hashtag.map({ "#\($0)" })
-        self.hashtagLabel.text = hashTagList.joined(separator: " ")
+        self.hashTagList = data.hashtag.map({ "#\($0)" })
+        self.hashTagCollectionView.reloadData()
         
-        self.isLike.onNext(data.isLike)
-        self.likeCount.onNext(data.likeCount)
-        self.dislikeCount.onNext(data.dislikeCount)
+        self.status = data.isLike
+          self.likeButtonState(state: self.status)
+          self.likeCountLabel.text = "\(data.likeCount)"
+          self.disLikeCountLabel.text = "\(data.dislikeCount)"
         
         self.initCommentList()
         
@@ -351,7 +364,15 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
-        self.initUsedDetail()
+          self.status = isLike
+          if self.status == true{
+              self.likeCountLabel.text = "\((Int(self.likeCountLabel.text ?? "0") ?? 0) + 1)"
+          }else if self.status == false{
+              self.disLikeCountLabel.text = "\((Int(self.disLikeCountLabel.text ?? "0") ?? 0) + 1)"
+          }else{
+              
+          }
+          self.likeButtonState(state: isLike)
       }, onError: { error in
       })
       .disposed(by: disposeBag)
@@ -362,11 +383,59 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
       .subscribe(onSuccess: { value in
-        self.initUsedDetail()
+          if self.status == true{
+              self.likeCountLabel.text = "\((Int(self.likeCountLabel.text ?? "0") ?? 0) - 1)"
+          }else if self.status == false{
+              self.disLikeCountLabel.text = "\((Int(self.disLikeCountLabel.text ?? "0") ?? 0) - 1)"
+          }else{
+              
+          }
+          self.status = nil
+          self.likeButtonState(state: nil)
       }, onError: { error in
       })
       .disposed(by: disposeBag)
   }
+    func removeAndRegistLike(isLike: Bool) {
+        APIProvider.shared.usedAPI.rx.request(.likeRemove(id: usedId))
+            .filterSuccessfulStatusCodes()
+            .map(DefaultResponse.self)
+            .subscribe(onSuccess: { value in
+                let param = RegistUsedLikeRequest(isLike: isLike, usedId: self.usedId)
+                APIProvider.shared.usedAPI.rx.request(.likeRegister(param: param))
+                    .filterSuccessfulStatusCodes()
+                    .map(DefaultResponse.self)
+                    .subscribe(onSuccess: { value in
+                        self.status = isLike
+                        if self.status == true{
+                            self.likeCountLabel.text = "\((Int(self.likeCountLabel.text ?? "0") ?? 0) + 1)"
+                            self.disLikeCountLabel.text = "\((Int(self.disLikeCountLabel.text ?? "0") ?? 0) - 1)"
+                        }else{
+                            self.disLikeCountLabel.text = "\((Int(self.disLikeCountLabel.text ?? "0") ?? 0) + 1)"
+                            self.likeCountLabel.text = "\((Int(self.likeCountLabel.text ?? "0") ?? 0) - 1)"
+                        }
+                        self.likeButtonState(state: isLike)
+                    }, onError: { error in
+                    })
+                    .disposed(by: self.disposeBag)
+            }, onError: { error in
+            })
+            .disposed(by: disposeBag)
+    }
+    func likeButtonState(state: Bool?){
+        if state == nil{
+            self.likeButton.image = UIImage(named: "likeoff")
+            self.dislikeButton.image = UIImage(named: "dislikeoff")
+            
+        }else if state == true{
+            self.dislikeButton.image = UIImage(named: "dislikeoff")
+            self.likeButton.image = UIImage(named: "like")
+        }else if state == false{
+            self.likeButton.image = UIImage(named: "likeoff")
+            self.dislikeButton.image = UIImage(named: "dislike")
+        }
+        
+    }
   
   func registFollow() {
     let param = RegistFollowRequest(userId: usedUserId)
@@ -464,28 +533,32 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.present(vc, animated: true)
       })
       .disposed(by: disposeBag)
-    
-    likeButton.rx.tapGesture().when(.recognized)
-      .bind(onNext: { [weak self] _ in
-        guard let self = self else { return }
-        if try! self.isLike.value() != nil {
-          self.removeLike()
-        } else {
-          self.registLike(isLike: true)
-        }
-      })
-      .disposed(by: disposeBag)
-    
-    dislikeButton.rx.tapGesture().when(.recognized)
-      .bind(onNext: { [weak self] _ in
-        guard let self = self else { return }
-        if try! self.isLike.value() != nil {
-          self.removeLike()
-        } else {
-          self.registLike(isLike: false)
-        }
-      })
-      .disposed(by: disposeBag)
+      likeButton.rx.tapGesture().when(.recognized)
+          .bind(onNext: { [weak self] _ in
+              guard let self = self else { return }
+              
+              if self.status == nil{
+                  self.registLike(isLike: true)
+              }else if self.status == false{
+                  self.removeAndRegistLike(isLike: true)
+              }else{
+                  self.removeLike()
+              }
+              
+          }).disposed(by: disposeBag)
+      
+      dislikeButton.rx.tapGesture().when(.recognized)
+          .bind(onNext: { [weak self] _ in
+              guard let self = self else { return }
+              if self.status == nil{
+                  self.registLike(isLike: false)
+              }else if self.status == true{
+                  self.removeAndRegistLike(isLike: false)
+              }else{
+                  self.removeLike()
+              }
+              
+          }).disposed(by: disposeBag)
     
     cancelReplyButton.rx.tap
       .bind(onNext: { [weak self] in
@@ -519,24 +592,25 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
     chatButton.rx.tap
       .bind(onNext: { [weak self] in
         guard let self = self else { return }
-        self.startChat()
+          if self.chatButton.currentTitle != "판매완료"{
+              self.startChat()
+          }
       })
       .disposed(by: disposeBag)
   }
   
   func bindOutput() {
-    isLike
-      .bind(onNext: { [weak self] isLike in
-        guard let self = self else { return }
-        if let bool = isLike {
-          self.likeButton.image = bool ? UIImage(named: "like") : UIImage(named: "likeoff")
-          self.dislikeButton.image = !bool ? UIImage(named: "dislike") : UIImage(named: "dislikeoff")
-        } else {
-          self.likeButton.image = UIImage(named: "likeoff")
-          self.dislikeButton.image = UIImage(named: "dislikeoff")
-        }
-      })
-      .disposed(by: disposeBag)
+//    isLike
+//      .bind(onNext: { [weak self] isLike in
+//        guard let self = self else { return }
+//        if let bool = isLike {
+//
+//        } else {
+//          self.likeButton.image = UIImage(named: "likeoff")
+//          self.dislikeButton.image = UIImage(named: "dislikeoff")
+//        }
+//      })
+//      .disposed(by: disposeBag)
     
     isWish
       .bind(onNext: { [weak self] isWish in
@@ -556,17 +630,17 @@ class UsedDetailVC: BaseViewController, ViewControllerFromStoryboard {
       })
       .disposed(by: disposeBag)
     
-    likeCount
-      .bind(onNext: { [weak self] count in
-        guard let self = self else { return }
-        self.likeCountLabel.text = "\(count)"
-      }).disposed(by: disposeBag)
-    
-    dislikeCount
-      .bind(onNext: { [weak self] count in
-        guard let self = self else { return }
-        self.disLikeCountLabel.text = "\(count)"
-      }).disposed(by: disposeBag)
+//    likeCount
+//      .bind(onNext: { [weak self] count in
+//        guard let self = self else { return }
+//        self.likeCountLabel.text = "\(count)"
+//      }).disposed(by: disposeBag)
+//
+//    dislikeCount
+//      .bind(onNext: { [weak self] count in
+//        guard let self = self else { return }
+//        self.disLikeCountLabel.text = "\(count)"
+//      }).disposed(by: disposeBag)
   }
   
 }
@@ -603,7 +677,43 @@ extension UsedDetailVC: CheckCrimeHistoryDelegate {
 
 extension UsedDetailVC: FoodDetailMenuDelegate {
   func shareFood() {
-    
+      var image = ""
+      if detaildata?.images.count != 0{
+          image = detaildata?.images[0].name ?? ""
+      }
+            let feedTemplateJsonStringData =
+            """
+            {
+              "object_type": "feed",
+              "content": {
+                "title": "\(detaildata?.name ?? "")",
+                "description": "\(detaildata?.hashtag.map({ "#\($0)" }).joined(separator: " ") ?? "")",
+                "image_url": "\(image)",
+                "link": {
+                  "mobile_web_url": "https://developers.kakao.com",
+                  "web_url": "https://developers.kakao.com"
+                }
+              },
+              "buttons": [
+                {
+                  "title": "앱으로 보기",
+                  "link": {
+                    "android_execution_params": "boardId=\(detaildata?.id ?? 0)",
+                    "ios_execution_params": "boardId=\(detaildata?.id ?? 0)"
+                  }
+                }
+              ]
+            }
+            """.data(using: .utf8)!
+            guard let templatable = try? SdkJSONDecoder.custom.decode(FeedTemplate.self, from: feedTemplateJsonStringData) else { return }
+            if ShareApi.isKakaoTalkSharingAvailable() {
+              ShareApi.shared.shareDefault(templatable: templatable) { sharingResult, error in
+                if let sharingResult = sharingResult {
+                    print(sharingResult.url)
+                  UIApplication.shared.open(sharingResult.url, options: [:], completionHandler: nil)
+                }
+              }
+            }
   }
   
   func updateFood() {
@@ -611,12 +721,38 @@ extension UsedDetailVC: FoodDetailMenuDelegate {
     vc.usedId = usedId
     self.navigationController?.pushViewController(vc, animated: true)
   }
+    
   
   func updateFoodStatus() {
-    
+      let param = UpdateUsedRequest(
+        statusSale: true
+      )
+      
+      APIProvider.shared.usedAPI.rx.request(.complete(id: usedId, param: param))
+        .filterSuccessfulStatusCodes()
+        .subscribe(onSuccess: { response in
+            self.callOkActionMSGDialog(message: "판매 완료되었습니다.") {
+              self.backPress()
+            }
+          
+        }, onError: { error in
+          self.dismissHUD()
+          self.callMSGDialog(message: "오류가 발생하였습니다")
+        })
+        .disposed(by: disposeBag)
   }
   
   func removeFood() {
+      callYesNoMSGDialog(message: "삭제하시겠습니까?") {
+          APIProvider.shared.usedAPI.rx.request(.remove(id: self.usedId))
+            .filterSuccessfulStatusCodes()
+            .map(DefaultResponse.self)
+            .subscribe(onSuccess: { value in
+                self.backPress()
+            }, onError: { error in
+            })
+            .disposed(by: self.disposeBag)
+      }
     
   }
   
@@ -629,8 +765,18 @@ extension UsedDetailVC: FoodDetailMenuDelegate {
 }
 
 extension UsedDetailVC: FoodReportDelegate {
-  func finishFoodReport() {
-    showToast(message: "신고가 완료되었습니다.", yPosition: APP_HEIGHT() / 2)
+    func finishFoodReport(text: String,foodId:Int?, usedId:Int?) {
+    let param = RegistReportRequest(content: text, foodId: foodId, usedId: usedId)
+    APIProvider.shared.reportAPI.rx.request(.register(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+          self.callOkActionMSGDialog(message: "신고 완료되었습니다.") {
+            self.backPress()
+          }
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
   }
 }
 
@@ -647,6 +793,8 @@ extension UsedDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     if collectionView == thumbnailCollectionView {
       return thumbnailList.count
+    }else if collectionView == hashTagCollectionView{
+      return hashTagList.count
     } else {
       return anotherUsedList.count
     }
@@ -662,6 +810,14 @@ extension UsedDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
       
       imageView.kf.setImage(with: URL(string: dict.name))
       return cell
+    }else if collectionView == hashTagCollectionView{
+      let cell = hashTagCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+      let dict = hashTagList[indexPath.row]
+      guard let hashTagLabel = cell.viewWithTag(1) as? UILabel else {
+        return cell
+      }
+      hashTagLabel.text = dict
+      return cell
     } else {
       let cell = anotherUsedListCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FoodListCell
       let dict = anotherUsedList[indexPath.row]
@@ -673,8 +829,11 @@ extension UsedDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if collectionView == thumbnailCollectionView {
       showImageList(imageList: thumbnailUIImageList, index: indexPath.row)
-    } else {
-      
+    } else if collectionView == hashTagCollectionView {
+      let vc = SearchFoodAndUsedVC.viewController()
+      vc.searchText = hashTagList[indexPath.row]
+      vc.selectedDiff = .used
+      self.navigationController?.pushViewController(vc, animated: true)
     }
   }
   

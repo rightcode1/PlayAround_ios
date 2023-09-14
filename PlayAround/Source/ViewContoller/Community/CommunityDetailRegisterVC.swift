@@ -10,11 +10,16 @@ import UIKit
 import Photos
 import DKImagePickerController
 
-class CommunityDetailRegisterVC:BaseViewController{
+class CommunityDetailRegisterVC:BaseViewController, tapRegister{
+    func vote(list: [Choices], endDate: String, title: String, overlap: Bool) {
+        voteData = CommunityVote(communityNoticeId: 0, title: title, endDate: endDate, overlap: overlap, choices: list.map{Choice.init(content: $0.content)})
+    }
+    
   @IBOutlet weak var uploadImageCollectionView: UICollectionView!
   @IBOutlet weak var titleTextField: UITextField!
   @IBOutlet weak var contentTextVIew: UITextView!
-  @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var contentPlaceHolder: UILabel!
+    @IBOutlet weak var registerButton: UIButton!
   
   var communityId: Int = 0
   var diff: String = ""
@@ -24,6 +29,7 @@ class CommunityDetailRegisterVC:BaseViewController{
       uploadImageCollectionView.reloadData()
     }
   }
+    var voteData: CommunityVote?
   var detailImagesCount: Int?
   var removeImageIdList: [Int] = []
   
@@ -71,8 +77,7 @@ class CommunityDetailRegisterVC:BaseViewController{
       .filterSuccessfulStatusCodes()
       .map(DefaultIDResponse.self)
       .subscribe(onSuccess: { value in
-        let communityId = value.data?.id ?? 0
-        self.uploadIamgeList(communityId: communityId, success: {
+        self.uploadBoardIamgeList(communityId: value.data?.id ?? 0, success: {
           self.dismissHUD()
           self.callOkActionMSGDialog(message: "등록되었습니다") {
             self.backPress()
@@ -93,13 +98,16 @@ class CommunityDetailRegisterVC:BaseViewController{
       .filterSuccessfulStatusCodes()
       .map(DefaultIDResponse.self)
       .subscribe(onSuccess: { value in
-        let communityId = value.data?.id ?? 0
-        self.uploadIamgeList(communityId: communityId, success: {
-          self.dismissHUD()
-          self.callOkActionMSGDialog(message: "등록되었습니다") {
-            self.backPress()
+          if self.voteData != nil{
+              self.initNoticeVoteRegister(communityId: value.data?.id ?? 0)
+          }else{
+              self.uploadIamgeList(communityId: value.data?.id ?? 0, success: {
+              self.dismissHUD()
+              self.callOkActionMSGDialog(message: "등록되었습니다") {
+                self.backPress()
+              }
+            })
           }
-        })
         self.dismissHUD()
       }, onError: { error in
         self.callOkActionMSGDialog(message: "권한이 없습니다") {
@@ -109,12 +117,36 @@ class CommunityDetailRegisterVC:BaseViewController{
       })
       .disposed(by: disposeBag)
   }
+    func initNoticeVoteRegister(communityId:Int) {
+      self.showHUD()
+        voteData?.communityNoticeId = communityId
+        APIProvider.shared.communityAPI.rx.request(.RegistCommunityNoticeVote(param: voteData!))
+        .filterSuccessfulStatusCodes()
+        .map(DefaultIDResponse.self)
+        .subscribe(onSuccess: { value in
+            self.uploadIamgeList(communityId: value.data?.id ?? 0, success: {
+            self.dismissHUD()
+            self.callOkActionMSGDialog(message: "등록되었습니다") {
+              self.backPress()
+            }
+          })
+            
+          self.dismissHUD()
+        }, onError: { error in
+          self.callOkActionMSGDialog(message: "권한이 없습니다") {
+            
+          }
+          self.dismissHUD()
+        })
+        .disposed(by: disposeBag)
+    }
+    
   
   func uploadIamgeList(communityId: Int, success: @escaping () -> Void) {
     if uploadImages.isEmpty {
       success()
     } else {
-      APIProvider.shared.communityAPI.rx.request(.imageRegister(communityId: communityId, imageList: uploadImages.map({ $0 })))
+      APIProvider.shared.communityAPI.rx.request(.imageNoticeRegister(communityId: communityId, imageList: uploadImages.map({ $0 })))
         .filterSuccessfulStatusCodes()
         .subscribe(onSuccess: { response in
           success()
@@ -124,6 +156,20 @@ class CommunityDetailRegisterVC:BaseViewController{
         .disposed(by: disposeBag)
     }
   }
+    func uploadBoardIamgeList(communityId: Int, success: @escaping () -> Void) {
+      if uploadImages.isEmpty {
+        success()
+      } else {
+        APIProvider.shared.communityAPI.rx.request(.imageBoardRegister(communityId: communityId, imageList: uploadImages.map({ $0 })))
+          .filterSuccessfulStatusCodes()
+          .subscribe(onSuccess: { response in
+            success()
+          }, onError: { error in
+            success()
+          })
+          .disposed(by: disposeBag)
+      }
+    }
   
   func showImagePicker() {
     if self.exportManually {
@@ -220,10 +266,16 @@ class CommunityDetailRegisterVC:BaseViewController{
   }
   
   @IBAction func tapVote(_ sender: Any) {
-    let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityVote") as! CommunityVote
+    let vc = UIStoryboard(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityVoteVC") as! CommunityVoteVC
+      vc.delegate = self
     self.navigationController?.pushViewController(vc, animated: true)
   }
   func initrx(){
+    contentTextVIew.rx.text.orEmpty
+        .bind(onNext: { [weak self] text in
+          self?.contentPlaceHolder.isHidden = !text.isEmpty
+        })
+        .disposed(by: disposeBag)
     registerButton.rx.tapGesture().when(.recognized)
       .bind(onNext: { [weak self] _ in
         guard let self = self else { return }

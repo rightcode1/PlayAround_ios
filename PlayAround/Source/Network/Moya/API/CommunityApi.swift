@@ -17,17 +17,33 @@ enum CommunityApi {
   case CommunityJoinerList(param: JoinCommunity)
   case CommunityJoinerUpdate(id:Int ,param: CommunityJoinerUpdateRequest)
   case CommuntyRegister(param: RegistCommunityRegister)
+    case CommuntyUpdate(id:Int,param: RegistCommunityRegister)
   
   
   case CommuntyList(param: categoryListRequest)
-  case CommuntyDetail(id: Int)
+    case CommuntyDetail(param: communityDetailRequest)
   //  case CommuntyRegister(param: )
   
   case CommuntyNotice(param: ComunityNoticeRequest)
   case CommuntyBoard(param: ComunityNoticeRequest)
   
+  case CommuntyLike(param: ComunityLikeRequest)
+    case CommuntyDisLike(id: Int)
+    
+    
+    case CommuntyInfoLike(param: ComunityInfoLikeRequest)
+      case CommuntyInfoDisLike(id: Int)
+    
+    case CommunityBoardDown(param: ComunityBoardDownRequest)
+      case CommunityBoardDownOff(id: Int)
+    
+    case CommunityNoticeDown(param: ComunityNoticeDownRequest)
+      case CommunityNoticeDownOff(id: Int)
+    
+    
   case CommuntyBoardDetail(id: Int)
   case CommuntyNoticeDetail(id: Int)
+    case CommuntyNoticeVoteDetail(id: Int)
   
   case CommuntyBoardComment(id: Int)
   case CommuntyNoticeComment(id: Int)
@@ -37,8 +53,13 @@ enum CommunityApi {
   
   case RegistCommunityBoard(param: RegistCommunityBoard)
   case RegistCommunityNotice(param: RegistCommunityBoard)
+    case RegistCommunityNoticeVote(param: CommunityVote)
   
   case imageRegister(communityId: Int, imageList: [UIImage])
+    case imageNoticeRegister(communityId: Int, imageList: [UIImage])
+    case imageBoardRegister(communityId: Int, imageList: [UIImage])
+    case imageRemove(id: [Int])
+    case communityNoticeCommentRemove(id: Int)
   
   
 }
@@ -55,6 +76,7 @@ extension CommunityApi: TargetType {
     case .CommunityJoinerList : return "/v1/communityJoiner/list"
     case .CommunityJoinerUpdate : return "/v1/communityJoiner/update"
     case .CommuntyRegister : return "/v1/community/register"
+    case .CommuntyUpdate : return "/v1/community/update"
     case .CommuntyList : return "/v1/community/list"
     case .CommuntyDetail : return "/v1/community/detail"
     case .CommuntyNotice : return "/v1/communityNotice/list"
@@ -67,7 +89,21 @@ extension CommunityApi: TargetType {
     case .BoardCommentRegister : return "/v1/communityBoardComment/register"
     case .RegistCommunityBoard : return "/v1/communityBoard/register"
     case .RegistCommunityNotice : return "/v1/communityNotice/register"
+    case .CommuntyNoticeVoteDetail : return "/v1/vote/list"
+    case .RegistCommunityNoticeVote : return "/v1/vote/register"
     case .imageRegister : return "/v1/communityImage/register"
+    case .imageNoticeRegister : return "/v1/communityNoticeImage/register"
+    case .imageBoardRegister : return "/v1/communityBoardImage/register"
+    case .imageRemove : return "/v1/communityImage/remove"
+    case .CommuntyLike : return "/v1/communityLike/register"
+    case .CommuntyDisLike : return "/v1/communityLike/remove"
+    case .CommuntyInfoLike : return "/v1/communityNoticeLike/register"
+    case .CommuntyInfoDisLike : return "/v1/communityNoticeLike/remove"
+    case .CommunityBoardDown : return "/v1/communityBoardDown/register"
+    case .CommunityBoardDownOff : return "/v1/communityBoardDown/remove"
+    case .CommunityNoticeDown : return "/v1/communityNoticeDown/register"
+    case .CommunityNoticeDownOff : return "/v1/communityNoticeDown/remove"
+    case .communityNoticeCommentRemove : return "/v1/communityNoticeComment/remove"
     }
     
   }
@@ -82,6 +118,7 @@ extension CommunityApi: TargetType {
         .CommuntyNoticeDetail,
         .CommuntyBoardComment,
         .CommuntyNoticeComment,
+        .CommuntyNoticeVoteDetail,
         .CommuntyBoard:
       return .get
     case .CommuntyJoin,
@@ -90,10 +127,25 @@ extension CommunityApi: TargetType {
         .RegistCommunityBoard,
         .imageRegister,
         .CommuntyRegister,
+        .CommuntyLike,
+        .CommuntyInfoLike,
+        .CommunityBoardDown,
+        .CommunityNoticeDown,
+        .imageNoticeRegister,
+        .RegistCommunityNoticeVote,
+        .imageBoardRegister,
         .RegistCommunityNotice:
       return .post
-    case .CommunityJoinerUpdate:
+    case .CommunityJoinerUpdate,
+            .CommuntyUpdate:
       return .put
+    case .CommuntyDisLike,
+            .imageRemove,
+            .CommunityBoardDownOff,
+            .CommunityNoticeDownOff,
+            .communityNoticeCommentRemove,
+            .CommuntyInfoDisLike:
+      return .delete
     }
   }
   
@@ -102,7 +154,12 @@ extension CommunityApi: TargetType {
   }
   var task: Task {
     switch self {
+    case .CommuntyNoticeVoteDetail(let id):
+        return .requestParameters(parameters: ["communityNoticeId": id], encoding: URLEncoding.queryString)
       
+    case .RegistCommunityNoticeVote(let param):
+        return .requestJSONEncodable(param)
+        
     case .CommuntyRegister(let param) :
       return .requestJSONEncodable(param)
       
@@ -114,10 +171,39 @@ extension CommunityApi: TargetType {
       
     case .CommunityJoinerUpdate(let id, let param) :
       return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
-      
-      
-    case .CommuntyDetail(let id) :
+        
+    case .CommuntyUpdate(let id, let param) :
+      return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
+        
+    
+    case .CommuntyLike(let param) :
+        return .requestJSONEncodable(param)
+    case .CommuntyDisLike(let id) :
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+    case .communityNoticeCommentRemove(let id) :
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+        
+    case .CommunityBoardDown(let param) :
+        return .requestJSONEncodable(param)
+    case .CommunityBoardDownOff(let id) :
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+        
+    case .CommuntyInfoLike(let param) :
+        return .requestJSONEncodable(param)
+    case .CommuntyInfoDisLike(let id) :
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+        
+        
+    case .CommunityNoticeDown(let param) :
+        return .requestJSONEncodable(param)
+    case .CommunityNoticeDownOff(let id) :
+      return .requestParameters(parameters: ["communityNoticeId": id], encoding: URLEncoding.queryString)
+        
+    case .imageRemove(let id):
+      return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
+      
+    case .CommuntyDetail(let param) :
+        return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
       
     case .CommuntyList(let param) :
       return .requestParameters(parameters: param.dictionary ?? [:], encoding: URLEncoding.queryString)
@@ -158,7 +244,23 @@ extension CommunityApi: TargetType {
       }
       return .uploadCompositeMultipart(
         multipartList,
-        urlParameters: ["foodId": foodId]
+        urlParameters: ["communityId": foodId]
+      )
+    case .imageNoticeRegister(let foodId, let imageList):
+      let multipartList = imageList.map { image in
+        return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.9)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+      }
+      return .uploadCompositeMultipart(
+        multipartList,
+        urlParameters: ["communityNoticeId": foodId]
+      )
+    case .imageBoardRegister(let foodId, let imageList):
+      let multipartList = imageList.map { image in
+        return MultipartFormData(provider: .data(image.jpegData(compressionQuality: 0.9)!), name: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+      }
+      return .uploadCompositeMultipart(
+        multipartList,
+        urlParameters: ["communityBoardId": foodId]
       )
     }
   }
@@ -187,6 +289,20 @@ struct ComunityNoticeRequest: Codable {
     self.communityId = communityId
   }
   
+}
+struct ComunityLikeRequest: Codable {
+  let isLike: Bool?
+  let communityId: Int?
+}
+struct ComunityInfoLikeRequest: Codable {
+  let isLike: Bool?
+  let communityNoticeId: Int?
+}
+struct ComunityBoardDownRequest: Codable {
+  let communityBoardId: Int?
+}
+struct ComunityNoticeDownRequest: Codable {
+  let communityNoticeId: Int?
 }
 
 struct RegistCommunityBoard: Codable {
@@ -271,6 +387,22 @@ struct categoryListRequest: Codable {
     self.sort = sort
     self.page = page
     self.limit = limit
+  }
+  
+}
+struct communityDetailRequest: Codable {
+  let latitude: String?
+  let longitude: String?
+  let id: Int?
+  
+  init(
+    latitude: String? = nil,
+    longitude: String? = nil,
+    id: Int? = nil
+  ) {
+    self.latitude = latitude
+    self.longitude = longitude
+    self.id = id
   }
   
 }

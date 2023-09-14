@@ -14,8 +14,11 @@ class FindIdVC:BaseViewController{
   
   var certify : Bool = false
   
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = false
+    }
   func smsSend(){
-    let param = SendCodeRequest(tel: phoneTextField.text!, diff: .find)
+      let param = SendCodeRequest(tel: phoneTextField.text!, diff: SendCodeDiff.find.rawValue)
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
@@ -69,6 +72,9 @@ class FindIdVC:BaseViewController{
               self.navigationController?.pushViewController(vc, animated: true)
           }
         }, onError: { error in
+            self.okActionAlert(message: "등록되지 않은 휴대폰번호입니다.") {
+                self.backPress()
+            }
           self.dismissHUD()
         })
         .disposed(by: disposeBag)

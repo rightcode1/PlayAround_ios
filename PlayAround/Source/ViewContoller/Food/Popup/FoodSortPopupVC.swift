@@ -11,8 +11,8 @@ enum FoodSort: String, Codable {
   case 최신순
   case 추천순
   case 인기순
-  case 가격낮은순
-  case 가격높은순
+//  case 가격낮은순
+//  case 가격높은순
 }
 
 protocol FoodSortDelegate {
@@ -64,21 +64,23 @@ class FoodSortPopupVC: BaseViewController, ViewControllerFromStoryboard {
         self.delegate?.setFoodSort(sort: .인기순)
       })
       .disposed(by: disposeBag)
-    
-    cheapButton.rx.tap
-      .bind(onNext: { [weak self] in
-        guard let self = self else { return }
-        self.backPress()
-        self.delegate?.setFoodSort(sort: .가격낮은순)
-      })
-      .disposed(by: disposeBag)
-    
-    expensiveButton.rx.tap
-      .bind(onNext: { [weak self] in
-        guard let self = self else { return }
-        self.backPress()
-        self.delegate?.setFoodSort(sort: .가격높은순)
-      })
-      .disposed(by: disposeBag)
+    cheapButton.isHidden = true
+    expensiveButton.isHidden = true
+//
+//    cheapButton.rx.tap
+//      .bind(onNext: { [weak self] in
+//        guard let self = self else { return }
+//        self.backPress()
+//        self.delegate?.setFoodSort(sort: .가격낮은순)
+//      })
+//      .disposed(by: disposeBag)
+//
+//    expensiveButton.rx.tap
+//      .bind(onNext: { [weak self] in
+//        guard let self = self else { return }
+//        self.backPress()
+//        self.delegate?.setFoodSort(sort: .가격높은순)
+//      })
+//      .disposed(by: disposeBag)
   }
 }

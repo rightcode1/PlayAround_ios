@@ -10,174 +10,241 @@ import UIKit
 import Gifu
 
 class HomeVC: BaseViewController{
+  @IBOutlet weak var mainScrollView: UIScrollView!
+  
   @IBOutlet weak var headerCollectionView: UICollectionView!
   @IBOutlet weak var advertisementCollectionView: UICollectionView!
+  @IBOutlet weak var communityCollectionview: UICollectionView!
+  @IBOutlet weak var foodCollectionview: UICollectionView!
   @IBOutlet weak var productCollectionview: UICollectionView!
-  @IBOutlet weak var mainTableVIew: UITableView!
-  @IBOutlet weak var villageButton: UIButton!
-  @IBOutlet weak var homeSplash: GIFImageView!
   
-  @IBOutlet weak var initAdHeight: NSLayoutConstraint!
+  @IBOutlet weak var communityBackView: UIView!
+  @IBOutlet weak var foodBackView: UIView!
   
-  var headerList: [CommuintyList] = []
-  var communityList: [CommuintyList] = []
-  var adList: [AdvertiseList] = []
-  var usedList : [UsedList] = []
-  var foodList : [FoodListData] = []
+  @IBOutlet weak var communityStackView: UIView!
+  @IBOutlet weak var foodStackView: UIView!
+  
+  @IBOutlet weak var villageButton: UILabel!
+  @IBOutlet weak var CommunityMoreButton: UIButton!
+  @IBOutlet weak var foodMoreButton: UIButton!
+  @IBOutlet weak var homeGifImage: GIFImageView!
+  
+  @IBOutlet weak var communityCollectionHeight: NSLayoutConstraint!
+  @IBOutlet weak var foodCollectionHeight: NSLayoutConstraint!
+  
+  let refreshControl = UIRefreshControl()
+  var usedList : [UsedList] = []{
+    didSet{
+      productCollectionview.reloadData()
+    }
+  }
+  var adList: [AdvertiseList] = []{
+    didSet{
+      if adList.isEmpty{
+        advertisementCollectionView.isHidden = true
+      }else{
+        advertisementCollectionView.isHidden = false
+        advertisementCollectionView.reloadData()
+      }
+    }
+  }
+  var headerList: [CommuintyList] = []{
+    didSet{
+      headerCollectionView.reloadData()
+    }
+  }
+  var communityList: [CommuintyList] = []{
+    didSet{
+      if communityList.isEmpty{
+        communityStackView.isHidden = true
+      }else{
+        communityStackView.isHidden = false
+        communityCollectionHeight.constant = CGFloat(communityList.count * 112)
+        communityCollectionview.reloadData()
+      }
+    }
+  }
+  var foodList : [FoodListData] = []{
+    didSet{
+      if foodList.isEmpty{
+          foodStackView.isHidden = true
+        }else{
+          foodStackView.isHidden = false
+          let height = ((APP_WIDTH() - 40) / 2) / 142 * 100 + 65
+          foodCollectionHeight.constant = height * CGFloat((foodList.count / 2 + (foodList.count % 2)))
+          foodCollectionview.reloadData()
+        }
+    }
+  }
+  var currentIndex: CGFloat = 0
+  
+  override func viewWillAppear(_ animated: Bool) {
+    villageButton.text = DataHelperTool.villageName
+    print("!!")
+    initDelegate()
+    navigationController?.isNavigationBarHidden = true
+    navigationController?.interactivePopGestureRecognizer?.delegate = self
+    
+  }
   
   override func viewDidLoad() {
-    
-    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
-    let flowLayout = UICollectionViewFlowLayout()
-    flowLayout.scrollDirection = .horizontal
-    flowLayout.itemSize = CGSize(width: 358, height: 128.0)
-    flowLayout.minimumLineSpacing = 0
-    headerCollectionView.collectionViewLayout = flowLayout
-    self.homeSplash.animate(withGIFNamed: "home")
-    //    communityListCollectionView.register(UINib(nibName: "TableViewCell", bundle: nil), forCellWithReuseIdentifier: "TableViewCell")
-    
+    rxtap() 
+    shadow(backView: communityBackView)
+    shadow(backView: foodBackView)
   }
-  override func viewWillAppear(_ animated: Bool) {
-    navigationController?.isNavigationBarHidden = true
-    initDelegate()
-  }
-  
   override func viewWillDisappear(_ animated: Bool) {
     navigationController?.isNavigationBarHidden = false
   }
   
+  func shadow(backView: UIView){
+    backView.layer.masksToBounds = false
+    backView.layer.applySketchShadow(color: UIColor(red: 117, green: 117, blue: 117), alpha: 0.16, x: 1.5, y: 1.5, blur: 10, spread: 0)
+  }
+  
   func initDelegate(){
+    refreshControl.endRefreshing()
+    mainScrollView.refreshControl = refreshControl
+    
     headerCollectionView.delegate = self
     advertisementCollectionView.delegate = self
+    communityCollectionview.delegate = self
+    foodCollectionview.delegate = self
     productCollectionview.delegate = self
-    mainTableVIew.delegate = self
     
     headerCollectionView.dataSource = self
     advertisementCollectionView.dataSource = self
+    communityCollectionview.dataSource = self
+    foodCollectionview.dataSource = self
     productCollectionview.dataSource = self
-    mainTableVIew.dataSource = self
     
     headerCollectionView.backgroundColor = .clear
     headerCollectionView.decelerationRate = .fast
     headerCollectionView.isPagingEnabled = false
     
-    initHeaderList()
-    initAdvList()
-    initCommunityList()
-    initFoodList()
-    initUsedList()
-    rxtap()
+    userInfo { value in
+      self.initHeaderList(id: value.data.id)
+    }
+    self.initAdvList()
+    self.initCommunityList()
+    self.initFoodList()
+    self.initUsedList()
   }
   
-  func initHeaderList() {
-    self.showHUD()
-    let param = categoryListRequest(myList: "true",dong: DataHelperTool.villageName)
+  func initHeaderList(id: Int) {
+    let param = categoryListRequest(villageId: DataHelperTool.villageId, userId: id)
     APIProvider.shared.communityAPI.rx.request(.CommuntyList(param:param))
       .filterSuccessfulStatusCodes()
       .map(CommunityResponse.self)
       .subscribe(onSuccess: { value in
         
         if(value.statusCode <= 202){
+          self.headerList.removeAll()
           self.headerList = value.list
-          print("\(self.headerList.count)!!!")
-          self.headerCollectionView.reloadData()
         }
-        self.dismissHUD()
       }, onError: { error in
-        self.dismissHUD()
       })
       .disposed(by: disposeBag)
   }
+  
+  func initAdvList() {
+    APIProvider.shared.authAPI.rx.request(.advertisement(location: "메인배너"))
+      .filterSuccessfulStatusCodes()
+      .map(AdvertiseResponse.self)
+      .subscribe(onSuccess: { value in
+        if(value.statusCode <= 202){
+          self.adList.removeAll()
+          self.adList = value.list
+        }
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func initCommunityList() {
-    self.showHUD()
-    let param = categoryListRequest(page:1,limit:5,dong: DataHelperTool.villageName ,latitude: "\(currentLocation?.0 ?? 0.0)", longitude: "\(currentLocation?.1 ?? 0.0)")
+    let param = categoryListRequest(page:1,limit:4,villageId: DataHelperTool.villageId,latitude: "\(currentLocation?.0 ?? 0.0)" ,longitude: "\(currentLocation?.1 ?? 0.0)", sort: nil)
     APIProvider.shared.communityAPI.rx.request(.CommuntyList(param:param))
       .filterSuccessfulStatusCodes()
       .map(CommunityRowResponse.self)
       .subscribe(onSuccess: { value in
         
         if(value.statusCode <= 202){
+          self.communityList.removeAll()
           self.communityList = value.list.rows
-          print("communityList: !!!")
-          self.mainTableVIew.reloadData()
         }
-        self.dismissHUD()
       }, onError: { error in
-        self.dismissHUD()
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  func initAdvList() {
-    self.showHUD()
-    APIProvider.shared.authAPI.rx.request(.advertisement(location: "메인배너"))
-      .filterSuccessfulStatusCodes()
-      .map(AdvertiseResponse.self)
-      .subscribe(onSuccess: { value in
-        if(value.statusCode <= 202){
-          print("\(self.adList.count)!!!")
-          self.adList = value.list
-          
-          self.initAdHeight.constant = self.adList.isEmpty ? 0 : 128
-          
-          self.mainTableVIew.layoutTableHeaderView()
-          
-          self.advertisementCollectionView.reloadData()
-        }
-        self.dismissHUD()
-      }, onError: { error in
-        self.dismissHUD()
-      })
-      .disposed(by: disposeBag)
-  }
-  
-  func initUsedList() {
-    self.showHUD()
-    let param = UsedListRequest()
-    APIProvider.shared.usedAPI.rx.request(.list(param: param))
-      .filterSuccessfulStatusCodes()
-      .map(UsedResponse.self)
-      .subscribe(onSuccess: { value in
-        if(value.statusCode <= 202){
-          self.usedList = value.list
-          print("\(self.usedList.count)!!!")
-          self.productCollectionview.reloadData()
-        }
-        self.dismissHUD()
-      }, onError: { error in
-        self.dismissHUD()
       })
       .disposed(by: disposeBag)
   }
   
   func initFoodList() {
-    self.showHUD()
-    let param = FoodListRequest(page:1, limit: 4)
+    let param = FoodListRequest(page:1, limit: 4,villageId: DataHelperTool.villageId,sort: nil)
     APIProvider.shared.foodAPI.rx.request(.foodList(param: param))
       .filterSuccessfulStatusCodes()
       .map(FoodRowResponse.self)
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 202){
+          self.foodList.removeAll()
           self.foodList = value.list.rows
-          print("food]List: !!!")
-          self.mainTableVIew.reloadData()
         }
-        self.dismissHUD()
       }, onError: { error in
-        self.dismissHUD()
       })
       .disposed(by: disposeBag)
   }
+  
+  func initUsedList() {
+    let param = UsedListRequest(villageId: DataHelperTool.villageId,sort: nil)
+    APIProvider.shared.usedAPI.rx.request(.list(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(UsedResponse.self)
+      .subscribe(onSuccess: { value in
+        if(value.statusCode <= 202){
+          self.usedList.removeAll()
+          self.usedList = value.list
+        }
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func rxtap(){
     
-    villageButton.rx.tap
-      .bind(onNext: { [weak self] in
+    villageButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
         guard let self = self else { return }
         let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "VillageListVC") as! VillageListVC
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
       })
       .disposed(by: disposeBag)
+    CommunityMoreButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        self.tabBarController?.selectedIndex = 1
+      })
+      .disposed(by: disposeBag)
+    foodMoreButton.rx.tapGesture().when(.recognized)
+      .bind(onNext: { [weak self] _ in
+        guard let self = self else { return }
+        self.tabBarController?.selectedIndex = 2
+      })
+      .disposed(by: disposeBag)
+    
+    refreshControl.rx.controlEvent(.valueChanged)
+        .bind(onNext: { [weak self] _ in
+          guard let self = self else { return }
+            // 아래코드: viewModel에서 발생한다고 가정
+            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1) { [weak self] in
+              self?.userInfo { value in
+                self?.initHeaderList(id: value.data.id)
+              }
+              self?.initAdvList()
+              self?.initCommunityList()
+              self?.initFoodList()
+              self?.initUsedList()
+              self?.refreshControl.endRefreshing()
+//                self?.refreshLoading.accept(true) // viewModel에서 dataSource업데이트 끝난 경우
+            }
+        }).disposed(by: disposeBag)
     
   }
 }
@@ -192,6 +259,10 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
       }
     }else if(collectionView == self.advertisementCollectionView){
       return adList.count
+    }else if(collectionView == self.communityCollectionview){
+      return communityList.count
+    }else if(collectionView == self.foodCollectionview){
+      return foodList.count
     }else {
       return usedList.count
     }
@@ -227,8 +298,8 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         
         cell.emptyView.isHidden = true
         cell.backView.isHidden = false
-//        cell.backView?.borderWidth = 1
-//        cell.backView.borderColor = .lightGray
+        //        cell.backView?.borderWidth = 1
+        //        cell.backView.borderColor = .lightGray
         cell.backView?.layer.applySketchShadow(color: UIColor(red: 117, green: 117, blue: 117), alpha: 0.16, x: 0, y: 1.5, blur: 5, spread: 0)
         cell.backView?.layer.cornerRadius  = 10
         
@@ -239,6 +310,70 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
       let dict = adList[indexPath.row]
       if(dict.thumbnail != nil){
         cell.banner?.kf.setImage(with: URL(string: dict.thumbnail!))
+      }
+      return cell
+    }else if(collectionView == self.communityCollectionview){
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Community", for: indexPath)
+      let dict = communityList[indexPath.row]
+      guard let thumbnail = cell.viewWithTag(1) as? UIImageView,
+            let tiltleLabel = cell.viewWithTag(2) as? UILabel,
+            let contentLabel = cell.viewWithTag(3) as? UILabel,
+            let distanceLabel = cell.viewWithTag(4) as? UILabel,
+            let peopleLabel = cell.viewWithTag(5) as? UILabel,
+            let likeLabel = cell.viewWithTag(6) as? UILabel,
+            let disLikeLabel = cell.viewWithTag(7) as? UILabel,
+            let categoryLabel = cell.viewWithTag(8) as? UILabel else {
+        return cell
+      }
+      //          secretView.isHidden = !data.isSecret
+      if(dict.images.count != 0){
+        thumbnail.kf.setImage(with: URL(string: dict.images[0].name))
+      }else{
+        thumbnail.image = UIImage(named: "defaultBoardImage")
+      }
+      categoryLabel.text = dict.category
+      tiltleLabel.text = dict.name
+      contentLabel.text = dict.content
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+      //          if let createdAtDate = dateFormatter.date(from: dict.createdAt) {
+      //            self.dateLabel.text = createdAtDate.toString(dateFormat: "yyyy-MM-dd")
+      //          } else {
+      //            self.dateLabel.text = dict.createdAt
+      //          }
+      distanceLabel.text = "\(dict.distance)km"
+      peopleLabel.text = "\(dict.people)명"
+      likeLabel.text = "좋아요 \(dict.likeCount)"
+      disLikeLabel.text = "싫어요 \(dict.dislikeCount)"
+      return cell
+    }else if(collectionView == self.foodCollectionview){
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Food", for: indexPath)
+      let dict = foodList[indexPath.row]
+      guard let thumbnail = cell.viewWithTag(1) as? UIImageView,
+            let title = cell.viewWithTag(2) as? UILabel,
+            let price = cell.viewWithTag(3) as? UILabel,
+            let wish = cell.viewWithTag(4) as? UILabel,
+            let like = cell.viewWithTag(5) as? UILabel,
+            let disslike = cell.viewWithTag(6) as? UILabel,
+            let complete = cell.viewWithTag(7) as? UILabel,
+            let discomplete = cell.viewWithTag(8) as? UILabel else {
+        return cell
+      }
+      //          secretView.isHidden = !data.isSecret
+      if(dict.thumbnail != nil){
+        thumbnail.kf.setImage(with: URL(string: dict.thumbnail ?? ""))
+      }else{
+        thumbnail.image = UIImage(named: "noImage")
+      }
+      title.text = dict.name
+      price.text = "\(dict.price.formattedProductPrice() ?? "0")원"
+      wish.text = "\(dict.wishCount)"
+      like.text = "좋아요 \(dict.likeCount)"
+      disslike.text = "싫어요 \(dict.dislikeCount)"
+      if dict.status == .조리완료{
+        discomplete.isHidden = true
+      }else{
+        complete.isHidden = true
       }
       return cell
     }else {
@@ -256,22 +391,54 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if(collectionView == self.headerCollectionView){
       if headerList.count != 0 {
-        let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityDetailVC") as! CommunityDetailVC
+        let vc = CommunityDetailVC.viewController()
         vc.communityId = headerList[indexPath.row].id
         self.navigationController?.pushViewController(vc, animated: true)
       }
+    }else if collectionView == self.advertisementCollectionView{
+      let dict = adList[indexPath.row]
+      if dict.diff == "url" {
+        if let openUrl = URL(string: dict.url!) {
+          UIApplication.shared.open(openUrl, options: [:])
+        }
+      } else {
+        let vc = AdvertisementDetailVC.viewController()
+        vc.images = [Image(id: 0, name: dict.image ?? "")]
+        navigationController?.pushViewController(vc, animated: true)
+      }
+    }else if collectionView == self.communityCollectionview{
+      let dict = communityList[indexPath.row]
+      let vc = UIStoryboard.init(name: "Community", bundle: nil).instantiateViewController(withIdentifier: "CommunityDetailVC") as! CommunityDetailVC
+      vc.communityId = dict.id
+      navigationController?.pushViewController(vc, animated: true)
+    } else if collectionView == self.foodCollectionview{
+      let dict = foodList[indexPath.row]
+      let vc = FoodDetailVC.viewController()
+      vc.foodId = dict.id
+      navigationController?.pushViewController(vc, animated: true)
+    } else {
+      let dict = usedList[indexPath.row]
+      let vc = UsedDetailVC.viewController()
+      vc.usedId = dict.id
+      self.navigationController?.pushViewController(vc, animated: true)
     }
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     if(collectionView == headerCollectionView){
       if headerList.count == 0 || headerList.count == 1{
-        return CGSize(width: APP_WIDTH(), height : 148)
+        return CGSize(width: APP_WIDTH() - 30, height : 148)
       }else{
-        return CGSize(width: 358, height : 148)
+        return CGSize(width: APP_WIDTH() - 60, height : 148)
       }
     }else if(collectionView == advertisementCollectionView){
       return CGSize(width: self.advertisementCollectionView.frame.size.width , height: self.headerCollectionView.frame.height)
+    }else if(collectionView == communityCollectionview){
+      return CGSize(width: (APP_WIDTH() - 50), height: 102)
+    }else if(collectionView == foodCollectionview){
+      let imageHeight = (self.foodCollectionview.frame.width - 30) / 2
+      let height = imageHeight / 142 * 100 + 65
+      return CGSize(width: Int(self.foodCollectionview.frame.width - 30) / 2, height: Int(height))
     }else {
       return CGSize(width: 160, height: self.productCollectionview.frame.height)
     }
@@ -280,91 +447,43 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
   func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
     if(scrollView.isEqual(self.headerCollectionView)){
       guard let layout = self.headerCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-      
-      // CollectionView Item Size
       let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
       
-      // 이동한 x좌표 값과 item의 크기를 비교 후 페이징 값 설정
-      let estimatedIndex = scrollView.contentOffset.x / cellWidthIncludingSpacing
-      let index: Int
+      // targetContentOff을 이용하여 x좌표가 얼마나 이동했는지 확인
+      // 이동한 x좌표 값과 item의 크기를 비교하여 몇 페이징이 될 것인지 값 설정
+      var offset = targetContentOffset.pointee
+      let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
+      var roundedIndex = round(index)
       
-      // 스크롤 방향 체크
-      // item 절반 사이즈 만큼 스크롤로 판단하여 올림, 내림 처리
-      if velocity.x > 0 {
-        index = Int(ceil(estimatedIndex))
-      } else if velocity.x < 0 {
-        index = Int(floor(estimatedIndex))
+      // scrollView, targetContentOffset의 좌표 값으로 스크롤 방향을 알 수 있다.
+      // index를 반올림하여 사용하면 item의 절반 사이즈만큼 스크롤을 해야 페이징이 된다.
+      // 스크로로 방향을 체크하여 올림,내림을 사용하면 좀 더 자연스러운 페이징 효과를 낼 수 있다.
+      if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+        roundedIndex = floor(index)
+      } else if scrollView.contentOffset.x < targetContentOffset.pointee.x {
+        roundedIndex = ceil(index)
       } else {
-        index = Int(round(estimatedIndex))
+        roundedIndex = round(index)
       }
-      // 위 코드를 통해 페이징 될 좌표 값을 targetContentOffset에 대입
-      targetContentOffset.pointee = CGPoint(x: CGFloat(index) * cellWidthIncludingSpacing, y: 0)
-    }
-  }
-}
-extension HomeVC: UITableViewDataSource, UITableViewDelegate {
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return 2
-  }
-  
-  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    let cell = self.mainTableVIew.dequeueReusableCell(withIdentifier: "MainHeaderCell") as! MainHeaderCell
-    if section == 0{
-      cell.initHedaer("커뮤니티")
-    }else{
-      cell.initHedaer("반찬")
-    }
-    return cell
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = self.mainTableVIew.dequeueReusableCell(withIdentifier: "contentCell", for: indexPath) as! HomeContentCell
-    if indexPath.section == 0{
-      cell.initCommunity(communityList)
-      cell.HomeVc = self
-    }else {
-      cell.initFood(foodList)
-      cell.HomeVc = self
-    }
-    return cell
-  }
-  
-  func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-    let cell = self.mainTableVIew.dequeueReusableCell(withIdentifier: "MainFooterCell") as! MainFooterCell
-    cell.initCell()
-    return cell
-  }
-  
-  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    return 79
-  }
-  
-  func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-    return 83
-  }
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 1
-  }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-  
-    }
-  
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    if indexPath.section == 0{
-      return CGFloat(122 * communityList.count)
-    } else {
-      let height = ((APP_WIDTH() - 40) / 2) / 142 * 100 + 87 + 25.2
-      let size : Int = Int(height) * (foodList.count / 2 + (foodList.count % 2))
-      return CGFloat(size)
+      
+      if currentIndex > roundedIndex {
+        currentIndex -= 1
+        roundedIndex = currentIndex
+      } else if currentIndex < roundedIndex {
+        currentIndex += 1
+        roundedIndex = currentIndex
+      }
+      
+      // 위 코드를 통해 페이징 될 좌표값을 targetContentOffset에 대입하면 된다.
+      offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - (roundedIndex + 1) * 20 - scrollView.contentInset.left, y: -scrollView.contentInset.top)
+      targetContentOffset.pointee = offset
     }
   }
 }
 
 extension HomeVC: SelectVillage{
   func select() {
-    villageButton.setTitle(DataHelperTool.villageName, for: .normal)
-    initHeaderList()
+    villageButton.text = DataHelperTool.villageName
   }
 }
 

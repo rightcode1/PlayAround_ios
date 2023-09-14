@@ -23,6 +23,8 @@ class CommunityCollectionViewCell: UICollectionViewCell {
     secretView.isHidden = !data.isSecret
     if(data.images.count != 0){
       self.thumbnailImageVIew.kf.setImage(with: URL(string: data.images[0].name))
+    }else{
+        self.thumbnailImageVIew.image = UIImage(named: "defaultBoardImage")
     }
     self.categoryLabel.text = data.category
     self.tiltleLabel.text = data.name

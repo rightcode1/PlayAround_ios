@@ -38,6 +38,7 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
   @objc func MyTapMethod(sender: UITapGestureRecognizer) {
     self.view.endEditing(true)
   }
+  
   func backTwo() {
     let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
     self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
@@ -47,7 +48,6 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     super.viewDidLoad()
     
     navigationController?.interactivePopGestureRecognizer?.delegate = self
-    
     self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
     self.navigationController?.navigationBar.clipsToBounds = true
     
@@ -80,6 +80,10 @@ class BaseViewController: UIViewController, UIGestureRecognizerDelegate {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
   }
+  func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+          print("Child ViewControllers", navigationController.viewControllers.count)
+          self.navigationController?.interactivePopGestureRecognizer?.isEnabled = navigationController.viewControllers.count > 1
+      }
   
   func userInfo(_ id: Int? = nil, result: @escaping (UserInfoResponse) -> Void) {
     let param = UserInfoRequest(id: id)

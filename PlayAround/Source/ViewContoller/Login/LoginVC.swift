@@ -17,6 +17,7 @@ class LoginVC: BaseViewController{
   @IBOutlet weak var backView: UIView!
   
   override func viewDidLoad() {
+    DataHelper<Any>.clearAll()
     loginSplash.animate(withGIFNamed:"login")
     
 //    backView.layer.applySketchShadow(color: UIColor(red: 117, green: 117, blue: 117), alpha: 0.16, x: 0, y: 1.5, blur: 5, spread: 0)

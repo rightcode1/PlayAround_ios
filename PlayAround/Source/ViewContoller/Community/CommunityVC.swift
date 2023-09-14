@@ -22,7 +22,7 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate, Co
   @IBOutlet weak var writCommunityImageView: UIImageView!
   
   
-  var selectFilter: CommunitySort = .인기순
+  var selectFilter: CommunitySort = .최신순
   var category: CommunityCategory = .전체
   var communityList: [CommuintyList] = []
   
@@ -60,7 +60,7 @@ class CommunityVC: BaseViewController, CommunityCategoryReusableViewDelegate, Co
   func initCommunityList() {
     
     self.showHUD()
-    let param = categoryListRequest(category: category == .전체 ? nil : category, gu:DataHelperTool.villageName ,latitude: "\(currentLocation?.0 ?? 0.0)", longitude: "\(currentLocation?.1 ?? 0.0)" , sort: selectFilter == .최신순 ? nil : selectFilter.rawValue)
+    let param = categoryListRequest(category: category == .전체 ? nil : category,villageId: DataHelperTool.villageId,latitude: "\(currentLocation?.0 ?? 0.0)", longitude: "\(currentLocation?.1 ?? 0.0)" , sort: selectFilter == .최신순 ? nil : selectFilter.rawValue)
     APIProvider.shared.communityAPI.rx.request(.CommuntyList(param: param))
       .filterSuccessfulStatusCodes()
       .map(CommunityResponse.self)

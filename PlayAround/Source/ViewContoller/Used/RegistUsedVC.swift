@@ -34,7 +34,7 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
   
   var usedId: Int?
   
-  let categoryList: [UsedCategory] = [.전체, .육아, .골프, .서적, .가전, .IT, .소형가전]
+  let categoryList: [UsedCategory] = [.육아, .골프, .서적, .가전, .IT, .소형가전]
   var selectedCategory: UsedCategory?
   
   var hashtag: [String] = []
@@ -42,6 +42,7 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
   let pickerController = DKImagePickerController()
   var assets: [DKAsset]?
   var exportManually = false
+    var updateDetail: UsedDetailData?
   
   var uploadImages: [UIImage] = [] {
     didSet {
@@ -55,6 +56,9 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    if usedId != nil{
+        initUsedDetail()
+    }
     setCollectionViews()
     bindInput()
   }
@@ -88,7 +92,7 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
   func setUploadImageCollectionViewLayout() {
     uploadImageCollectionView.dataSource = self
     uploadImageCollectionView.delegate = self
-    
+    priceTextField.delegate = self
     let layout = UICollectionViewFlowLayout()
     layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
     
@@ -165,6 +169,38 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
     
     print("self.assets : \(self.assets?.count ?? 0)")
   }
+    func initUsedDetail() {
+      self.showHUD()
+      APIProvider.shared.usedAPI.rx.request(.detail(id: usedId ?? 0))
+        .filterSuccessfulStatusCodes()
+        .map(UsedDetailResponse.self)
+        .subscribe(onSuccess: { value in
+          guard let data = value.data else { return }
+            for count in 0 ..< (value.data?.images.count ?? 0){
+                let url = URL(string: value.data?.images[count].name ?? "")
+                    if let data = try? Data(contentsOf: url!)
+                    {
+                        let image: UIImage = UIImage(data: data)!
+                        self.uploadImages.append(image)
+                        self.uploadImageCollectionView.reloadData()
+                    }
+            }
+            self.selectedCategory = data.category
+            self.categoryCollectionView.reloadData()
+            self.titleTextField.text = data.name
+            self.contentTextView.text = data.content
+            self.hashtag = data.hashtag
+            self.hashtagTextView.text = self.hashtag.map({ "#\($0)" }).joined(separator: " ")
+            self.hashtagTextViewPlaceHolder.isHidden = true
+            self.priceTextField.text = data.price.formattedProductPrice()
+            self.registButton.setTitle("수정하기", for: .normal)
+          
+          self.dismissHUD()
+        }, onError: { error in
+          self.dismissHUD()
+        })
+        .disposed(by: disposeBag)
+    }
   
   func registFood() {
     guard let selectedCategory = selectedCategory else {
@@ -187,17 +223,12 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
       return
     }
     
-    if hashtag.count <= 0 {
-      showToast(message: "해시태그를 입력해주세요.")
-      return
-    }
-    
     let param = RegistUsedRequest(
       category: selectedCategory,
       name: titleTextField.text!,
       content: contentTextView.text!,
-      price: Int(priceTextField.text!) ?? 0,
-      villageId: 0,
+      price: Int(priceTextField.text?.replacingOccurrences(of: ",", with: "") ?? "0") ?? 0,
+      villageId: DataHelperTool.villageId ?? 0,
       hashtag: hashtag
     )
     
@@ -275,7 +306,11 @@ class RegistUsedVC: BaseViewController, ViewControllerFromStoryboard {
     registButton.rx.tapGesture().when(.recognized)
       .bind(onNext: { [weak self] _ in
         guard let self = self else { return }
-        self.registFood()
+          if self.updateDetail == nil{
+              self.registFood()
+          }else{
+              
+          }
       })
       .disposed(by: disposeBag)
   }
@@ -288,6 +323,49 @@ extension RegistUsedVC: HashtagListVCDelegate {
     hashtagTextView.text = hashtag.map({ "#\($0)" }).joined(separator: " ")
     hashtagTextViewPlaceHolder.isHidden = true
   }
+}
+extension RegistUsedVC: UITextFieldDelegate{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard var text = textField.text else {
+                    return true
+                }
+                
+                text = text.replacingOccurrences(of: ",", with: "")
+                
+                let numberFormatter = NumberFormatter()
+                numberFormatter.numberStyle = .decimal
+                
+                if (string.isEmpty) {
+                    // delete
+                    if text.count > 1 {
+                        guard let price = Int.init("\(text.prefix(text.count - 1))") else {
+                            return true
+                        }
+                        guard let result = numberFormatter.string(from: NSNumber(value:price)) else {
+                            return true
+                        }
+                        
+                        textField.text = "\(result)"
+                    }
+                    else {
+                        textField.text = ""
+                    }
+                }
+                else {
+                    // add
+                    guard let price = Int.init("\(text)\(string)") else {
+                        return true
+                    }
+                    guard let result = numberFormatter.string(from: NSNumber(value:price)) else {
+                        return true
+                    }
+                    
+                    textField.text = "\(result)"
+                }
+                
+                return false
+            }
+            
 }
 
 extension RegistUsedVC: UICollectionViewDelegate, UICollectionViewDataSource {

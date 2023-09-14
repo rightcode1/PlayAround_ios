@@ -21,9 +21,15 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
   var checkId : Bool = false
   
   func idcheck(){
-    if idTextField.text!.isEmpty{
-      callMSGDialog(message: "아이디를 입력해주세요.")
-    }else{
+      if idTextField.text!.isEmpty{
+          callMSGDialog(message: "아이디를 입력해주세요.")
+          return
+      }
+      if idTextField.text!.isIdValidate() {
+          callMSGDialog(message: "아이디는 특수문자 제외 영문과 숫자 8~16조합으로 입력해주세요.")
+          return
+      }
+      
       APIProvider.shared.authAPI.rx.request(.isExistLoginId(email: idTextField.text!))
         .filterSuccessfulStatusCodes()
         .map(DefaultResponse.self)
@@ -38,11 +44,10 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
           }
         })
         .disposed(by: disposeBag)
-    }
   }
   
   func smsSend(){
-    let param = SendCodeRequest(tel: phoneTextField.text!, diff: .join)
+    let param = SendCodeRequest(tel: phoneTextField.text!, diff: SendCodeDiff.join.rawValue )
     APIProvider.shared.authAPI.rx.request(.sendCode(param: param))
       .filterSuccessfulStatusCodes()
       .map(DefaultResponse.self)
@@ -118,7 +123,10 @@ class JoinVC: BaseViewController, DialogPopupViewDelegate, UIViewControllerTrans
       .map(LoginResponse.self)
       .subscribe(onSuccess: { value in
         if(value.statusCode <= 202){
+          DataHelper<String>.remove(forKey: .token)
+            print("\(DataHelperTool.token)111")
           DataHelper.set("bearer \(value.token)", forKey: .token)
+            print("\(DataHelperTool.token)222")
           DataHelper.set("\(value.token)", forKey: .chatToken)
           DataHelper.set(self.idTextField.text!, forKey: .userId)
           DataHelper.set(self.pwdTextField.text!, forKey: .userPw)

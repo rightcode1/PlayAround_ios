@@ -52,7 +52,6 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
     super.viewDidLoad()
     setCollectionViews()
     bindInput()
-    bindOutput()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -108,8 +107,8 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
       self.userNameLabel.text = result.data.name
       
       self.communityLevelImage.image = self.communityLevelImage(level: result.data.communityLevel ?? 1)
-      self.foodLevelImage.image = self.foodLevelImage(level: result.data.foodLevel ?? 1)
-      self.usedLevelImage.image = self.usedLevelImage(level: result.data.usedLevel ?? 1)
+      self.foodLevelImage.image = UIImage(named: "foodLevel\(result.data.foodLevel ?? 1)")
+      self.usedLevelImage.image = UIImage(named: "usedLevel\(result.data.usedLevel ?? 1)")
       
       self.initList()
     }
@@ -127,7 +126,7 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
   }
   
   func initCommunityList() {
-    let param = categoryListRequest(userId: self.userId ?? 0)
+    let param = categoryListRequest(myList: "true")
     APIProvider.shared.communityAPI.rx.request(.CommuntyList(param: param))
       .filterSuccessfulStatusCodes()
       .map(CommunityResponse.self)
@@ -211,6 +210,27 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
           self.navigationController?.pushViewController(vc, animated: true)
         })
         .disposed(by: disposeBag)
+    usedLevelImage.rx.tapGesture().when(.recognized)
+        .bind(onNext: { [weak self] _ in
+          guard let self = self else { return }
+          let vc = LevelVC.viewController()
+          self.navigationController?.pushViewController(vc, animated: true)
+        })
+        .disposed(by: disposeBag)
+    foodLevelImage.rx.tapGesture().when(.recognized)
+        .bind(onNext: { [weak self] _ in
+          guard let self = self else { return }
+          let vc = LevelVC.viewController()
+          self.navigationController?.pushViewController(vc, animated: true)
+        })
+        .disposed(by: disposeBag)
+    communityLevelImage.rx.tapGesture().when(.recognized)
+        .bind(onNext: { [weak self] _ in
+          guard let self = self else { return }
+          let vc = LevelVC.viewController()
+          self.navigationController?.pushViewController(vc, animated: true)
+        })
+        .disposed(by: disposeBag)
     
     showFollowerButton.rx.tap
       .bind(onNext: { [weak self] in
@@ -232,9 +252,6 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
         }
       })
       .disposed(by: disposeBag)
-  }
-  
-  func bindOutput() {
     isFollow
       .bind(onNext: { [weak self] isFollow in
         guard let self = self else { return }
@@ -242,7 +259,6 @@ class MyPageVC: BaseViewController, ViewControllerFromStoryboard {
       })
       .disposed(by: disposeBag)
   }
-  
 }
 
 extension MyPageVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

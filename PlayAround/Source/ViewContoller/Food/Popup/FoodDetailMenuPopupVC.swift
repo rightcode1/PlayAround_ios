@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 
-protocol FoodDetailMenuDelegate {
+protocol FoodDetailMenuDelegate : AnyObject {
   func shareFood()
   
   func updateFood()
@@ -31,7 +31,7 @@ class FoodDetailMenuPopupVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var removeButton: UIButton!
   @IBOutlet weak var reportButton: UIButton!
   
-  var delegate: FoodDetailMenuDelegate?
+  weak var delegate: FoodDetailMenuDelegate?
   let isMine = BehaviorSubject<Bool>(value: false)
   
   override func viewDidLoad() {

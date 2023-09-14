@@ -644,6 +644,9 @@ open class DKAssetGroupDetailVC: UIViewController,
                 self.imagePickerController?.presentCamera()
             }
         } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell
+            cell?.layer.borderWidth = 2 // 선택 테두리 두께
+            cell?.layer.borderColor = UIColor.blue.cgColor // 선택 테두리 색상
             self.selectAsset(atIndex: indexPath)
         }
     }

@@ -61,6 +61,7 @@ extension MyCommunityVC: UITableViewDelegate, UITableViewDataSource{
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       let vc = MyCommunitiyUpdateVC.viewController()
       vc.communityId = communityList[indexPath.row].id
+      vc.data = communityList[indexPath.row]
       self.navigationController?.pushViewController(vc, animated: true)
   }
   

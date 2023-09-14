@@ -15,7 +15,11 @@ enum ChatRoomType: String, Codable {
   case 중고거래
 }
 
-class ChatRoomListVC: UIViewController {
+class ChatRoomListVC: BaseViewController, SelectVillage {
+    func select() {
+        initChatRoomList()
+    }
+    
   @IBOutlet weak var typeCollectionView: UICollectionView!
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var villageButton: UIButton!
@@ -25,7 +29,11 @@ class ChatRoomListVC: UIViewController {
   var typeList: [ChatRoomType] = [.커뮤니티, .반찬공유, .중고거래]
   var selectedType: ChatRoomType = .커뮤니티
   
-  var chatRoomList: [ChatRoomData] = []
+  var chatRoomList: [ChatRoomData] = []{
+    didSet{
+      tableView.reloadData()
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -33,6 +41,7 @@ class ChatRoomListVC: UIViewController {
     setCollectionView()
     
     initChatRoomList()
+      rxtap()
     socketOn()
   }
   
@@ -63,21 +72,31 @@ class ChatRoomListVC: UIViewController {
           self.chatRoomList.append(ChatRoomData(dict: data))
         }
       }
-      self.tableView.reloadData()
     }
   }
   
   func socketOn() {
     socketManager.roomListUpdate { list in
+      self.showHUD()
       self.chatRoomList.removeAll()
       if list.count > 0 {
         for data in list {
           self.chatRoomList.append(ChatRoomData(dict: data))
         }
       }
-      self.tableView.reloadData()
+      self.dismissHUD()
     }
   }
+    func rxtap(){
+        villageButton.rx.tap
+          .bind(onNext: { [weak self] in
+            guard let self = self else { return }
+            let vc = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "VillageListVC") as! VillageListVC
+            vc.delegate = self
+            self.navigationController?.pushViewController(vc, animated: true)
+          })
+          .disposed(by: disposeBag)
+    }
   
   func sendMessage(_ message: String) {
     

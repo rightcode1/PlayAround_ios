@@ -12,6 +12,7 @@ enum ChatAPI {
   case roomRegister(param: RegistChatRoomRequest)
   
   case roomJoinRegister(param: RegistChatRoomJoinRequest)
+    case roomList(communityId: Int)
   case roomJoinRemove(chatRoomId: Int, userId: Int, diff: ChatRommJoinRemoveDiff)
   
   case chatMessageFileRegister(chatRoomId: Int, image: UIImage)
@@ -31,6 +32,8 @@ extension ChatAPI: TargetType {
       return "/v1/chatRoom/register"
     case .roomJoinRegister:
       return "/v1/chatRoomJoin/list"
+    case .roomList:
+      return "/v1/chatRoom/list"
     case .roomJoinRemove:
       return "/v1/chatRoom/remove"
     case .chatMessageFileRegister:
@@ -44,6 +47,8 @@ extension ChatAPI: TargetType {
         .roomJoinRegister,
         .chatMessageFileRegister:
       return .post
+    case .roomList:
+        return .get
     case .roomJoinRemove:
       return .delete
     }
@@ -55,6 +60,9 @@ extension ChatAPI: TargetType {
   
   var task: Task {
     switch self {
+        
+    case .roomList(let Id):
+        return .requestParameters(parameters: ["communityId": Id], encoding: URLEncoding.queryString)
     case .roomRegister(let param):
       return .requestJSONEncodable(param)
     case .roomJoinRegister(let param):
@@ -135,5 +143,8 @@ struct RegistChatMessageImageResponse: Codable {
   // MARK: - Data
   struct Data: Codable {
     let id: Int
+    let message: String
+    let userId: Int
+      let type: String
   }
 }

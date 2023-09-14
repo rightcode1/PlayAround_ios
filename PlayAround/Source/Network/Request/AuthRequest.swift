@@ -42,7 +42,7 @@ enum SendCodeDiff: String, Codable {
 
 struct SendCodeRequest: Codable {
   var tel: String
-  var diff: SendCodeDiff
+  var diff: String
 }
 
 struct FindMyIdRequest: Codable {

@@ -54,13 +54,19 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
   
   let socketManager = SocketIOManager.sharedInstance
   
+  var isregistCommunity = false
   var communityId: Int?
   var foodId: Int?
   var usedId: Int?
+    var communityTitle: String = ""
   
   var chatRoomId: Int = -1
   var isMaster: Bool = false
-  var messageList: [MessageData] = []
+  var messageList: [MessageData] = []{
+    didSet{
+      tableView.reloadData()
+    }
+  }
   
   var chatDialogType: ChatDialogType = .out
   
@@ -80,10 +86,13 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
   
   override func viewDidAppear(_ animated: Bool) {
     scrollToBottom()
+    navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    swipeRecognizer()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     IQKeyboardManager.shared.enableAutoToolbar = true
+    navigationController?.interactivePopGestureRecognizer?.isEnabled = true
   }
   
   static func viewController() -> ChatVC {
@@ -149,7 +158,7 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
   
   func setTopViewInfo() {
     if let communityId = communityId {
-      print("communityId: \(communityId)")
+        self.navigationItem.title = communityTitle
     }
     
     if let foodId = foodId {
@@ -176,7 +185,8 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
         
         self.navigationItem.title = data.user.name
         self.nameLabel.text = data.name
-        self.subNameLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
+        self.subNameLabel.isHidden = true
+//        self.subNameLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
         self.topView.isHidden = false
       }, onError: { error in
       })
@@ -210,8 +220,8 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
       .filterSuccessfulStatusCodes()
       .map(RegistChatMessageImageResponse.self)
       .subscribe(onSuccess: { response in
-        
         self.socketManager.sendImage(chatRoomId: self.chatRoomId, messageId: response.data.id)
+          self.messageList.append(MessageData.init(dict: response.data.dictionary ?? [:]))
       }, onError: { error in
       })
       .disposed(by: disposeBag)
@@ -221,15 +231,13 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
     socketManager.enterRoom(chatRoomId: chatRoomId) { (isMaster: Bool, messageList: [MessageData]) in
       self.isMaster = isMaster
       self.messageList = messageList
-      self.tableView.reloadData()
     }
     
     socketManager.messageRefresh { messageData in
       self.messageList.append(messageData)
-      self.tableView.reloadData()
+      self.finishSendMessageEvent()
     }
   }
-  
   func finishSendMessageEvent() {
     inputTextView.text = nil
     inputTextView.heightAnchor.constraint(equalToConstant: 35).isActive = true
@@ -296,6 +304,26 @@ class ChatVC: BaseViewController, ViewControllerFromStoryboard, DialogPopupViewD
     socketManager.checkOutRoom()
     backPress()
   }
+  func swipeRecognizer() {
+          let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
+          swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+          self.view.addGestureRecognizer(swipeRight)
+          
+      }
+      
+      @objc func respondToSwipeGesture(_ gesture: UIGestureRecognizer){
+          if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+              switch swipeGesture.direction{
+              case UISwipeGestureRecognizer.Direction.right:
+                if isregistCommunity{
+                  backTwo()
+                }else{
+                  backPress()
+                }
+              default: break
+              }
+          }
+      }
   
 }
 
@@ -338,6 +366,20 @@ extension ChatVC: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      let messageData = messageList[indexPath.row]
+      if messageData.type == "image"{
+              let vc = UIStoryboard(name: "Common", bundle: nil).instantiateViewController(withIdentifier: "imageListScroll") as! ImageListWithScrolViewViewController
+           vc.indexRow = 0
+              var imageList: [UIImage] = []
+                let data = try! Data(contentsOf: URL(string: messageData.message ?? "")!)
+                let image = UIImage(data: data)
+                print(messageData.message)
+                imageList.append(image!.resizeToWidth(newWidth: self.view.frame.width))
+              vc.imageList = imageList
+              vc.modalPresentationStyle = .overFullScreen
+              vc.modalTransitionStyle = .crossDissolve
+              self.present(vc, animated: true)
+      }
     
   }
   

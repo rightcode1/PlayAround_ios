@@ -44,6 +44,13 @@ class SocketIOManager: NSObject {
       result(list ?? [])
     }
   }
+    func getCommunityRoomList(type: String, result: @escaping ([[String: Any]]) -> Void) {
+      manager.defaultSocket.emitWithAck("getList", ["communityId": type]).timingOut(after: 0) { data in
+        guard let listData = data[0] as? [String: Any] else { return }
+        let list = listData["list"] as? [[String: Any]]
+        result(list ?? [])
+      }
+    }
   
   func roomListUpdate(result: @escaping ([[String: Any]]) -> Void) {
     manager.defaultSocket.on("listUpdate") { data, ack  in

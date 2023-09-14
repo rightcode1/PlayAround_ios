@@ -71,16 +71,19 @@
 		CBEE7DD5283B78DB000BEC15 /* Follow.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBEE7DD4283B78DB000BEC15 /* Follow.storyboard */; };
 		D9C7AD93FEBD34A70F8F88EE /* Pods_PlayAroundTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F302BE5B32C8F770A47AB1 /* Pods_PlayAroundTests.framework */; };
 		DF095AA228924E5400D631A9 /* NotificationLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF095AA128924E5400D631A9 /* NotificationLogVC.swift */; };
+		DF1B142B2938B8460028AA69 /* RegistRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1B142A2938B8460028AA69 /* RegistRoomVC.swift */; };
 		DF308A89282E4ADA008E9728 /* FindId2VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF308A88282E4ADA008E9728 /* FindId2VC.swift */; };
 		DF308A8B282E500D008E9728 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF308A8A282E500D008E9728 /* AuthResponse.swift */; };
 		DF308A8D282E6F1D008E9728 /* FindPwd2VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF308A8C282E6F1D008E9728 /* FindPwd2VC.swift */; };
+		DF336FEE295DA92400724B23 /* FoodUserListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF336FED295DA92400724B23 /* FoodUserListVC.swift */; };
+		DF336FF0295DAAD600724B23 /* FoodUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF336FEF295DAAD600724B23 /* FoodUserCell.swift */; };
 		DF3C36D328364F2900BD05D8 /* MainHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3C36D228364F2900BD05D8 /* MainHeaderCell.swift */; };
 		DF3C36DA2836516D00BD05D8 /* MainFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3C36D92836516D00BD05D8 /* MainFooterCell.swift */; };
 		DF3D64832832607D00D72D36 /* UsedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D64822832607D00D72D36 /* UsedResponse.swift */; };
 		DF3E8DC72872C519006251AF /* Community.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF3E8DC62872C519006251AF /* Community.storyboard */; };
 		DF3E8DD12872C552006251AF /* CommunityDetailRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DC92872C552006251AF /* CommunityDetailRegisterVC.swift */; };
 		DF3E8DD22872C552006251AF /* CommunityInfoDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DCA2872C552006251AF /* CommunityInfoDetailVC.swift */; };
-		DF3E8DD32872C552006251AF /* CommunityVote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DCB2872C552006251AF /* CommunityVote.swift */; };
+		DF3E8DD32872C552006251AF /* CommunityVoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DCB2872C552006251AF /* CommunityVoteVC.swift */; };
 		DF3E8DD42872C552006251AF /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DCC2872C552006251AF /* CommunityVC.swift */; };
 		DF3E8DD52872C552006251AF /* CommunityCategoryReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DCE2872C552006251AF /* CommunityCategoryReusableView.swift */; };
 		DF3E8DD62872C552006251AF /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3E8DCF2872C552006251AF /* CommentCell.swift */; };
@@ -174,6 +177,9 @@
 		DFD35711287496D80037A850 /* MyCommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD35710287496D80037A850 /* MyCommunityVC.swift */; };
 		DFD35713287499950037A850 /* CommunityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD35712287499950037A850 /* CommunityCell.swift */; };
 		DFD3571528749C2E0037A850 /* MyCommunityRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD3571428749C2D0037A850 /* MyCommunityRegisterVC.swift */; };
+		DFDD7FFB294F621B003B6571 /* PushAlarmSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDD7FFA294F621B003B6571 /* PushAlarmSettingViewController.swift */; };
+		DFDD7FFD294F64B6003B6571 /* SettingApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFDD7FFC294F64B6003B6571 /* SettingApi.swift */; };
+		DFE330802966DE2A00F4E9B7 /* VoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE3307F2966DE2A00F4E9B7 /* VoteCell.swift */; };
 		DFF528B72885B3C50060B082 /* HomeContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF528B62885B3C50060B082 /* HomeContentCell.swift */; };
 		F19B3CF0D9EB4CC47DCBC0CC /* Pods_PlayAround.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B8F3D397A015C1DFBA4C82 /* Pods_PlayAround.framework */; };
 /* End PBXBuildFile section */
@@ -267,16 +273,19 @@
 		CBEE7DD2283B74E2000BEC15 /* FoodDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDetailVC.swift; sourceTree = "<group>"; };
 		CBEE7DD4283B78DB000BEC15 /* Follow.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Follow.storyboard; sourceTree = "<group>"; };
 		DF095AA128924E5400D631A9 /* NotificationLogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationLogVC.swift; sourceTree = "<group>"; };
+		DF1B142A2938B8460028AA69 /* RegistRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistRoomVC.swift; sourceTree = "<group>"; };
 		DF308A88282E4ADA008E9728 /* FindId2VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindId2VC.swift; sourceTree = "<group>"; };
 		DF308A8A282E500D008E9728 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		DF308A8C282E6F1D008E9728 /* FindPwd2VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPwd2VC.swift; sourceTree = "<group>"; };
+		DF336FED295DA92400724B23 /* FoodUserListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodUserListVC.swift; sourceTree = "<group>"; };
+		DF336FEF295DAAD600724B23 /* FoodUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodUserCell.swift; sourceTree = "<group>"; };
 		DF3C36D228364F2900BD05D8 /* MainHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHeaderCell.swift; sourceTree = "<group>"; };
 		DF3C36D92836516D00BD05D8 /* MainFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFooterCell.swift; sourceTree = "<group>"; };
 		DF3D64822832607D00D72D36 /* UsedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedResponse.swift; sourceTree = "<group>"; };
 		DF3E8DC62872C519006251AF /* Community.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Community.storyboard; sourceTree = "<group>"; };
 		DF3E8DC92872C552006251AF /* CommunityDetailRegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityDetailRegisterVC.swift; sourceTree = "<group>"; };
 		DF3E8DCA2872C552006251AF /* CommunityInfoDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityInfoDetailVC.swift; sourceTree = "<group>"; };
-		DF3E8DCB2872C552006251AF /* CommunityVote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityVote.swift; sourceTree = "<group>"; };
+		DF3E8DCB2872C552006251AF /* CommunityVoteVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityVoteVC.swift; sourceTree = "<group>"; };
 		DF3E8DCC2872C552006251AF /* CommunityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityVC.swift; sourceTree = "<group>"; };
 		DF3E8DCE2872C552006251AF /* CommunityCategoryReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityCategoryReusableView.swift; sourceTree = "<group>"; };
 		DF3E8DCF2872C552006251AF /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
@@ -374,6 +383,9 @@
 		DFD35710287496D80037A850 /* MyCommunityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommunityVC.swift; sourceTree = "<group>"; };
 		DFD35712287499950037A850 /* CommunityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCell.swift; sourceTree = "<group>"; };
 		DFD3571428749C2D0037A850 /* MyCommunityRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommunityRegisterVC.swift; sourceTree = "<group>"; };
+		DFDD7FFA294F621B003B6571 /* PushAlarmSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushAlarmSettingViewController.swift; sourceTree = "<group>"; };
+		DFDD7FFC294F64B6003B6571 /* SettingApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingApi.swift; sourceTree = "<group>"; };
+		DFE3307F2966DE2A00F4E9B7 /* VoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteCell.swift; sourceTree = "<group>"; };
 		DFF528B62885B3C50060B082 /* HomeContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentCell.swift; sourceTree = "<group>"; };
 		F15639B4D565D91E6FADADE7 /* Pods-PlayAroundTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAroundTests.debug.xcconfig"; path = "Target Support Files/Pods-PlayAroundTests/Pods-PlayAroundTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FAB9DD1A846F14E8B2B04DB1 /* Pods-PlayAround-PlayAroundUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayAround-PlayAroundUITests.release.xcconfig"; path = "Target Support Files/Pods-PlayAround-PlayAroundUITests/Pods-PlayAround-PlayAroundUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -463,6 +475,7 @@
 				CB399D3028697CCB0084F9EF /* Cell */,
 				CB399D2828645FA70084F9EF /* ChatRoomListVC.swift */,
 				CB399D2A28645FB40084F9EF /* ChatVC.swift */,
+				DF1B142A2938B8460028AA69 /* RegistRoomVC.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -480,6 +493,7 @@
 			isa = PBXGroup;
 			children = (
 				CB87B44D2848B3DE000297BB /* CommentListCell.swift */,
+				DF336FEF295DAAD600724B23 /* FoodUserCell.swift */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -533,6 +547,7 @@
 				DFD35710287496D80037A850 /* MyCommunityVC.swift */,
 				DFD3571428749C2D0037A850 /* MyCommunityRegisterVC.swift */,
 				DF4767432878000A00F6BDB1 /* MyCommunitiyUpdateVC.swift */,
+				DFDD7FFA294F621B003B6571 /* PushAlarmSettingViewController.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -580,7 +595,9 @@
 				CBAD1390285738FC00247EE6 /* RegistFoodVC.swift */,
 				CBAD139828586FC400247EE6 /* SelectFoodDateVC.swift */,
 				CBAD139C28587D8A00247EE6 /* HashtagListVC.swift */,
+				DF3E8DD82872C561006251AF /* VillageListVC.swift */,
 				CB3860792861D9D100C4B688 /* SearchFoodAndUsedVC.swift */,
+				DF336FED295DA92400724B23 /* FoodUserListVC.swift */,
 			);
 			path = Food;
 			sourceTree = "<group>";
@@ -640,7 +657,7 @@
 				DF3E8DCD2872C552006251AF /* Cell */,
 				DF3E8DC92872C552006251AF /* CommunityDetailRegisterVC.swift */,
 				DF3E8DCA2872C552006251AF /* CommunityInfoDetailVC.swift */,
-				DF3E8DCB2872C552006251AF /* CommunityVote.swift */,
+				DF3E8DCB2872C552006251AF /* CommunityVoteVC.swift */,
 				DF3E8DCC2872C552006251AF /* CommunityVC.swift */,
 				DF3E8DD02872C552006251AF /* CommunityDetailVC.swift */,
 			);
@@ -652,6 +669,7 @@
 			children = (
 				DF3E8DCE2872C552006251AF /* CommunityCategoryReusableView.swift */,
 				DF3E8DCF2872C552006251AF /* CommentCell.swift */,
+				DFE3307F2966DE2A00F4E9B7 /* VoteCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -752,6 +770,7 @@
 				CB399D342869B9D90084F9EF /* ChatAPI.swift */,
 				DF3E8DE12872C5EB006251AF /* VillageApi.swift */,
 				CB225DE328A664F50024C2D5 /* AdvertisementAPI.swift */,
+				DFDD7FFC294F64B6003B6571 /* SettingApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -794,7 +813,6 @@
 				DF6112DC28912CE000DF4BD8 /* Dialog */,
 				DF3E8DDC2872C582006251AF /* Cell */,
 				DF3E8DD92872C562006251AF /* villageDetailVC.swift */,
-				DF3E8DD82872C561006251AF /* VillageListVC.swift */,
 				DFA40485282BC263004E8859 /* LoginVC.swift */,
 				DF770ABC282CB61A0038380E /* JoinVC.swift */,
 				DF770ACD282CE7930038380E /* JoingOkVC.swift */,
@@ -1004,6 +1022,8 @@
 			dependencies = (
 			);
 			name = PlayAround;
+			packageProductDependencies = (
+			);
 			productName = PlayAround;
 			productReference = DFA451C2282B762D0059EEFC /* PlayAround.app */;
 			productType = "com.apple.product-type.application";
@@ -1079,6 +1099,8 @@
 				Base,
 			);
 			mainGroup = DFA451B9282B762D0059EEFC;
+			packageReferences = (
+			);
 			productRefGroup = DFA451C3282B762D0059EEFC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1250,6 +1272,7 @@
 				CBE3DAE1285070BC00A2A1B6 /* FoodReportPopupVC.swift in Sources */,
 				DFA4521D282B7A1A0059EEFC /* Data+Extension.swift in Sources */,
 				DFA40486282BC263004E8859 /* LoginVC.swift in Sources */,
+				DFE330802966DE2A00F4E9B7 /* VoteCell.swift in Sources */,
 				DF63D87B2834235A00711E53 /* UsedCell.swift in Sources */,
 				DFA40477282B963B004E8859 /* UserRequest.swift in Sources */,
 				DF308A89282E4ADA008E9728 /* FindId2VC.swift in Sources */,
@@ -1295,13 +1318,15 @@
 				DFA4045E282B86D3004E8859 /* APIProvider.swift in Sources */,
 				CB399D352869B9D90084F9EF /* ChatAPI.swift in Sources */,
 				DFD35711287496D80037A850 /* MyCommunityVC.swift in Sources */,
+				DFDD7FFD294F64B6003B6571 /* SettingApi.swift in Sources */,
 				DFA45226282B7A1A0059EEFC /* DataHelper.swift in Sources */,
 				DFB73C0D2833D8F7000BB20B /* HeaderCell.swift in Sources */,
 				CB399D332869945C0084F9EF /* SocketIOHelper.swift in Sources */,
+				DFDD7FFB294F621B003B6571 /* PushAlarmSettingViewController.swift in Sources */,
 				DFA45227282B7A1A0059EEFC /* Class+UICollectionViewLeftAlignedLayout.swift in Sources */,
 				DFA45222282B7A1A0059EEFC /* BaseViewController.swift in Sources */,
 				DF7EE3F92832232600788CFE /* TableView2Cell.swift in Sources */,
-				DF3E8DD32872C552006251AF /* CommunityVote.swift in Sources */,
+				DF3E8DD32872C552006251AF /* CommunityVoteVC.swift in Sources */,
 				DF3E8DE42872C5FD006251AF /* CommunityApi.swift in Sources */,
 				DF513F65287E8BE7003B7E01 /* CommunitySortPopUpVC.swift in Sources */,
 				DF3E8DDE2872C582006251AF /* VillageDetailCell.swift in Sources */,
@@ -1330,6 +1355,7 @@
 				CBDBEB9928600D7E00165352 /* FAQListCell.swift in Sources */,
 				DFA45221282B7A1A0059EEFC /* String+Extension.swift in Sources */,
 				DF63D87628340C7D00711E53 /* FoodApi.swift in Sources */,
+				DF336FF0295DAAD600724B23 /* FoodUserCell.swift in Sources */,
 				CB87B4542849FEBB000297BB /* FoodLikeAPI.swift in Sources */,
 				DFA4521A282B7A1A0059EEFC /* CustomPageController.swift in Sources */,
 				DFA4047B282BA02C004E8859 /* VersionResponse.swift in Sources */,
@@ -1363,7 +1389,9 @@
 				DFA4522F282B7A1A0059EEFC /* UIView+Extension.swift in Sources */,
 				CBAD139928586FC400247EE6 /* SelectFoodDateVC.swift in Sources */,
 				DFA45229282B7A1A0059EEFC /* Class+AppColor.swift in Sources */,
+				DF336FEE295DA92400724B23 /* FoodUserListVC.swift in Sources */,
 				CBDBEB8E28600AB500165352 /* SettingVC.swift in Sources */,
+				DF1B142B2938B8460028AA69 /* RegistRoomVC.swift in Sources */,
 				DFA45228282B7A1A0059EEFC /* UITextField+Extension.swift in Sources */,
 				CBEE7DD3283B74E2000BEC15 /* FoodDetailVC.swift in Sources */,
 				DFA40479282B9661004E8859 /* AuthRequest.swift in Sources */,
@@ -1564,8 +1592,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PlayAround/PlayAround.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = 85PXJB7ANP;
+				CURRENT_PROJECT_VERSION = 27;
+				DEVELOPMENT_TEAM = 3G89CX686Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PlayAround/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "플레이어라운드";
@@ -1583,8 +1611,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rightcode.PlayAround;
+				MARKETING_VERSION = 1.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rightcode.PlayAroundAPP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1600,8 +1628,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PlayAround/PlayAround.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = 85PXJB7ANP;
+				CURRENT_PROJECT_VERSION = 27;
+				DEVELOPMENT_TEAM = 3G89CX686Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PlayAround/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "플레이어라운드";
@@ -1619,8 +1647,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rightcode.PlayAround;
+				MARKETING_VERSION = 1.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rightcode.PlayAroundAPP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

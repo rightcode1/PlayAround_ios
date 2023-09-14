@@ -67,6 +67,14 @@ extension UIImage{
     
     return newImage!
   }
+    func resizeToFloat(newWidth: CGFloat) -> CGFloat {
+      
+      let scale = newWidth / self.size.width
+      let newHeight = self.size.height * scale
+      
+      return newHeight
+    }
+
   
   func asBase64() -> String?{
     let data = self.jpegData(compressionQuality: 0.9)

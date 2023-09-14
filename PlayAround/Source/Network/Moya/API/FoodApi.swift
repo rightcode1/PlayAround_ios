@@ -14,7 +14,10 @@ enum FoodApi {
   case foodDetail(id: Int)
   
   case register(param: FoodRegistRequest)
+    case foodregister(param: FoodjoinRequest)
+    case foodremove(param: RemoveFoodUserRequest)
   case update(id: Int, param: FoodRegistRequest)
+case complete(id: Int, param: FoodUpdateRequest)
   case remove(id: Int)
   
   case imageRegister(foodId: Int, imageList: [UIImage])
@@ -33,7 +36,9 @@ extension FoodApi: TargetType {
     case .foodList : return "/v1/food/list"
     case .foodDetail : return "/v1/food/detail"
     case .register : return "/v1/food/register"
-    case .update : return "/v1/food/update"
+    case .foodregister : return "/v1/foodUser/register"
+    case .foodremove : return "/v1/foodUser/remove"
+    case .update,.complete : return "/v1/food/update"
     case .remove : return "/v1/food/remove"
     case .imageRegister : return "/v1/foodImage/register"
     }
@@ -45,11 +50,13 @@ extension FoodApi: TargetType {
         .foodDetail:
       return .get
     case .register,
+            .foodregister,
         .imageRegister:
       return .post
-    case .update:
+    case .update,.complete:
       return .put
-    case .remove:
+    case .remove,
+            .foodremove:
       return .delete
     }
   }
@@ -66,8 +73,14 @@ extension FoodApi: TargetType {
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
     case .register(let param):
       return .requestJSONEncodable(param)
+    case .foodregister(let param):
+      return .requestJSONEncodable(param)
     case .update(let id, let param):
       return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
+    case .complete(let id, let param):
+        return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
+    case .foodremove(let param):
+        return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["foodId": param.foodId , "userId" : param.userId])
     case .remove(let id):
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
     case .imageRegister(let foodId, let imageList):
@@ -256,4 +269,22 @@ struct FoodRegistRequest: Codable {
   let userCount: Int?
   let dueDate: String?
   let status: FoodStatus
+}
+struct FoodUpdateRequest: Codable {
+  let statusSale: Bool
+}
+struct FoodjoinRequest: Codable {
+  let foodId: Int
+}
+struct RemoveFoodUserRequest: Codable {
+  let foodId: Int?
+  let userId: Int?
+  
+  init(
+    foodId: Int? = nil,
+    userId: Int? = nil
+  ) {
+    self.foodId = foodId
+    self.userId = userId
+  }
 }

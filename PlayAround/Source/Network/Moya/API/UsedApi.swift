@@ -14,6 +14,7 @@ enum UsedAPI {
   
   case register(param: RegistUsedRequest)
   case update(id: Int, param: RegistUsedRequest)
+    case complete(id: Int, param: UpdateUsedRequest)
   case remove(id: Int)
   
   case imageRegister(usedId: Int, imageList: [UIImage])
@@ -41,7 +42,7 @@ extension UsedAPI: TargetType {
     case .list : return "/v1/used/list"
     case .detail : return "/v1/used/detail"
     case .register : return "/v1/used/register"
-    case .update : return "/v1/used/update"
+    case .update,.complete : return "/v1/used/update"
     case .remove : return "/v1/used/remove"
     case .imageRegister : return "/v1/usedImage/register"
       
@@ -68,7 +69,7 @@ extension UsedAPI: TargetType {
         .wishRegister,
         .commentRegister:
       return .post
-    case .update:
+    case .update, .complete :
       return .put
     case .remove,
         .likeRemove,
@@ -89,8 +90,11 @@ extension UsedAPI: TargetType {
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.queryString)
     case .register(let param):
       return .requestJSONEncodable(param)
-    case .update(let id, let param):
+    case .update(let id, let param) :
       return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
+        
+      case .complete(let id, let param) :
+        return .requestCompositeParameters(bodyParameters: param.dictionary ?? [:], bodyEncoding: JSONEncoding.default, urlParameters: ["id": id])
     case .remove(let id):
       return .requestParameters(parameters: ["id": id], encoding: URLEncoding.default)
     case .imageRegister(let usedId, let imageList):
@@ -268,4 +272,8 @@ struct RegistUsedRequest: Codable {
   let price: Int
   let villageId: Int
   let hashtag: [String]
+}
+
+struct UpdateUsedRequest: Codable {
+  let statusSale: Bool
 }

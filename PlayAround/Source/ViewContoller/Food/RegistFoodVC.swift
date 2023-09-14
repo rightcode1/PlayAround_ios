@@ -79,10 +79,14 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+      if foodId != nil{
+          initFoodDetail()
+          setStatusSegmentedControl()
+      }else{
+          setStatusSegmentedControl()
+      }
     bindInput()
     bindOutput()
-    setStatusSegmentedControl()
     setCollectionViews()
   }
   
@@ -100,14 +104,53 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
       statusSegmentedControl.subviews[0].layer.borderColor = statusGrayColor.cgColor
     }
   }
+    func initFoodDetail() {
+      self.showHUD()
+        APIProvider.shared.foodAPI.rx.request(.foodDetail(id: self.foodId ?? 0))
+        .filterSuccessfulStatusCodes()
+        .map(FoodDetailResponse.self)
+        .subscribe(onSuccess: { value in
+          guard let data = value.data else { return }
+            for count in 0 ..< (value.data?.images.count ?? 0){
+                let url = URL(string: value.data?.images[count].name ?? "")
+                    if let data = try? Data(contentsOf: url!)
+                    {
+                        let image: UIImage = UIImage(data: data)!
+                        self.uploadImages.append(image)
+                        self.uploadImageCollectionView.reloadData()
+                    }
+            }
+            self.titleTextField.text = data.name
+            self.priceTextField.text = data.price.formattedProductPrice()
+            self.contentTextView.text = data.content
+            self.hashtag = data.hashtag
+            self.hashtagTextView.text = self.hashtag.map({ "#\($0)" }).joined(separator: " ")
+            self.hashtagTextViewPlaceHolder.isHidden = true
+            self.selectedAllergyList = data.allergy
+            self.allergyCollectionView.reloadData()
+            self.statusSegmentedControl.selectedSegmentIndex = data.status == .조리완료 ? 0 : 1
+            self.status.onNext(data.status)
+            self.dueDate = data.dueDate
+            self.dateTextField.text = data.dueDate
+            self.peopleCountLabel.text = "\(data.userCount)"
+            self.peopleCount = data.userCount ?? 0
+            self.selectedCategory = data.category
+            self.categoryCollectionView.reloadData()
+            self.registButton.setTitle("수정하기", for: .normal)
+          self.dismissHUD()
+        }, onError: { error in
+          self.dismissHUD()
+        })
+        .disposed(by: disposeBag)
+    }
   
   func setStatusSegmentedControl() {
     setSegementBorder(index: 0)
-    
-    statusSegmentedControl.setBackgroundImage(segmentBackgroundImage, for: .normal, barMetrics: .default)
+//
+//    statusSegmentedControl.setBackgroundImage(segmentBackgroundImage, for: .normal, barMetrics: .default)
     statusSegmentedControl.setBackgroundImage(segmentBackgroundImage, for: .selected, barMetrics: .default)
     statusSegmentedControl.setBackgroundImage(segmentBackgroundImage, for: .highlighted, barMetrics: .default)
-    
+//
     statusSegmentedControl.setDividerImage(segmentBackgroundImage, forLeftSegmentState: .selected, rightSegmentState: .normal, barMetrics: .default)
     statusSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: statusGrayColor], for: .normal)
     statusSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: statusOrangeColor, .font: UIFont.systemFont(ofSize: 14, weight: .regular)], for: .selected)
@@ -138,6 +181,8 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
   func setAllergyCollectionViewLayout() {
     allergyCollectionView.dataSource = self
     allergyCollectionView.delegate = self
+      
+      priceTextField.delegate = self
     
     let layout = UICollectionViewFlowLayout()
     layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
@@ -248,7 +293,7 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
   
   func registFood() {
     guard let selectedCategory = selectedCategory else {
-      showToast(message: "반찬 카테고리를 선택해주세요.")
+      showToast(message: "카테고리를 선택해주세요.")
       return
     }
     
@@ -257,10 +302,10 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
       return
     }
     
-    guard !priceTextField.text!.isEmpty else {
-      showToast(message: "가격을 입력해주세요.")
-      return
-    }
+//    guard !priceTextField.text!.isEmpty else {
+//      showToast(message: "가격을 입력해주세요.")
+//      return
+//    }
     
     guard !contentTextView.text!.isEmpty else {
       showToast(message: "내용을 입력해주세요.")
@@ -274,13 +319,8 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
       }
     }
     
-    if hashtag.count <= 0 {
-      showToast(message: "해시태그를 입력해주세요.")
-      return
-    }
-    
     if selectedAllergyList.count <= 0 {
-      showToast(message: "알러지 내용을 선택해주세요.")
+      showToast(message: "알레르기 성분을 선택해주세요.")
       return
     }
     
@@ -288,10 +328,10 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
       category: selectedCategory,
       name: titleTextField.text!,
       content: contentTextView.text!,
-      price: Int(priceTextField.text!) ?? 0,
+      price: Int(priceTextField.text?.replacingOccurrences(of: ",", with: "") ?? "0") ?? 0,
       hashtag: hashtag,
       allergy: selectedAllergyList,
-      villageId: 0,
+      villageId: DataHelperTool.villageId ?? 0,
       userCount: try! status.value() == .조리예정 ? peopleCount : nil,
       dueDate: dueDate,
       status: try! status.value()
@@ -354,7 +394,7 @@ class RegistFoodVC: BaseViewController, ViewControllerFromStoryboard {
   
   @IBAction func segmentedControlValueChanged(_ sender: Any) {
     let selectedIndex = statusSegmentedControl.selectedSegmentIndex
-    setSegementBorder(index: selectedIndex)
+//    setSegementBorder(index: selectedIndex)
     status.onNext(selectedIndex == 0 ? .조리완료 : .조리예정)
   }
   
@@ -576,6 +616,49 @@ extension RegistFoodVC: UICollectionViewDelegate, UICollectionViewDataSource {
   }
 }
 
+extension RegistFoodVC: UITextFieldDelegate{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard var text = textField.text else {
+                    return true
+                }
+                
+                text = text.replacingOccurrences(of: ",", with: "")
+                
+                let numberFormatter = NumberFormatter()
+                numberFormatter.numberStyle = .decimal
+                
+                if (string.isEmpty) {
+                    // delete
+                    if text.count > 1 {
+                        guard let price = Int.init("\(text.prefix(text.count - 1))") else {
+                            return true
+                        }
+                        guard let result = numberFormatter.string(from: NSNumber(value:price)) else {
+                            return true
+                        }
+                        
+                        textField.text = "\(result)"
+                    }
+                    else {
+                        textField.text = ""
+                    }
+                }
+                else {
+                    // add
+                    guard let price = Int.init("\(text)\(string)") else {
+                        return true
+                    }
+                    guard let result = numberFormatter.string(from: NSNumber(value:price)) else {
+                        return true
+                    }
+                    
+                    textField.text = "\(result)"
+                }
+                
+                return false
+            }
+            
+}
 // MARK: - DKImagePickerControllerBaseUIDelegate
 
 class AssetClickHandler: DKImagePickerControllerBaseUIDelegate {

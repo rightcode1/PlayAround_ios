@@ -214,7 +214,7 @@
             </objects>
             <point key="canvasLocation" x="2539" y="131"/>
         </scene>
-        <!--Advertisement DetailVC-->
+        <!--광고상세-->
         <scene sceneID="HrW-da-hh5">
             <objects>
                 <viewController storyboardIdentifier="AdvertisementDetailVC" hidesBottomBarWhenPushed="YES" id="1wo-h8-5Pg" customClass="AdvertisementDetailVC" customModule="PlayAround" customModuleProvider="target" sceneMemberID="viewController">
@@ -269,15 +269,12 @@
                             <constraint firstAttribute="bottom" secondItem="7La-jF-hV1" secondAttribute="bottom" id="fhY-e9-UZd"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="e14-zN-qj9">
-                        <leftBarButtonItems>
-                            <barButtonItem image="btnBack" id="vKR-Wf-8SP">
-                                <connections>
-                                    <action selector="backPress" destination="1wo-h8-5Pg" id="5En-Xf-fWU"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title=" " id="jqK-Ce-T4x"/>
-                        </leftBarButtonItems>
+                    <navigationItem key="navigationItem" title="광고상세" id="e14-zN-qj9">
+                        <barButtonItem key="leftBarButtonItem" image="back" id="vKR-Wf-8SP">
+                            <connections>
+                                <action selector="backPress" destination="1wo-h8-5Pg" id="5En-Xf-fWU"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="imageStackView" destination="d3h-IY-HuK" id="nT8-s2-WeB"/>
@@ -289,7 +286,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="btnBack" width="16" height="14"/>
+        <image name="back" width="23" height="23"/>
         <image name="closeWhite" width="35" height="35"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

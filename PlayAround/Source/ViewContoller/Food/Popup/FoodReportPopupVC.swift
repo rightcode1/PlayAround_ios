@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol FoodReportDelegate {
-  func finishFoodReport()
+protocol FoodReportDelegate : AnyObject {
+    func finishFoodReport(text: String,foodId:Int? , usedId:Int?)
 }
 
 class FoodReportPopupVC: BaseViewController, ViewControllerFromStoryboard, UITextViewDelegate {
@@ -20,7 +20,7 @@ class FoodReportPopupVC: BaseViewController, ViewControllerFromStoryboard, UITex
   @IBOutlet weak var contentTextViewPlaceHolder: UILabel!
   @IBOutlet weak var reportButton: UIButton!
   
-  var delegate: FoodReportDelegate?
+  weak var delegate: FoodReportDelegate?
   var foodId: Int?
   var usedId: Int?
   
@@ -44,17 +44,8 @@ class FoodReportPopupVC: BaseViewController, ViewControllerFromStoryboard, UITex
   }
   
   func registReport() {
-    let param = RegistReportRequest(content: contentTextView.text!, foodId: foodId, usedId: usedId)
-    APIProvider.shared.reportAPI.rx.request(.register(param: param))
-      .filterSuccessfulStatusCodes()
-      .map(DefaultResponse.self)
-      .subscribe(onSuccess: { value in
-        print("?????????????????? 뭐야 이거")
-        self.backPress()
-        self.delegate?.finishFoodReport()
-      }, onError: { error in
-      })
-      .disposed(by: disposeBag)
+      backPress()
+      self.delegate?.finishFoodReport(text: contentTextView.text,foodId: foodId ,usedId: usedId)
   }
   
   func bindInput() {

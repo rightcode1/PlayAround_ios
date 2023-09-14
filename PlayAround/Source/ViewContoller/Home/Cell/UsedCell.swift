@@ -18,10 +18,11 @@ class UsedCell: UICollectionViewCell{
   
   
   func initdelegate(_ data: UsedList){
+    print("!!!!!!!!!!!!\(data.thumbnail)")
     if(data.thumbnail != nil){
       self.Thumbnail?.kf.setImage(with: URL(string: data.thumbnail!))
     }else{
-//      self.thumbnail?.kf.setImage(with: URL(string: data.thumbnail ))
+      Thumbnail.image = UIImage(named: "noImage")
     }
     title.text = data.name
     pay.text = "\(data.price.formattedProductPrice() ?? "")원"

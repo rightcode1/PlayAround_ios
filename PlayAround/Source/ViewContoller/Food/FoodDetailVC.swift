@@ -1,4 +1,4 @@
-//
+ //
 //  FoodDetailVC.swift
 //  PlayAround
 //
@@ -8,6 +8,9 @@
 import UIKit
 import RxSwift
 import IQKeyboardManagerSwift
+import KakaoSDKTemplate
+import KakaoSDKShare
+import KakaoSDKCommon
 
 struct ChatRoomHeaderData: Codable {
   let thumbnail: String?
@@ -49,7 +52,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   @IBOutlet weak var disLikeCountLabel: UILabel!
   
   @IBOutlet weak var foodContentLabel: UILabel!
-  @IBOutlet weak var hashtagLabel: UILabel!
+  @IBOutlet weak var hashTagCollectionView: UICollectionView!
   
   @IBOutlet weak var allergyCollectionView: UICollectionView!
   @IBOutlet weak var allergyCollectionVIewHeightConstraint: NSLayoutConstraint!
@@ -60,7 +63,9 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   
   @IBOutlet weak var commentCountlabel: UILabel!
   @IBOutlet weak var registCommentButton: UIButton!
-  
+    
+    @IBOutlet weak var soldOutView: UIView!
+    
   @IBOutlet weak var replyView: UIView!
   @IBOutlet weak var replyLabel: UILabel!
   @IBOutlet weak var cancelReplyButton: UIButton!
@@ -92,6 +97,8 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   var isEndRequest = false
   var isFullRequest = false
   var isRequest = false
+    
+    var data:FoodDetailData?
   
   let isWish = BehaviorSubject<Bool>(value: false)
   
@@ -106,6 +113,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   
   var replyCommentId: Int?
   var commentList: [FoodCommentListData] = []
+  var hashTagList: [String] = []
   
   var chatRoomHeaderData: ChatRoomHeaderData?
   
@@ -120,7 +128,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    initUserInfo()
+      self.initFoodDetail()
     setTextViewHeight()
   }
   
@@ -210,6 +218,9 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     anotherFoodListCollectionView.delegate = self
     anotherFoodListCollectionView.dataSource = self
     
+    hashTagCollectionView.delegate = self
+    hashTagCollectionView.dataSource = self
+    
     setThumbnailCollectionViewLayout()
     setAllergyCollectionViewLayout()
     setAnotherFoodListCollectionViewLayout()
@@ -244,6 +255,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     layout.itemSize = CGSize(width: (APP_WIDTH() - 60) / 2, height: 170)
     layout.minimumInteritemSpacing = 10
     layout.minimumLineSpacing = 10
+    layout.scrollDirection = .horizontal
     layout.invalidateLayout()
     anotherFoodListCollectionView.collectionViewLayout = layout
   }
@@ -269,13 +281,6 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     }
   }
   
-  func initUserInfo() {
-    userInfo() { result in
-      self.initFoodDetail()
-      self.initAnotherFoodList(userId: result.data.id)
-    }
-  }
-  
   func initFoodDetail() {
     self.showHUD()
     APIProvider.shared.foodAPI.rx.request(.foodDetail(id: foodId))
@@ -283,6 +288,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
       .map(FoodDetailResponse.self)
       .subscribe(onSuccess: { value in
         guard let data = value.data else { return }
+        self.initAnotherFoodList(userId: value.data?.userId ?? 0)
         self.navigationItem.title = data.category.rawValue
         
         self.thumbnailList = data.images
@@ -291,11 +297,18 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         }
         self.thumbnailCountLabel.text = "1/\(self.thumbnailList.count)"
         self.thumbnailCollectionView.reloadData()
-        
+          
+          self.soldOutView.isHidden = !data.statusSale!
+        if data.statusSale! || data.user.id == DataHelperTool.userAppId{
+                self.chatButton.backgroundColor = .systemGray3
+                self.chatButton.setTitle("나눔완료", for: .normal)
+      }
+          
         self.selectedAllergyList = data.allergy
+        self.allergyCollectionView.reloadData()
         
-        self.foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리예정
-        self.foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리완료
+        self.foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리완료
+        self.foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리예정
       
         self.isWish.onNext(data.isWish)
         self.titleLabel.text = data.name
@@ -306,15 +319,17 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         if userData.thumbnail != nil {
           self.userThumbnailImageView.kf.setImage(with: URL(string: userData.thumbnail ?? ""))
         } else {
-          self.userThumbnailImageView.image = UIImage(named: "defaultProfileImage")
+          self.userThumbnailImageView.image = UIImage(named: "defaultBoardImage")
         }
         self.userFoodLevelImageView.image = self.foodLevelImage(level: userData.foodLevel ?? 1)
         self.userNameLabel.text = userData.name
+        self.userNameLabel2.text = userData.name
+
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         if let createdAtDate = dateFormatter.date(from: data.createdAt) {
-          self.dateLabel.text = createdAtDate.toString(dateFormat: "yyyy-MM-dd HH:mm")
+          self.dateLabel.text = createdAtDate.toString(dateFormat: "yyyy.MM.dd")
         } else {
           self.dateLabel.text = data.createdAt
         }
@@ -325,9 +340,9 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         
         self.isMine = data.userId == DataHelperTool.userAppId ?? 0
         self.isEndRequest = Date() > data.dueDate?.stringToDate ?? Date()
-        self.isFullRequest = (data.requestCount ?? 0) <= (data.userCount ?? 0)
-        
-        self.foodRequestInfoView.isHidden = self.isEndRequest
+        self.isFullRequest = (data.userCount ?? 0) <= (data.requestCount ?? 0)
+          
+        self.foodRequestInfoView.isHidden = data.status == .조리완료
         self.dueDateLabel.text = data.dueDate
         
         if self.isFullRequest {
@@ -346,8 +361,8 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         self.initRequstButton()
         
         self.foodContentLabel.text = data.content
-        let hashTagList = data.hashtag.map({ "#\($0)" })
-        self.hashtagLabel.text = hashTagList.joined(separator: " ")
+        self.hashTagList = data.hashtag.map({ "#\($0)" })
+        self.hashTagCollectionView.reloadData()
         
         self.isLike.onNext(data.isLike)
         self.likeCount.onNext(data.likeCount)
@@ -357,7 +372,7 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
         
         let chatRoomHeaderData = ChatRoomHeaderData(thumbnail: data.images.count > 0 ? data.images[0].name : nil, name: data.user.name, title: data.name)
         self.chatRoomHeaderData = chatRoomHeaderData
-        
+          self.data = data
         self.dismissHUD()
       }, onError: { error in
         self.dismissHUD()
@@ -588,14 +603,43 @@ class FoodDetailVC: BaseViewController, ViewControllerFromStoryboard {
     chatButton.rx.tap
       .bind(onNext: { [weak self] in
         guard let self = self else { return }
-        self.startChat()
+          if self.chatButton.currentTitle != "판매완료"{
+              self.startChat()
+          }
       })
       .disposed(by: disposeBag)
+    requestButton.rx.tap
+        .bind(onNext: { [weak self] in
+          guard let self = self else { return }
+            if !self.isMine {
+                let param = FoodjoinRequest(foodId: self.foodId)
+                APIProvider.shared.foodAPI.rx.request(.foodregister(param: param))
+                  .filterSuccessfulStatusCodes()
+                  .map(DefaultResponse.self)
+                  .subscribe(onSuccess: { value in
+                      self.okActionAlert(message: "신청되었습니다.") {
+                          self.initFoodDetail()
+                      }
+                  }, onError: { error in
+                  })
+                  .disposed(by: self.disposeBag)
+            }else{
+                if self.data?.foodUsers.isEmpty ?? false{
+                    self.callOkActionMSGDialog(message: "신청인이 없습니다.") {
+                    }
+                }else{
+                    let vc = FoodUserListVC.viewController()
+                    vc.foodId = self.foodId
+                    vc.foodUserList = self.data?.foodUsers ?? []
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        })
+        .disposed(by: disposeBag)
   }
   
   func bindOutput() {
-    isLike
-      .bind(onNext: { [weak self] isLike in
+    isLike.bind(onNext: { [weak self] isLike in
         guard let self = self else { return }
         if let bool = isLike {
           self.likeButton.image = bool ? UIImage(named: "like") : UIImage(named: "likeoff")
@@ -672,7 +716,43 @@ extension FoodDetailVC: CheckCrimeHistoryDelegate {
 
 extension FoodDetailVC: FoodDetailMenuDelegate {
   func shareFood() {
-    
+      var image = ""
+      if data?.images.count != 0{
+          image = data?.images[0].name ?? ""
+      }
+      let feedTemplateJsonStringData =
+      """
+      {
+        "object_type": "feed",
+        "content": {
+          "title": "\(data?.name ?? "")",
+          "description": "\(data?.hashtag.map({ "#\($0)" }).joined(separator: " ") ?? "")",
+          "image_url": "\(image)",
+          "link": {
+            "mobile_web_url": "https://developers.kakao.com",
+            "web_url": "https://developers.kakao.com"
+          }
+        },
+        "buttons": [
+          {
+            "title": "앱으로 보기",
+            "link": {
+              "android_execution_params": "boardId=\(data?.id ?? 0)",
+              "ios_execution_params": "boardId=\(data?.id ?? 0)"
+            }
+          }
+        ]
+      }
+      """.data(using: .utf8)!
+
+      guard let templatable = try? SdkJSONDecoder.custom.decode(FeedTemplate.self, from: feedTemplateJsonStringData) else { return }
+      if ShareApi.isKakaoTalkSharingAvailable() {
+        ShareApi.shared.shareDefault(templatable: templatable) { sharingResult, error in
+          if let sharingResult = sharingResult {
+            UIApplication.shared.open(sharingResult.url, options: [:], completionHandler: nil)
+          }
+        }
+      }
   }
   
   func updateFood() {
@@ -682,11 +762,38 @@ extension FoodDetailVC: FoodDetailMenuDelegate {
   }
   
   func updateFoodStatus() {
-    
+      print("!!!")
+      let param = FoodUpdateRequest(
+        statusSale: true
+      )
+      showHUD()
+        APIProvider.shared.foodAPI.rx.request(.complete(id: foodId, param: param))
+          .filterSuccessfulStatusCodes()
+          .subscribe(onSuccess: { response in
+              self.dismissHUD()
+              self.callOkActionMSGDialog(message: "판매 완료되었습니다") {
+                self.backPress()
+              }
+            
+          }, onError: { error in
+            self.dismissHUD()
+            self.callMSGDialog(message: "오류가 발생하였습니다")
+          })
+          .disposed(by: disposeBag)
   }
   
   func removeFood() {
-    
+      callYesNoMSGDialog(message: "삭제하시겠습니까?") {
+          APIProvider.shared.foodAPI.rx.request(.remove(id: self.foodId))
+            .filterSuccessfulStatusCodes()
+            .subscribe(onSuccess: { response in
+                self.backPress()
+              
+            }, onError: { error in
+              self.callMSGDialog(message: "오류가 발생하였습니다")
+            })
+            .disposed(by: self.disposeBag)
+      }
   }
   
   func reportFood() {
@@ -698,8 +805,20 @@ extension FoodDetailVC: FoodDetailMenuDelegate {
 }
 
 extension FoodDetailVC: FoodReportDelegate {
-  func finishFoodReport() {
-    showToast(message: "신고가 완료되었습니다.", yPosition: APP_HEIGHT() / 2)
+    func finishFoodReport(text: String,foodId:Int?, usedId:Int?) {
+        
+    let param = RegistReportRequest(content: text, foodId: foodId, usedId: usedId)
+    APIProvider.shared.reportAPI.rx.request(.register(param: param))
+      .filterSuccessfulStatusCodes()
+      .map(DefaultResponse.self)
+      .subscribe(onSuccess: { value in
+          self.dismissHUD()
+          self.callOkActionMSGDialog(message: "신고가 완료되었습니다") {
+            self.backPress()
+          }
+      }, onError: { error in
+      })
+      .disposed(by: disposeBag)
   }
 }
 
@@ -718,6 +837,8 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
       return thumbnailList.count
     } else if collectionView == allergyCollectionView {
       return allergyList.count
+    }else if collectionView == hashTagCollectionView{
+      return hashTagList.count
     } else {
       return anotherFoodList.count
     }
@@ -739,11 +860,21 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
       guard let imageView = cell.viewWithTag(1) as? UIImageView else {
         return cell
       }
-      
       imageView.image = selectedAllergyList.contains(dict) ? dict.onImage() : dict.offImage()
+      if selectedAllergyList.contains(dict){
+        print(dict)
+      }
       return cell
-    } else {
-      let cell = anotherFoodListCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FoodListCell
+    }else if collectionView == hashTagCollectionView{
+      let cell = hashTagCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+      let dict = hashTagList[indexPath.row]
+      guard let hashTagLabel = cell.viewWithTag(1) as? UILabel else {
+        return cell
+      }
+      hashTagLabel.text = dict
+      return cell
+    }  else {
+      let cell = anotherFoodListCollectionView.dequeueReusableCell(withReuseIdentifier: "anothercell", for: indexPath) as! FoodListCell
       let dict = anotherFoodList[indexPath.row]
       cell.update(dict, isDetail: "detail")
       return cell
@@ -753,10 +884,11 @@ extension FoodDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     if collectionView == thumbnailCollectionView {
       showImageList(imageList: thumbnailUIImageList, index: indexPath.row)
-    } else if collectionView == allergyCollectionView {
-      
-    } else {
-      
+    } else if collectionView == hashTagCollectionView {
+      let vc = SearchFoodAndUsedVC.viewController()
+      vc.searchText = hashTagList[indexPath.row]
+      vc.selectedDiff = .food
+      self.navigationController?.pushViewController(vc, animated: true)
     }
   }
   

@@ -31,17 +31,21 @@ class FoodListCell: UICollectionViewCell {
       foodStatusStackView.arrangedSubviews[0].isHidden = true
       foodStatusStackView.arrangedSubviews[1].isHidden = true
     } else {
-      foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리예정
-      foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리완료
+      foodStatusStackView.arrangedSubviews[0].isHidden = data.status == .조리완료
+      foodStatusStackView.arrangedSubviews[1].isHidden = data.status == .조리예정
     }
     
     heartImageView.isHidden = false
+    
+    likeCountLabel.isHidden = false
+    disLikeCountLabel.isHidden = false
     
     titleLabel.text = data.name
     priceLabel.text = "\(data.price.formattedProductPrice() ?? "0")원"
     wishCountLabel.text = "\(data.wishCount)"
     likeCountLabel.text = "좋아요 \(data.likeCount)"
     disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"
+    soldOutView.isHidden = !data.statusSale
   }
   
   func update(_ data: UsedListData) {
@@ -63,6 +67,7 @@ class FoodListCell: UICollectionViewCell {
     wishCountLabel.text = "\(data.wishCount)"
     likeCountLabel.text = "좋아요 \(data.likeCount)"
     disLikeCountLabel.text = "싫어요 \(data.dislikeCount)"
+    soldOutView.isHidden = !data.statusSale
   }
   
   func updateWithAdvertisementData(_ data: AdvertisementData) {
@@ -82,6 +87,7 @@ class FoodListCell: UICollectionViewCell {
     
     titleLabel.text = data.title
     priceLabel.text = nil
+    
   }
   
 }

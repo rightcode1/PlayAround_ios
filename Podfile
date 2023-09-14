@@ -14,9 +14,12 @@ target 'PlayAround' do
   
   # Socket IO
   pod 'Socket.IO-Client-Swift'
-  
-  # Kakao
-  pod 'KakaoSDK'
+
+pod 'KakaoSDKShare'
+pod 'KakaoSDKTemplate'
+pod 'KakaoSDKUser'
+pod 'KakaoSDKAuth'
+pod 'KakaoSDKCommon'
   
   # Reactive
   pod 'RxSwift'

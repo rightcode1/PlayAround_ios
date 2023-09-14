@@ -21,13 +21,15 @@ class CommunityCell:UITableViewCell{
   
   func initcell(_ data: CommuintyList){
     dict = data
-//    thumbnailImageView.kf.setImage(with: URL(string: dict!.images[0].name))
+      if dict?.images.count != 0 {
+          thumbnailImageView.kf.setImage(with: URL(string: dict?.images[0].name ?? ""))
+      }
     titleLabel.text = dict?.name
     contentLabel.text = dict?.content
-    kmLabel.text = "\(dict?.distance)km"
-    peopleLabel.text = "\(dict?.people)명"
-    likeLabel.text = "좋아요 \(dict?.likeCount)"
-    disLikeLabel.text = "싫어요 \(dict?.dislikeCount)"
+    kmLabel.text = "\(dict?.distance ?? 0)km"
+    peopleLabel.text = "\(dict?.people ?? 0)명"
+    likeLabel.text = "좋아요 \(dict?.likeCount ?? 0)"
+    disLikeLabel.text = "싫어요 \(dict?.dislikeCount ?? 0)"
   }
   
   
